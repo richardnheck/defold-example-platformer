@@ -1,0 +1,185 @@
+script: "/game/gui/pause.gui_script"
+fonts {
+  name: "main"
+  font: "/assets/font/main.font"
+}
+textures {
+  name: "game"
+  texture: "/game/core/game.tilesource"
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+  }
+  type: TYPE_BOX
+  id: "container"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -21.0
+  }
+  scale {
+    x: 4.0
+    y: 4.597687
+  }
+  size {
+    x: 80.0
+    y: 48.0
+  }
+  type: TYPE_BOX
+  texture: "game/dialog"
+  id: "bg"
+  parent: "container"
+  inherit_alpha: true
+  slice9 {
+    x: 4.0
+    y: 4.0
+    z: 4.0
+    w: 4.0
+  }
+}
+nodes {
+  position {
+    y: 49.0
+  }
+  size {
+    x: 200.0
+    y: 32.0
+  }
+  color {
+    x: 0.827451
+    y: 0.15294118
+    z: 0.20392157
+  }
+  type: TYPE_TEXT
+  text: "PAUSED"
+  font: "main"
+  id: "title"
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "container"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -70.0
+    y: -15.0
+  }
+  size {
+    x: 200.0
+    y: 32.0
+  }
+  type: TYPE_TEXT
+  text: "CONTINUE"
+  font: "main"
+  id: "1"
+  pivot: PIVOT_W
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "container"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -70.0
+    y: -53.0
+  }
+  size {
+    x: 200.0
+    y: 32.0
+  }
+  type: TYPE_TEXT
+  text: "RESTART"
+  font: "main"
+  id: "2"
+  pivot: PIVOT_W
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "container"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -70.0
+    y: -91.0
+  }
+  size {
+    x: 200.0
+    y: 32.0
+  }
+  type: TYPE_TEXT
+  text: "QUIT"
+  font: "main"
+  id: "3"
+  pivot: PIVOT_W
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "container"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    x: -91.0
+    y: -14.0
+  }
+  scale {
+    x: 4.0
+    y: 4.0
+  }
+  type: TYPE_BOX
+  texture: "game/arrow"
+  id: "arrow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "container"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

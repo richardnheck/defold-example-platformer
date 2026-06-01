@@ -1,0 +1,68 @@
+-- Drives N rotating_platform child GOs around the controller's position (the pivot).
+-- Sign convention: Defold is Y-up / math-standard positive-CCW. To match the Godot
+-- source's positive-CW visual sense, pass negative speeds per-instance.
+
+go.property("swing_mode", false)       -- false: SPIN (continuous), true: SWING (back-and-forth arc)
+go.property("start_direction", 0)      -- deg, initial pivot angle. 0 = +X (right)
+go.property("spin_speed", 90)          -- deg/s, SPIN only
+go.property("swing_degrees", 90)       -- deg, SWING half-amplitude either side of start_direction
+go.property("swing_speed", 90)         -- deg/s peak (at centre of arc), SWING only
+go.property("radius", 48)              -- px, orbit radius from pivot to platform centre
+go.property("chains", 1)               -- platforms equally spaced around the pivot
+
+local DEG_TO_RAD = math.pi / 180
+local TWO_PI = 2 * math.pi
+
+function init(self)
+	-- Pivot marker is editor-only — hide it at runtime so it doesn't overlay the orbit.
+	msg.post("#marker", "disable")
+
+	-- Use world position so the rotator works whether parented or at collection root.
+	-- Spawned platforms have no parent, so go.set_position on them uses world coords.
+	-- Force z=0: custom.render_script clips outside [-1, 1], and platforms inherit pivot z.
+	self.pivot = go.get_world_position()
+	self.pivot.z = 0
+	self.time = 0
+	self.start_rad = self.start_direction * DEG_TO_RAD
+	self.spin_rad_per_sec = self.spin_speed * DEG_TO_RAD
+	self.swing_amp_rad = self.swing_degrees * DEG_TO_RAD
+	-- Peak angular speed (at phase 0) equals swing_speed (deg/s). Derivative of
+	-- swing_amp_rad * sin(omega * t) is swing_amp_rad * omega at t=0, so set
+	-- omega so swing_amp_rad * omega == swing_speed * DEG_TO_RAD.
+	self.swing_omega = (self.swing_degrees ~= 0) and (self.swing_speed / self.swing_degrees) or 0
+
+	self.platforms = {}
+	for c = 1, self.chains do
+		local id = factory.create("#platform_factory", self.pivot)
+		self.platforms[c] = {
+			id = id,
+			url = msg.url(nil, id, "script"),
+			angle_offset = (c - 1) * TWO_PI / self.chains,
+		}
+	end
+end
+
+function fixed_update(self, dt)
+	self.time = self.time + dt
+
+	local angle_rad, angular_vel
+	if self.swing_mode then
+		local phase = self.swing_omega * self.time
+		angle_rad = self.start_rad + self.swing_amp_rad * math.sin(phase)
+		angular_vel = self.swing_amp_rad * self.swing_omega * math.cos(phase)
+	else
+		angle_rad = self.start_rad + self.spin_rad_per_sec * self.time
+		angular_vel = self.spin_rad_per_sec
+	end
+
+	for _, p in ipairs(self.platforms) do
+		local theta = angle_rad + p.angle_offset
+		local cos_t = math.cos(theta)
+		local sin_t = math.sin(theta)
+		local pos = self.pivot + vmath.vector3(self.radius * cos_t, self.radius * sin_t, 0)
+		local vel = vmath.vector3(-self.radius * angular_vel * sin_t,
+		                           self.radius * angular_vel * cos_t, 0)
+		go.set_position(pos, p.id)
+		go.set(p.url, "vel", vel)
+	end
+end

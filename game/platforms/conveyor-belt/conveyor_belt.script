@@ -1,0 +1,45 @@
+go.property("speed", 70)              -- horizontal surface velocity in px/s; negative = leftward
+go.property("length", 1)              -- belt length in 16px tiles
+-- Read by player.script's pcall(go.get, platform_url, "vel"). The pcall targets
+-- the same GO as the colliding shape, so the script and collisionobject MUST
+-- both live on "root".
+go.property("vel", vmath.vector3())
+
+local TILE_SIZE = 16
+
+-- Layout: "root" owns the script + collisionobject. Visual sprites live on
+-- child GOs ("main", "left-end", "right-end") so their positions can be set at
+-- init based on `length`. The placement position in a level is the belt's LEFT
+-- edge — root shifts itself right by width/2 so the symmetric collision shape
+-- (centred at root's origin) and the symmetrically-placed children land with
+-- the belt visually starting at the placement position.
+
+function init(self)
+	local width = self.length * TILE_SIZE
+
+	self.vel = vmath.vector3(self.speed, 0, 0)
+	self.scroll_offset = 0
+
+	-- Resize collision box and the scrolling sprite. dimensions is taken as full
+	-- extents; if collision feels half-sized in-engine, switch to width*0.5 / 8.
+	physics.set_shape("#collisionobject", "box", {
+		type = physics.SHAPE_TYPE_BOX,
+		dimensions = vmath.vector3(width, TILE_SIZE, 20)
+	})
+	go.set("main#sprite", "size", vmath.vector3(width, TILE_SIZE, 0))
+
+	-- Children sit in root's local space; root is at belt-centre after the
+	-- shift below, so left-end is at -width/2+8 and right-end at +width/2-8.
+	go.set_position(vmath.vector3(0, 0, -0.1), "main")
+	go.set_position(vmath.vector3(-width * 0.5 + TILE_SIZE * 0.5, 0, 0), "left-end")
+	go.set_position(vmath.vector3( width * 0.5 - TILE_SIZE * 0.5, 0, 0), "right-end")
+
+	-- Shift root so the user's placement position becomes the belt's left edge.
+	go.set_position(go.get_position() + vmath.vector3(width * 0.5, 0, 0))
+end
+
+function fixed_update(self, dt)
+	-- Negate so visual scroll matches the surface-velocity direction.
+	self.scroll_offset = (self.scroll_offset - self.speed * dt / TILE_SIZE) % 1
+	go.set("main#sprite", "uv_params", vmath.vector4(self.length, 1, self.scroll_offset, 0))
+end

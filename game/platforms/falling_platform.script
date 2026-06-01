@@ -1,0 +1,53 @@
+local data = require("main.data")
+
+-- Player-ride contract: the player's pcall-probe latches onto this and
+-- applies (vel * dt) each fixed_update while standing on the platform.
+go.property("vel", vmath.vector3())
+go.property("shake_delay", 0.1)
+go.property("gravity", 300)
+go.property("shake_amplitude", 1)
+go.property("shake_freq", 25)
+
+local DESPAWN_MARGIN = 32
+
+local MSG_CONTACT = hash("contact_point_response")
+local GROUP_PLAYER = hash("player")
+local TWO_PI = 2 * math.pi
+
+function init(self)
+	self.state = "idle"
+	self.timer = 0
+	self.vel = vmath.vector3()
+	self.start_x = go.get_position().x
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == MSG_CONTACT
+		and self.state == "idle"
+		and message.other_group == GROUP_PLAYER
+		and message.normal.y < -0.7 then
+		self.state = "shaking"
+		self.timer = 0
+	end
+end
+
+function fixed_update(self, dt)
+	if self.state == "shaking" then
+		self.timer = self.timer + dt
+		go.set_position(vmath.vector3(
+			self.start_x + self.shake_amplitude * math.sin(TWO_PI * self.shake_freq * self.timer),
+			go.get_position().y, 0))
+		if self.timer >= self.shake_delay then
+			go.set_position(vmath.vector3(self.start_x, go.get_position().y, 0))
+			self.state = "falling"
+			self.timer = 0
+		end
+	elseif self.state == "falling" then
+		self.vel.y = self.vel.y - self.gravity * dt
+		local pos = go.get_position() + self.vel * dt
+		go.set_position(pos)
+		if not data.onscreen(pos, DESPAWN_MARGIN) then
+			go.delete()
+		end
+	end
+end

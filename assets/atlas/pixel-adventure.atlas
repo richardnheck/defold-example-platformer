@@ -1,0 +1,78 @@
+images {
+  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle1.png"
+}
+images {
+  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle10.png"
+}
+images {
+  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle11.png"
+}
+images {
+  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle2.png"
+}
+images {
+  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle3.png"
+}
+images {
+  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle4.png"
+}
+images {
+  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle5.png"
+}
+images {
+  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle6.png"
+}
+images {
+  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle7.png"
+}
+images {
+  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle8.png"
+}
+images {
+  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle9.png"
+}
+animations {
+  id: "player-idle"
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle1.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle2.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle3.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle4.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle5.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle6.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle7.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle8.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle9.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle10.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle11.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "player"
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle1.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+extrude_borders: 2

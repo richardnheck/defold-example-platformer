@@ -1,0 +1,3 @@
+-- Externally driven by rotating_platform_controller.script: position and velocity are written each tick.
+-- Exposed so the player can ride the platform by applying (vel * dt) in fixed_update.
+go.property("vel", vmath.vector3())

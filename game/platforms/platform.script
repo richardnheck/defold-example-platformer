@@ -1,0 +1,52 @@
+go.property("vertical", false)  -- axis of motion: false = X (horizontal), true = Y (vertical)
+go.property("distance", 100)    -- peak-to-peak travel in pixels
+go.property("period", 4)        -- seconds per full cycle
+go.property("linear", false)    -- false: sinusoidal (eases at endpoints); true: constant speed, sharp reversal
+-- Exposed so the player can ride the platform by applying (vel * dt) in fixed_update.
+-- Reading it via go.get decouples the player from per-tick script execution order.
+go.property("vel", vmath.vector3())
+
+local TWO_PI = 2 * math.pi
+
+-- Motion functions return (offset, speed) scalars at time t — caller projects along
+-- the motion axis. offset is in [-amplitude, +amplitude]; speed is the derivative
+-- (signed: negative while retreating, magnitude is the instantaneous travel rate).
+
+-- Sinusoidal: smooth easing into the turnaround. Speed is zero at the endpoints.
+local function sin_motion(self, t)
+	local phase = t * self.omega
+	return self.amplitude * math.sin(phase),
+	       self.amplitude * self.omega * math.cos(phase)
+end
+
+-- Linear: triangle wave. Constant speed within each leg, sign flips at the endpoints.
+-- Starts at 0, peaks at +amplitude at T/4, back to 0 at T/2, down to -amplitude at 3T/4.
+local function linear_motion(self, t)
+	local speed = 4 * self.amplitude / self.period
+	local phase = (t / self.period) % 1
+	if phase < 0.25 then
+		return 4 * self.amplitude * phase, speed
+	elseif phase < 0.5 then
+		return self.amplitude * (2 - 4 * phase), -speed
+	elseif phase < 0.75 then
+		return -4 * self.amplitude * (phase - 0.5), -speed
+	else
+		return self.amplitude * (4 * phase - 4), speed
+	end
+end
+
+function init(self)
+	self.center = go.get_position()
+	self.time = 0
+	self.amplitude = self.distance * 0.5  -- half the peak-to-peak distance
+	self.omega = self.period > 0 and (TWO_PI / self.period) or 0
+	self.axis = self.vertical and vmath.vector3(0, 1, 0) or vmath.vector3(1, 0, 0)
+	self.motion_fn = self.linear and linear_motion or sin_motion
+end
+
+function fixed_update(self, dt)
+	self.time = self.time + dt
+	local offset, speed = self.motion_fn(self, self.time)
+	self.vel = speed * self.axis
+	go.set_position(self.center + offset * self.axis)
+end

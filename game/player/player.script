@@ -1,0 +1,550 @@
+local stately = require("stately.stately")
+local data = require("main.data")
+local debugdraw = require("debug-draw.debug-draw")
+local msg_def = require("game.messages")
+
+-- Player controller configuration
+local player_config = {
+	can_air_jump = true,
+	can_wall_grab = true
+}
+
+-- Player Constants
+-- Velocity convention: Y-DOWN (Godot semantics) — vel.y > 0 = falling, vel.y < 0 = rising.
+-- The Y component is negated at position-apply time to translate into Defold's Y-up world.
+local SPEED         = 125
+local GRAVITY       = 15
+local GRAVITY_WALL  = 3
+local JUMP          = 340
+local AIR_JUMP      = 280
+local WALL_JUMP_Y   = 295
+local WALL_JUMP_X   = 155
+local FALL_MAX      = 500
+local VAR_JUMP_MULT = 0.5
+local JUMP_BUFFER   = 0.2
+local COYOTE_TIME   = 0.1
+local RAY_LEN       = 10
+local FLOOR_BUFFER_FRAMES = 3 -- frames of grace floor contact (bridges moving-platform contact gaps)
+local CAMERA_OFFSET = vmath.vector3(0, 16, 0) -- pivot is at the feet; aim the camera at the player's mid-body
+
+-- Events for state transitions
+local EV_MOVE_START = hash("ev_move_start")
+local EV_MOVE_STOP  = hash("ev_move_stop")
+local EV_JUMP       = hash("ev_jump")
+local EV_FALL       = hash("ev_fall")
+local EV_AIR_JUMP   = hash("ev_air_jump")
+local EV_GRAB_WALL = hash("ev_touch_wall")
+local EV_LEAVE_WALL = hash("ev_leave_wall")
+local EV_WALL_JUMP  = hash("ev_wall_jump")
+local EV_LAND_IDLE  = hash("ev_land_idle")
+local EV_LAND_MOVE  = hash("ev_land_move")
+
+-- Player animations
+local ANIM_IDLE      = hash("idle")
+local ANIM_RUN       = hash("run")
+local ANIM_JUMP_UP   = hash("jump_up")
+local ANIM_JUMP_DOWN = hash("jump_down")
+local ANIM_SLIDE     = hash("slide")
+
+-- Groups for collisions
+local WORLD_GROUP = hash("world")
+local ONE_WAY_PLATFORM_GROUP = hash("one_way_platform")
+local TRAP_GROUP = hash("trap")
+
+-- Input actions
+local ACTION_LEFT    = hash("left")
+local ACTION_RIGHT   = hash("right")
+local ACTION_JUMP    = hash("jump")
+local ACTION_EXIT    = hash("exit")
+local ACTION_DEBUG   = hash("debug")
+local ACTION_CONFIRM = hash("action") -- generic confirm/dismiss on clear/gameover/complete screens
+
+-- Messages
+local MSG_POS     = hash("pos")
+local MSG_CONTACT_POINT_RESPONSE = hash("contact_point_response")
+local MSG_QUIT    = hash("quit")
+
+local function quit2menu()
+	msg.post("main:/sound", "stop_sound")
+	msg.post("main:/handler", "show_menu")
+end
+
+-- Setup the player's finite state machine (FSM)
+local function setup_fsm(self)
+	local fsm = stately.create()
+	local s = {
+		idle       = fsm.state("idle"),
+		move       = fsm.state("move"),
+		jump       = fsm.state("jump"),
+		air_jump   = fsm.state("air_jump"),
+		wall_slide = fsm.state("wall_slide"),
+		wall_jump  = fsm.state("wall_jump"),
+	}
+
+	local function t(from, to, ev) fsm.transition(from, to, ev) end
+	t(s.idle,       s.move,       EV_MOVE_START)
+	t(s.idle,       s.jump,       EV_JUMP)
+	t(s.idle,       s.jump,       EV_FALL)
+	t(s.move,       s.idle,       EV_MOVE_STOP)
+	t(s.move,       s.jump,       EV_JUMP)
+	t(s.move,       s.jump,       EV_FALL)
+	t(s.jump,       s.air_jump,   EV_AIR_JUMP)
+	t(s.jump,       s.wall_slide, EV_GRAB_WALL)
+	t(s.jump,       s.idle,       EV_LAND_IDLE)
+	t(s.jump,       s.move,       EV_LAND_MOVE)
+	t(s.jump,       s.jump,       EV_JUMP) -- self-loop for re-launch (e.g. spring bounce-back)
+	t(s.air_jump,   s.wall_slide, EV_GRAB_WALL)
+	t(s.air_jump,   s.idle,       EV_LAND_IDLE)
+	t(s.air_jump,   s.move,       EV_LAND_MOVE)
+	t(s.air_jump,   s.jump,       EV_JUMP) -- spring while in air-jump
+	t(s.wall_slide, s.wall_jump,  EV_WALL_JUMP)
+	t(s.wall_slide, s.jump,       EV_LEAVE_WALL)
+	t(s.wall_slide, s.idle,       EV_LAND_IDLE)
+	t(s.wall_slide, s.move,       EV_LAND_MOVE)
+	t(s.wall_slide, s.jump,       EV_JUMP) -- spring while wall-sliding
+	t(s.wall_jump,  s.wall_slide, EV_GRAB_WALL)
+	t(s.wall_jump,  s.idle,       EV_LAND_IDLE)
+	t(s.wall_jump,  s.move,       EV_LAND_MOVE)
+	t(s.wall_jump,  s.jump,       EV_JUMP) -- spring while wall-jumping
+
+	local function play(anim) sprite.play_flipbook("#sprite", anim) end
+	local function apply_gravity(g) self.vel.y = self.vel.y + g end
+	local function var_cut()
+		if not self.jump_held and self.vel.y < 0 and not self.jump_cut_applied then
+			self.vel.y = self.vel.y * VAR_JUMP_MULT
+			self.jump_cut_applied = true
+		end
+	end
+	local function airborne_update(dt)
+		apply_gravity(GRAVITY)
+		self.vel.x = self.dir * SPEED
+		if self.dir ~= 0 then self.facing = self.dir end
+		var_cut()
+		if self.vel.y > 30 then play(ANIM_JUMP_DOWN) end
+	end
+
+	--- State: IDLE
+	fsm.on_enter(s.idle, function()
+		play(ANIM_IDLE)
+		self.vel.x = 0
+		self.jump_cut_applied = false
+		self.air_jumped = false
+	end)
+	fsm.on_update(s.idle, function(dt) apply_gravity(GRAVITY) end)
+
+	--- State: MOVE
+	fsm.on_enter(s.move, function()
+		play(ANIM_RUN)
+		self.air_jumped = false
+	end)
+	fsm.on_update(s.move, function(dt)
+		self.vel.x = self.dir * SPEED
+		if self.dir ~= 0 then self.facing = self.dir end
+		apply_gravity(GRAVITY)
+	end)
+
+	--- State: JUMP
+	-- impulse: when set, this is a launched jump (regular ground jump, coyote
+	-- jump, or spring). When nil, it's a ledge-fall (EV_FALL) where vel.y is
+	-- left as-is to preserve the existing fall momentum.
+	-- can_air_jump: whether the player can still air-jump after this launch.
+	-- can_var_cut: whether releasing jump should short-hop (variable-jump cut).
+	-- Ground/coyote jumps: can_air_jump=true, can_var_cut=true.
+	-- Spring: can_air_jump=false, can_var_cut=false.
+	fsm.on_enter(s.jump, function(from, impulse, can_air_jump, can_var_cut)
+		if impulse then
+			self.vel.y = -impulse
+			self.platform_id = nil
+			self.platform_url = nil
+			self.air_jumped = not can_air_jump
+		end
+		self.jump_cut_applied = can_var_cut == false
+		if self.vel.y < 0 then play(ANIM_JUMP_UP) else play(ANIM_JUMP_DOWN) end
+	end)
+	fsm.on_update(s.jump, airborne_update)
+
+	--- State: AIR_JUMP
+	fsm.on_enter(s.air_jump, function()
+		self.vel.y = -AIR_JUMP
+		self.air_jumped = true
+		self.jump_cut_applied = false
+		self.platform_id = nil
+		self.platform_url = nil
+		play(ANIM_JUMP_UP)
+	end)
+	fsm.on_update(s.air_jump, airborne_update)
+
+	--- State: WALL_SLIDE
+	fsm.on_enter(s.wall_slide, function()
+		self.vel.x = 0
+		self.vel.y = 0
+		if self.wall_side ~= 0 then self.facing = self.wall_side end
+		self.jump_cut_applied = false
+		play(ANIM_SLIDE)
+	end)
+	fsm.on_update(s.wall_slide, function(dt)
+		if self.jump_held then
+			self.vel.y = 0
+		elseif self.dir == self.wall_side then
+			apply_gravity(GRAVITY_WALL)
+		else
+			apply_gravity(GRAVITY)
+		end
+	end)
+
+	--- State: WALL_JUMP
+	fsm.on_enter(s.wall_jump, function()
+		self.vel.y = -WALL_JUMP_Y
+		self.vel.x = -self.wall_side * WALL_JUMP_X
+		self.facing = -self.wall_side
+		self.air_jumped = true
+		self.jump_cut_applied = false
+		self.platform_id = nil
+		self.platform_url = nil
+		play(ANIM_JUMP_UP)
+	end)
+	fsm.on_update(s.wall_jump, airborne_update)
+
+	fsm.on_state_change(function(from, to)
+		local function name(id)
+			if id == nil then return "nil" end
+			for k, v in pairs(s) do if v.id == id then return k end end
+			return tostring(id)
+		end
+		print(string.format("dbg FSM %s -> %s vel=(%.1f,%.1f) on_floor=%s dir=%d held=%s nL=%s nR=%s",
+			name(from), name(to), self.vel.x, self.vel.y,
+			tostring(self.on_floor), self.dir, tostring(self.jump_held),
+			tostring(self.next_to_left), tostring(self.next_to_right)))
+	end)
+
+	fsm.start(s.idle)
+	self.fsm = fsm
+	self.states = s
+end
+
+local function reset_player_state(self)
+	self.vel = vmath.vector3()       -- velocity, Y-DOWN convention (vel.y > 0 = falling)
+	self.dir = 0                     -- input direction this frame: -1 left, 0 none, 1 right
+	self.facing = 1                  -- sprite facing: -1 left, 1 right
+	self.input_left = false          -- left key currently held
+	self.input_right = false         -- right key currently held
+	self.on_floor = false            -- floor contact arrived in the latest physics step
+	self.next_to_left = false        -- left wall raycast hit this frame
+	self.next_to_right = false       -- right wall raycast hit this frame
+	self.wall_side = 0               -- which side a wall is on: -1 left, 0 none, 1 right
+	self.jump_held = false           -- jump key currently held (drives wall cling + var-jump cut)
+	self.jump_buffer = 0             -- seconds remaining on the just-pressed jump signal (counts down to 0)
+	self.coyote_timer = 0            -- seconds remaining after walking off a ledge during which a jump still counts as a ground jump
+	self.jump_cut_applied = false    -- variable-jump short-hop already applied for the current jump
+	self.air_jumped = false          -- in-air double jump opportunity consumed: either used, or locked because the player walked off a ledge instead of jumping
+	self.correction = vmath.vector3()-- accumulated collision push-out this frame (prevents double-push from multiple contacts)
+	self.contacts = {}               -- buffered contact_point_response messages, resolved at the top of fixed_update
+	self.floor_buffer = 0            -- frames remaining of grace floor contact (smooths moving-platform jitter)
+	self.platform_id = nil           -- id of the GO we're standing on (identity check for cache invalidation)
+	self.platform_url = nil          -- cached msg.url to that GO's "script" component, for go.get(_, "vel")
+end
+
+local function is_grounded(self)
+	return self.on_floor or self.floor_buffer > 0
+end
+
+function init(self)
+	reset_player_state(self)
+	setup_fsm(self)
+	msg.post(".", "acquire_input_focus")
+end
+
+local function pick(self)
+	local pos = data.world2tile(go.get_position())
+	local t = tilemap.get_tile("/level#tilemap", "world", pos.x, pos.y)
+	if t == 4 then
+		tilemap.set_tile("/level#tilemap", "world", pos.x, pos.y, 0)
+		data.sound("beep")
+	end
+end
+
+local RAY_TOP_YOFFSET = 16
+local RAY_BOTTOM_YOFFSET = 4
+
+function fixed_update(self, dt)
+	if data.state ~= data.STATE_PLAYING then return end
+
+	-- End-of-last-frame Y, captured before any motion this frame. Used by the
+	-- one-way-platform contact handler to tell a real top-landing apart from
+	-- a body that's overlapping the platform from below.
+	self.prev_pos_y = go.get_position().y
+
+	-- Apply platform-ride before physics. The physics step then only resolves
+	-- the player's own residual motion (gravity / input), avoiding double-counting
+	-- the platform's delta against contact correction. Reading vel via go.get
+	-- decouples this from per-tick script execution order.
+	if self.platform_url and self.floor_buffer > 0 then
+		go.set_position(go.get_position() + go.get(self.platform_url, "vel") * dt)
+	end
+
+	local has_wall_contact = false
+
+	local pos = go.get_position()
+	debugdraw.cross(pos.x, pos.y, 3, 3, debugdraw.COLORS.white )
+	
+	local hit_l_top    = physics.raycast(pos + vmath.vector3(0,  RAY_TOP_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN,  RAY_TOP_YOFFSET, 0), {WORLD_GROUP})
+	debugdraw.ray(pos + vmath.vector3(0,  RAY_TOP_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN,  RAY_TOP_YOFFSET, 0), debugdraw.COLORS.red)
+	local hit_l_bottom = physics.raycast(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN, RAY_BOTTOM_YOFFSET, 0), {WORLD_GROUP})
+	debugdraw.ray(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN, RAY_BOTTOM_YOFFSET, 0), debugdraw.COLORS.blue)
+	local hit_r_top    = physics.raycast(pos + vmath.vector3(0, RAY_TOP_YOFFSET, 0), pos + vmath.vector3( RAY_LEN,  RAY_TOP_YOFFSET, 0), {WORLD_GROUP})
+	debugdraw.ray(pos + vmath.vector3(0, RAY_TOP_YOFFSET, 0), pos + vmath.vector3( RAY_LEN,  RAY_TOP_YOFFSET, 0), debugdraw.COLORS.green)
+	local hit_r_bottom = physics.raycast(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3( RAY_LEN, RAY_BOTTOM_YOFFSET, 0), {WORLD_GROUP})
+	debugdraw.ray(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3( RAY_LEN, RAY_BOTTOM_YOFFSET, 0), debugdraw.COLORS.yellow)
+	self.next_to_left  = hit_l_top ~= nil or hit_l_bottom ~= nil
+	self.next_to_right = hit_r_top ~= nil or hit_r_bottom ~= nil
+	if self.next_to_left then self.wall_side = -1
+	elseif self.next_to_right then self.wall_side = 1
+	else self.wall_side = 0 end
+
+	if self.jump_buffer > 0 then
+		self.jump_buffer = math.max(0, self.jump_buffer - dt)
+	end
+	if self.coyote_timer > 0 then
+		self.coyote_timer = math.max(0, self.coyote_timer - dt)
+	end
+
+	local s = self.states
+	local cur = self.fsm.current_state()
+
+	if self.jump_buffer > 0 and (cur == s.idle.id or cur == s.move.id) and is_grounded(self) then
+		self.jump_buffer = 0
+		self.fsm.handle_event(EV_JUMP, JUMP, player_config.can_air_jump, true)
+		cur = self.fsm.current_state()
+	end
+
+	-- Coyote-time ground jump: player walked off a ledge into `jump` state but
+	-- the grace window is still open, so consume the buffered jump as a fresh
+	-- ground jump (re-apply impulse, reopen the air-jump opportunity).
+	if self.jump_buffer > 0 and self.coyote_timer > 0 and cur == s.jump.id then
+		self.jump_buffer = 0
+		self.coyote_timer = 0
+		self.fsm.handle_event(EV_JUMP, JUMP, true, true)
+	end
+
+	if self.jump_buffer > 0 and not self.air_jumped and cur == s.jump.id then
+		self.jump_buffer = 0
+		self.fsm.handle_event(EV_AIR_JUMP)
+		cur = self.fsm.current_state()
+	end
+
+	if (cur == s.idle.id or cur == s.move.id) and not is_grounded(self) then
+		self.coyote_timer = COYOTE_TIME -- open coyote window before locking air-jump
+		self.air_jumped = true          -- block air-jump unless a coyote ground-jump unlocks it
+		self.fsm.handle_event(EV_FALL)
+		cur = self.fsm.current_state()
+	end
+	
+	if player_config.can_wall_grab then
+		if (cur == s.jump.id or cur == s.air_jump.id or cur == s.wall_jump.id)
+		and not self.on_floor and self.jump_held and self.vel.y > 0
+		and (self.next_to_left or self.next_to_right) then
+			self.fsm.handle_event(EV_GRAB_WALL)
+			cur = self.fsm.current_state()
+		end
+	end
+
+	if cur == s.wall_slide.id and self.jump_held and self.wall_side ~= 0 and self.dir == -self.wall_side then
+			self.fsm.handle_event(EV_WALL_JUMP)
+			cur = self.fsm.current_state()
+	end
+
+	if cur == s.wall_slide.id then
+		local still_on_wall = self.wall_side ~= 0
+		if not still_on_wall then
+			self.fsm.handle_event(EV_LEAVE_WALL)
+			cur = self.fsm.current_state()
+		end
+	end
+
+	if self.on_floor and self.vel.y >= 0
+	   and (cur == s.jump.id or cur == s.air_jump.id or cur == s.wall_jump.id or cur == s.wall_slide.id) then
+		if self.dir ~= 0 then
+			self.fsm.handle_event(EV_LAND_MOVE)
+		else
+			self.fsm.handle_event(EV_LAND_IDLE)
+		end
+		cur = self.fsm.current_state()
+	end
+
+	if cur == s.idle.id and self.dir ~= 0 and is_grounded(self) then
+		self.fsm.handle_event(EV_MOVE_START)
+	elseif cur == s.move.id and self.dir == 0 and is_grounded(self) then
+		self.fsm.handle_event(EV_MOVE_STOP)
+	end
+
+	self.fsm.update(dt)
+
+	if self.vel.y > FALL_MAX then self.vel.y = FALL_MAX end
+
+	
+	-- Y-down vel → Y-up world: negate y when applying.
+	go.set_position(go.get_position() + vmath.vector3(self.vel.x, -self.vel.y, 0) * dt)
+
+	sprite.set_hflip("#sprite", self.facing < 0)
+
+	msg.post("view#script", "point", {pos = go.get_position() + CAMERA_OFFSET})
+
+	pick(self)
+
+	self.on_floor = false
+	self.next_to_left = false
+	self.next_to_right = false
+	self.correction = vmath.vector3()
+	if self.floor_buffer > 0 then
+		self.floor_buffer = self.floor_buffer - 1
+	end
+	if self.floor_buffer == 0 then
+		self.platform_id = nil
+		self.platform_url = nil
+	end
+end
+
+-- https://defold.com/manuals/physics/#resolving-kinematic-collisions
+local function handle_obstacle_contact(self, normal, distance, position, other_id, other_group)
+	-- One-way platforms are solid ONLY for a real top-landing: a push-up
+	-- contact (normal.y ≈ 1) where the player's lowest point was at or above
+	-- the platform top at the end of the previous frame. Distance alone is
+	-- not enough — with two collision spheres (head + body) a head-only
+	-- contact can have small penetration while the body is embedded from
+	-- below. Any other one-way contact is treated as invisible.
+	if other_group == ONE_WAY_PLATFORM_GROUP then
+		-- The GO pivot is at the player's feet, so prev_pos_y is the feet Y
+		-- at end of the previous frame. A real top-landing requires that the
+		-- feet were at or above the platform top then.
+		local is_landing = normal.y > 0.7 and (self.prev_pos_y or 0) >= position.y - 1
+		if not is_landing then return end
+	end
+	
+	if distance > 0 then
+		-- First, project the accumulated correction onto the penetration vector
+		local proj = vmath.project(self.correction, normal * distance)
+		if proj < 1 then
+			-- Only care for projections that does not overshoot.
+			local comp = (distance - distance * proj) * normal
+			-- Apply compensation
+			go.set_position(go.get_position() + comp)
+			-- Accumulate correction done
+			self.correction = self.correction + comp
+		end
+	end
+
+	-- collided with a wall
+	-- stop horizontal movement
+	if math.abs(normal.x) > 0.7 then
+		self.wall_contact = true
+		self.vel.x = 0
+	end
+	-- collided with the ground/floor
+	-- stop vertical movement
+	if normal.y == 1 then
+		self.on_floor = true
+		self.floor_buffer = FLOOR_BUFFER_FRAMES
+		self.vel.y = 0
+		-- Track the surface we're standing on so we can ride moving platforms.
+		-- Cache a URL to its script component for go.get(_, "vel") in fixed_update.
+		-- Probe with pcall: static tilemap floors also produce floor contacts but
+		-- have no script/vel — those leave platform_url nil and skip the ride block.
+		if other_id and self.platform_id ~= other_id then
+			self.platform_id = other_id
+			local url = msg.url(nil, other_id, "script")
+			local ok = pcall(go.get, url, "vel")
+			self.platform_url = ok and url or nil
+		end
+	end
+	-- Ceiling contact: only halt upward motion, never clobber a
+	-- gravity-accumulated fall speed — otherwise a descending platform
+	-- pinning the player's head resets vel.y every frame and the player
+	-- gets carried down with the platform. Also drop any prior platform
+	-- ride: while pinned to a ceiling the player isn't on a floor, so
+	-- stop applying the cached platform's velocity (this is what was
+	-- horizontally sticking the player to rotating platforms after they
+	-- had been on one).
+	if normal.y < -0.7 then
+		-- hit ceiling so stop vertical motion
+		if self.vel.y < 0 then self.vel.y = 0 end -- this means only set 0 vertical velocity when going up. this means that player can fall and not get stuck due to velocity application from moving platforms
+		self.platform_id = nil
+		self.platform_url = nil
+		self.floor_buffer = 0 
+	end
+end
+
+local function input_playing(self, action_id, action)
+	if action_id == ACTION_LEFT then
+		if action.pressed then self.input_left = true
+		elseif action.released then self.input_left = false end
+		self.dir = (self.input_right and 1 or 0) - (self.input_left and 1 or 0)
+	elseif action_id == ACTION_RIGHT then
+		if action.pressed then self.input_right = true
+		elseif action.released then self.input_right = false end
+		self.dir = (self.input_right and 1 or 0) - (self.input_left and 1 or 0)
+	elseif action_id == ACTION_JUMP then
+		if action.pressed then
+			self.jump_buffer = JUMP_BUFFER
+			self.jump_held = true
+		elseif action.released then
+			self.jump_held = false
+		end
+	elseif action_id == ACTION_EXIT and action.pressed then
+		msg.post("view#pause", "show")
+	elseif action_id == ACTION_DEBUG and action.pressed and sys.get_engine_info().is_debug then
+		msg.post("/common/view#clear", "show", {state = data.STATE_CLEAR})
+	end
+end
+
+local function input_clear(self, action_id, action)
+	if action_id == ACTION_CONFIRM and action.pressed then
+		data.level = data.level + 1
+		if data.level > data.MAX_LEVELS then
+			data.level = 1
+			quit2menu()
+		else
+			msg.post("game:/loader", "new_level")
+		end
+	end
+end
+
+local function input_endscreen(self, action_id, action)
+	if (action_id == ACTION_EXIT or action_id == ACTION_CONFIRM) and action.pressed then
+		quit2menu()
+	end
+end
+
+function on_input(self, action_id, action)
+	if data.state == data.STATE_PLAYING then
+		input_playing(self, action_id, action)
+	elseif data.state == data.STATE_PAUSE then
+		msg.post("view#pause", "input", {action_id = action_id, action = action})
+	elseif data.state == data.STATE_CLEAR then
+		input_clear(self, action_id, action)
+	elseif data.state == data.STATE_GAMEOVER then
+		input_endscreen(self, action_id, action)
+	elseif data.state == data.STATE_COMPLETE then
+		input_endscreen(self, action_id, action)
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == MSG_POS then
+		go.set_position(message.pos)
+		reset_player_state(self)
+		setup_fsm(self)
+	elseif message_id == MSG_CONTACT_POINT_RESPONSE then
+		if message.other_group == TRAP_GROUP then
+			-- Player dies immediately when hitting a trap
+			msg.post("game:/loader", "reload_level")
+		else
+			-- For all other collision groups
+			handle_obstacle_contact(self, message.normal, message.distance, message.position, message.other_id, message.other_group)
+		end
+	elseif message_id == MSG_QUIT then
+		quit2menu()
+	elseif message_id == msg_def.MSG_APPLY_IMPULSE then
+		self.floor_buffer = 0
+		self.fsm.handle_event(EV_JUMP, message.impulse, false, false)
+	end
+end
