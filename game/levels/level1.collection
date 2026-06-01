@@ -46,7 +46,7 @@ instances {
     }
     properties {
       id: "linear"
-      value: "true"
+      value: "false"
       type: PROPERTY_TYPE_BOOLEAN
     }
   }
@@ -108,6 +108,14 @@ instances {
     y: 184.0
   }
 }
+instances {
+  id: "falling_platform3"
+  prototype: "/game/platforms/falling_platform.go"
+  position {
+    x: 419.0
+    y: 184.0
+  }
+}
 collection_instances {
   id: "common"
   collection: "/game/core/common.collection"
@@ -142,6 +150,7 @@ embedded_instances {
   children: "falling_platform"
   children: "falling_platform1"
   children: "falling_platform2"
+  children: "falling_platform3"
   children: "horizontal_platform"
   children: "player_spawn_position"
   children: "rotating_platform_controller"

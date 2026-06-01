@@ -1,53 +1,79 @@
 local data = require("main.data")
-
--- Player-ride contract: the player's pcall-probe latches onto this and
--- applies (vel * dt) each fixed_update while standing on the platform.
+local stately = require("stately.stately")
 go.property("vel", vmath.vector3())
 go.property("shake_delay", 0.1)
 go.property("gravity", 300)
 go.property("shake_amplitude", 1)
 go.property("shake_freq", 25)
 
-local DESPAWN_MARGIN = 32
+local DESPAWN_MARGIN = 32	-- how far off the screen before deleting
 
 local MSG_CONTACT = hash("contact_point_response")
 local GROUP_PLAYER = hash("player")
-local TWO_PI = 2 * math.pi
+local SPRITE = "#sprite"
+local ANIM_OFF = hash("falling-platform-off")
 
-function init(self)
-	self.state = "idle"
-	self.timer = 0
-	self.vel = vmath.vector3()
-	self.start_x = go.get_position().x
-end
+-- FSM events
+local EV_LAND = hash("ev_land") -- player landed on us -> start shaking
+local EV_DROP = hash("ev_drop") -- shake elapsed -> start falling
 
-function on_message(self, message_id, message, sender)
-	if message_id == MSG_CONTACT
-		and self.state == "idle"
-		and message.other_group == GROUP_PLAYER
-		and message.normal.y < -0.7 then
-		self.state = "shaking"
-		self.timer = 0
-	end
-end
+local STATE_IDLE = hash("idle")
 
-function fixed_update(self, dt)
-	if self.state == "shaking" then
-		self.timer = self.timer + dt
-		go.set_position(vmath.vector3(
-			self.start_x + self.shake_amplitude * math.sin(TWO_PI * self.shake_freq * self.timer),
-			go.get_position().y, 0))
-		if self.timer >= self.shake_delay then
-			go.set_position(vmath.vector3(self.start_x, go.get_position().y, 0))
-			self.state = "falling"
-			self.timer = 0
-		end
-	elseif self.state == "falling" then
+local function setup_fsm(self)
+	local fsm = stately.create()
+	local s = {
+		idle    = fsm.state("idle"),
+		shaking = fsm.state("shaking"),
+		falling = fsm.state("falling"),
+	}
+
+	fsm.transition(s.idle, s.shaking, EV_LAND)
+	fsm.transition(s.shaking, s.falling, EV_DROP)
+
+	fsm.on_enter(s.shaking, function()
+		-- Wobble in place via a pingpong tween (half-period matches the old sin
+		-- shake_freq), then drop once the delay elapses.
+		go.set_position(vmath.vector3(self.start_x - self.shake_amplitude, go.get_position().y, 0))
+		go.animate(".", "position.x", go.PLAYBACK_LOOP_PINGPONG,
+			self.start_x + self.shake_amplitude, go.EASING_LINEAR, 1 / (2 * self.shake_freq))
+		timer.delay(self.shake_delay, false, function()
+			fsm.handle_event(EV_DROP)
+		end)
+	end)
+
+	fsm.on_enter(s.falling, function()
+		-- Stop the wobble, recentre, then switch to the broken-off sprite.
+		go.cancel_animations(".", "position.x")
+		go.set_position(vmath.vector3(self.start_x, go.get_position().y, 0))
+		sprite.play_flipbook(SPRITE, ANIM_OFF)
+	end)
+
+	fsm.on_update(s.falling, function(dt)
 		self.vel.y = self.vel.y - self.gravity * dt
 		local pos = go.get_position() + self.vel * dt
 		go.set_position(pos)
 		if not data.onscreen(pos, DESPAWN_MARGIN) then
 			go.delete()
 		end
+	end)
+
+	fsm.start(s.idle)
+	self.fsm = fsm
+end
+
+function init(self)
+	self.vel = vmath.vector3()
+	self.start_x = go.get_position().x
+	setup_fsm(self)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == MSG_CONTACT and self.fsm.current_state() == STATE_IDLE
+		and message.other_group == GROUP_PLAYER and message.normal.y < -0.7 then
+		self.fsm.handle_event(EV_LAND)
 	end
+end
+
+function fixed_update(self, dt)
+	self.fsm.update(dt)
 end
