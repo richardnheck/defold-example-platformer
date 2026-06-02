@@ -1,13 +1,14 @@
 local msg_def = require("game.messages")
 
 local SPRITE_URL = "#sprite"
+local SPRING_IMPULSE = 410
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("trigger_response") then
 		if message.other_group == hash("player") then
 			if message.enter then
 				print("Player touched spring")
-				msg.post(message.other_id, msg_def.MSG_APPLY_IMPULSE, { impulse = 470 })
+				msg.post(message.other_id, msg_def.MSG_APPLY_IMPULSE, { impulse = SPRING_IMPULSE })
 				sprite.play_flipbook(SPRITE_URL, "launch", function() 
 					sprite.play_flipbook(SPRITE_URL, "default")
 				end)

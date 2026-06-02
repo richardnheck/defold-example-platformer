@@ -4,6 +4,8 @@ render = /main/custom.renderc
 
 [display]
 update_frequency = 60
+width = 1280
+height = 720
 
 [graphics]
 default_texture_min_filter = nearest

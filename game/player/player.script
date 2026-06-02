@@ -12,13 +12,13 @@ local player_config = {
 -- Player Constants
 -- Velocity convention: Y-DOWN (Godot semantics) — vel.y > 0 = falling, vel.y < 0 = rising.
 -- The Y component is negated at position-apply time to translate into Defold's Y-up world.
-local SPEED         = 125
+local SPEED         = 110
 local GRAVITY       = 15
 local GRAVITY_WALL  = 3
-local JUMP          = 340
-local AIR_JUMP      = 280
-local WALL_JUMP_Y   = 295
-local WALL_JUMP_X   = 155
+local JUMP          = 280
+local AIR_JUMP      = 240
+local WALL_JUMP_Y   = 245
+local WALL_JUMP_X   = 100
 local FALL_MAX      = 500
 local VAR_JUMP_MULT = 0.5
 local JUMP_BUFFER   = 0.2
@@ -40,11 +40,11 @@ local EV_LAND_IDLE  = hash("ev_land_idle")
 local EV_LAND_MOVE  = hash("ev_land_move")
 
 -- Player animations
-local ANIM_IDLE      = hash("idle")
-local ANIM_RUN       = hash("run")
-local ANIM_JUMP_UP   = hash("jump_up")
-local ANIM_JUMP_DOWN = hash("jump_down")
-local ANIM_SLIDE     = hash("slide")
+local ANIM_IDLE      = hash("player-idle")
+local ANIM_RUN       = hash("player-run")
+local ANIM_JUMP_UP   = hash("player-jump")
+local ANIM_JUMP_DOWN = hash("player-fall")
+local ANIM_SLIDE     = hash("player-wall-grab")
 
 -- Groups for collisions
 local WORLD_GROUP = hash("world")

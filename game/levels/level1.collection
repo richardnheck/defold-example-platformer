@@ -3,8 +3,8 @@ instances {
   id: "horizontal_platform"
   prototype: "/game/platforms/platform.go"
   position {
-    x: 785.0
-    y: 184.0
+    x: 799.0
+    y: 152.0
   }
   component_properties {
     id: "script"
@@ -88,15 +88,15 @@ instances {
   id: "spring1"
   prototype: "/game/platforms/spring/spring.go"
   position {
-    x: 386.0
-    y: 89.0
+    x: 873.0
+    y: 388.0
   }
 }
 instances {
   id: "falling_platform1"
   prototype: "/game/platforms/falling_platform.go"
   position {
-    x: 625.0
+    x: 617.0
     y: 184.0
   }
 }
@@ -104,15 +104,7 @@ instances {
   id: "falling_platform2"
   prototype: "/game/platforms/falling_platform.go"
   position {
-    x: 688.0
-    y: 184.0
-  }
-}
-instances {
-  id: "falling_platform3"
-  prototype: "/game/platforms/falling_platform.go"
-  position {
-    x: 419.0
+    x: 675.0
     y: 184.0
   }
 }
@@ -150,7 +142,6 @@ embedded_instances {
   children: "falling_platform"
   children: "falling_platform1"
   children: "falling_platform2"
-  children: "falling_platform3"
   children: "horizontal_platform"
   children: "player_spawn_position"
   children: "rotating_platform_controller"
@@ -191,13 +182,13 @@ embedded_instances {
   "}\\n"
   "textures {\\n"
   "  sampler: \\\"texture_sampler\\\"\\n"
-  "  texture: \\\"/assets/atlas/pixel-adventure.atlas\\\"\\n"
+  "  texture: \\\"/assets/atlas/characters.atlas\\\"\\n"
   "}\\n"
   "\"\n"
   "}\n"
   ""
   position {
-    x: 484.0
-    y: 206.0
+    x: 733.0
+    y: 193.0
   }
 }
