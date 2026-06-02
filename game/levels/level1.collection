@@ -55,8 +55,8 @@ instances {
   id: "rotating_platform_controller"
   prototype: "/game/platforms/rotating_platform_controller.go"
   position {
-    x: 995.0
-    y: 252.0
+    x: 982.0
+    y: 235.0
   }
   rotation {
     y: 0.0040008402
@@ -66,7 +66,7 @@ instances {
     id: "script"
     properties {
       id: "spin_speed"
-      value: "45.0"
+      value: "-45.0"
       type: PROPERTY_TYPE_NUMBER
     }
     properties {
