@@ -24,6 +24,7 @@ const.MSG              = {
 	TRIGGER_RESPONSE     = hash("trigger_response"),
 
 	-- Game
+	PLAYER_SPAWN         = hash("player_spawn")
 	-- RESTART              = hash("restart"),
 	-- PLAYER_DIE           = hash("player_die"),
 	-- GAME_PAUSE           = hash("game_pause"),

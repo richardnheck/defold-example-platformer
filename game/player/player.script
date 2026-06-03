@@ -2,6 +2,7 @@ local stately = require("stately.stately")
 local data = require("main.data")
 local debugdraw = require("debug-draw.debug-draw")
 local msg_def = require("game.messages")
+local const = require("game.lib.const")
 
 -- Player controller configuration
 local player_config = {
@@ -28,6 +29,7 @@ local FLOOR_BUFFER_FRAMES = 3 -- frames of grace floor contact (bridges moving-p
 local CAMERA_OFFSET = vmath.vector3(0, 16, 0) -- pivot is at the feet; aim the camera at the player's mid-body
 
 -- Events for state transitions
+local EV_SPAWNED    = hash("ev_spawned")
 local EV_MOVE_START = hash("ev_move_start")
 local EV_MOVE_STOP  = hash("ev_move_stop")
 local EV_JUMP       = hash("ev_jump")
@@ -40,6 +42,7 @@ local EV_LAND_IDLE  = hash("ev_land_idle")
 local EV_LAND_MOVE  = hash("ev_land_move")
 
 -- Player animations
+local ANIM_SPAWN     = hash("player-spawn")
 local ANIM_IDLE      = hash("player-idle")
 local ANIM_RUN       = hash("player-run")
 local ANIM_JUMP_UP   = hash("player-jump")
@@ -60,7 +63,6 @@ local ACTION_DEBUG   = hash("debug")
 local ACTION_CONFIRM = hash("action") -- generic confirm/dismiss on clear/gameover/complete screens
 
 -- Messages
-local MSG_POS     = hash("pos")
 local MSG_CONTACT_POINT_RESPONSE = hash("contact_point_response")
 local MSG_QUIT    = hash("quit")
 
@@ -73,6 +75,7 @@ end
 local function setup_fsm(self)
 	local fsm = stately.create()
 	local s = {
+		spawn      = fsm.state("spawn"),
 		idle       = fsm.state("idle"),
 		move       = fsm.state("move"),
 		jump       = fsm.state("jump"),
@@ -82,6 +85,7 @@ local function setup_fsm(self)
 	}
 
 	local function t(from, to, ev) fsm.transition(from, to, ev) end
+	t(s.spawn,       s.idle,      EV_SPAWNED)
 	t(s.idle,       s.move,       EV_MOVE_START)
 	t(s.idle,       s.jump,       EV_JUMP)
 	t(s.idle,       s.jump,       EV_FALL)
@@ -122,6 +126,13 @@ local function setup_fsm(self)
 		var_cut()
 		if self.vel.y > 30 then play(ANIM_JUMP_DOWN) end
 	end
+
+	--- State: SPAWN
+	fsm.on_enter(s.spawn, function()
+		sprite.play_flipbook("#sprite", ANIM_SPAWN, function()
+			self.fsm.handle_event(EV_SPAWNED)
+		end)
+	end)
 
 	--- State: IDLE
 	fsm.on_enter(s.idle, function()
@@ -217,7 +228,7 @@ local function setup_fsm(self)
 			tostring(self.next_to_left), tostring(self.next_to_right)))
 	end)
 
-	fsm.start(s.idle)
+	fsm.start(s.spawn)
 	self.fsm = fsm
 	self.states = s
 end
@@ -529,7 +540,7 @@ function on_input(self, action_id, action)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == MSG_POS then
+	if message_id == const.MSG.PLAYER_SPAWN then
 		go.set_position(message.pos)
 		reset_player_state(self)
 		setup_fsm(self)

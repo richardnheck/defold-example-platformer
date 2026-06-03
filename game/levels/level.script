@@ -1,4 +1,5 @@
 local data = require "main.data"
+local const = require "game.lib.const"
 
 local SPAWN_POSITION = "player_spawn_position"
 
@@ -27,6 +28,7 @@ function init(self)
 	
 	-- Spawn the player
 	local player_spawn_position = go.get_position(SPAWN_POSITION)
-	msg.post("common/player", "pos", {pos = player_spawn_position})
+	msg.post("common/player", const.MSG.PLAYER_SPAWN, {pos = player_spawn_position})
+
 	go.delete(SPAWN_POSITION)
 end

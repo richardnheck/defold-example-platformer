@@ -150,4 +150,55 @@ animations {
   playback: PLAYBACK_LOOP_FORWARD
   fps: 5
 }
+animations {
+  id: "player-spawn"
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Appearing1.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Appearing2.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Appearing3.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Appearing4.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Appearing5.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Appearing6.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Appearing7.png"
+  }
+  fps: 20
+}
+animations {
+  id: "player-die"
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Desappearing1.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Desappearing2.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Desappearing3.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Desappearing4.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Desappearing5.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Desappearing6.png"
+  }
+  images {
+    image: "/assets/png/pixel-adventure/Main Characters/Desappearing7.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 20
+}
 extrude_borders: 2
