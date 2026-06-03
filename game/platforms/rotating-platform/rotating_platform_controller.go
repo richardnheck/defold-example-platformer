@@ -1,6 +1,6 @@
 components {
   id: "script"
-  component: "/game/platforms/rotating_platform_controller.script"
+  component: "/game/platforms/rotating-platform/rotating_platform_controller.script"
 }
 embedded_components {
   id: "marker"
@@ -21,6 +21,6 @@ embedded_components {
 embedded_components {
   id: "platform_factory"
   type: "factory"
-  data: "prototype: \"/game/platforms/rotating_platform.go\"\n"
+  data: "prototype: \"/game/platforms/rotating-platform/rotating_platform.go\"\n"
   ""
 }

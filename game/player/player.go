@@ -27,6 +27,7 @@ embedded_components {
   "mask: \"world\"\n"
   "mask: \"platform\"\n"
   "mask: \"one_way_platform\"\n"
+  "mask: \"item\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_SPHERE\n"

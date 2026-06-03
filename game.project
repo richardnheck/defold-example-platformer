@@ -34,7 +34,7 @@ max_count = 0
 game_binding = /main/game.input_bindingc
 
 [project]
-title = Defold Platformer Experimentation
+title = Defold Example Platformer
 dependencies#0 = https://github.com/subsoap/defos/archive/master.zip
 dependencies#1 = https://github.com/britzl/stately/archive/master.zip
 dependencies#2 = https://github.com/rgrams/debug-draw/archive/master.zip

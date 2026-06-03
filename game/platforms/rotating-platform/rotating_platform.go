@@ -1,6 +1,6 @@
 components {
   id: "script"
-  component: "/game/platforms/platform.script"
+  component: "/game/platforms/rotating-platform/rotating_platform.script"
 }
 embedded_components {
   id: "sprite"

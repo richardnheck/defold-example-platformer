@@ -1,0 +1,28 @@
+local const = require("game.lib.const")
+
+local checkpoint_reached = false
+
+local ANIM_FLAG_OUT = "checkpoint-flag-out"
+local ANIM_FLAG_WAVE = "checkpoint-flag-wave"
+
+local SPRITE_URL = "#sprite"
+
+function init(self)
+	-- Add initialization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == const.MSG.TRIGGER_RESPONSE then
+		if message.other_group == const.GROUP.PLAYER and message.enter and not checkpoint_reached then 
+			checkpoint_reached = true
+			--msg.post(message.other_id, msg_def.MSG_APPLY_IMPULSE, { impulse = SPRING_IMPULSE })
+			sprite.play_flipbook(SPRITE_URL, ANIM_FLAG_OUT, function() 
+				sprite.play_flipbook(SPRITE_URL, ANIM_FLAG_WAVE)
+			end)
+			
+		end
+	end
+end
+

@@ -14,7 +14,7 @@ embedded_components {
   "size_mode: SIZE_MODE_MANUAL\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/assets/atlas/platforms.atlas\"\n"
+  "  texture: \"/assets/atlas/platforms-and-items.atlas\"\n"
   "}\n"
   ""
   position {
