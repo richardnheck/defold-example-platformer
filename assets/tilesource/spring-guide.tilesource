@@ -1,4 +1,4 @@
-image: "/assets/png/GuideSpriteSheet.png"
+image: "/assets/images/GuideSpriteSheet.png"
 tile_width: 16
 tile_height: 48
 collision_groups: "default"

@@ -1,25 +1,25 @@
 images {
-  image: "/assets/png/conveyor-belt-block.png"
+  image: "/assets/images/conveyor-belt-block.png"
 }
 images {
-  image: "/assets/png/conveyor-belt-end.png"
+  image: "/assets/images/conveyor-belt-end.png"
 }
 images {
-  image: "/assets/png/pixel-adventure-tweaks/platform.png"
+  image: "/assets/images/pixel-adventure-tweaks/platform.png"
 }
 animations {
   id: "falling-platform-on"
   images {
-    image: "/assets/png/pixel-adventure/Traps/Falling Platforms/falling-platform-on1.png"
+    image: "/assets/images/pixel-adventure/Traps/Falling Platforms/falling-platform-on1.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Traps/Falling Platforms/falling-platform-on2.png"
+    image: "/assets/images/pixel-adventure/Traps/Falling Platforms/falling-platform-on2.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Traps/Falling Platforms/falling-platform-on3.png"
+    image: "/assets/images/pixel-adventure/Traps/Falling Platforms/falling-platform-on3.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Traps/Falling Platforms/falling-platform-on4.png"
+    image: "/assets/images/pixel-adventure/Traps/Falling Platforms/falling-platform-on4.png"
   }
   playback: PLAYBACK_LOOP_FORWARD
   fps: 10
@@ -27,41 +27,41 @@ animations {
 animations {
   id: "falling-platform-off"
   images {
-    image: "/assets/png/pixel-adventure/Traps/Falling Platforms/falling-platform-off.png"
+    image: "/assets/images/pixel-adventure/Traps/Falling Platforms/falling-platform-off.png"
   }
   playback: PLAYBACK_LOOP_FORWARD
 }
 animations {
   id: "checkpoint-flag-wave"
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)1.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)1.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)2.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)2.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)3.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)3.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)4.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)4.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)5.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)5.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)6.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)6.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)7.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)7.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)8.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)8.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)9.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)9.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)10.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)10.png"
   }
   playback: PLAYBACK_LOOP_FORWARD
   fps: 20
@@ -69,89 +69,124 @@ animations {
 animations {
   id: "checkpoint-flag-out"
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)1.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)1.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)2.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)2.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)3.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)3.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)4.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)4.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)5.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)5.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)6.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)6.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)7.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)7.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)8.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)8.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)9.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)9.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)10.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)10.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)11.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)11.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)12.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)12.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)13.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)13.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)14.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)14.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)15.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)15.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)16.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)16.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)17.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)17.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)18.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)18.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)19.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)19.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)20.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)20.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)21.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)21.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)22.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)22.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)23.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)23.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)24.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)24.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)25.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)25.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)26.png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (Flag Out)26.png"
   }
 }
 animations {
   id: "checkpoint-no-flag"
   images {
-    image: "/assets/png/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (No Flag).png"
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/Checkpoint/Checkpoint (No Flag).png"
   }
   playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "endpoint-idle"
+  images {
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/End/End (Idle).png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "endpoint-play"
+  images {
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/End/End (Pressed)1.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/End/End (Pressed)2.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/End/End (Pressed)3.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/End/End (Pressed)4.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/End/End (Pressed)5.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/End/End (Pressed)6.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/End/End (Pressed)7.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Checkpoints/End/End (Pressed)8.png"
+  }
+  fps: 15
 }
 extrude_borders: 2

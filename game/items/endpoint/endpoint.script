@@ -1,0 +1,32 @@
+local const = require("game.lib.const")
+
+local endpoint_reached = false
+
+local ANIM_PLAY = "endpoint-play"
+
+local SPRITE_URL = "#sprite"
+local CONFETTI_URL = "confetti#confetti"
+
+function init(self)
+	-- Add initialization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == const.MSG.TRIGGER_RESPONSE then
+		if message.other_group == const.GROUP.PLAYER and message.enter and not endpoint_reached then 
+			-- player has entered the endpoint
+			endpoint_reached = true
+
+			-- animate the trophy and shoot confetti
+			sprite.play_flipbook(SPRITE_URL, ANIM_PLAY)
+			timer.delay(0.2, false, function() 
+				particlefx.play(CONFETTI_URL) 
+
+				-- TODO: Goto next level
+			end)	
+		end
+	end
+end
+

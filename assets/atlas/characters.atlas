@@ -1,70 +1,70 @@
 images {
-  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle1.png"
+  image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle1.png"
 }
 images {
-  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle10.png"
+  image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle10.png"
 }
 images {
-  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle11.png"
+  image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle11.png"
 }
 images {
-  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle2.png"
+  image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle2.png"
 }
 images {
-  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle3.png"
+  image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle3.png"
 }
 images {
-  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle4.png"
+  image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle4.png"
 }
 images {
-  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle5.png"
+  image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle5.png"
 }
 images {
-  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle6.png"
+  image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle6.png"
 }
 images {
-  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle7.png"
+  image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle7.png"
 }
 images {
-  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle8.png"
+  image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle8.png"
 }
 images {
-  image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle9.png"
+  image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle9.png"
 }
 animations {
   id: "player-idle"
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle1.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle1.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle2.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle2.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle3.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle3.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle4.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle4.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle5.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle5.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle6.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle6.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle7.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle7.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle8.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle8.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle9.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle9.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle10.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle10.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle11.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle11.png"
   }
   playback: PLAYBACK_LOOP_FORWARD
   fps: 20
@@ -72,47 +72,47 @@ animations {
 animations {
   id: "player"
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Idle1.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Idle1.png"
   }
   playback: PLAYBACK_LOOP_FORWARD
 }
 animations {
   id: "player-run"
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Run1.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Run1.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Run2.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Run2.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Run3.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Run3.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Run4.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Run4.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Run5.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Run5.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Run6.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Run6.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Run7.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Run7.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Run8.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Run8.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Run9.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Run9.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Run10.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Run10.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Run11.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Run11.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Run12.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Run12.png"
   }
   playback: PLAYBACK_LOOP_FORWARD
   fps: 20
@@ -120,21 +120,21 @@ animations {
 animations {
   id: "player-jump"
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Jump (32x32).png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Jump (32x32).png"
   }
   playback: PLAYBACK_LOOP_FORWARD
 }
 animations {
   id: "player-fall"
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Fall (32x32).png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Fall (32x32).png"
   }
   playback: PLAYBACK_LOOP_FORWARD
 }
 animations {
   id: "player-wall-grab"
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Wall Jump2.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Wall Jump2.png"
   }
   playback: PLAYBACK_LOOP_FORWARD
   fps: 5
@@ -142,10 +142,10 @@ animations {
 animations {
   id: "player-wall-slide"
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Wall Jump1.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Wall Jump1.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Ninja Frog/Wall Jump2.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Ninja Frog/Wall Jump2.png"
   }
   playback: PLAYBACK_LOOP_FORWARD
   fps: 5
@@ -153,50 +153,50 @@ animations {
 animations {
   id: "player-spawn"
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Appearing1.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Appearing1.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Appearing2.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Appearing2.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Appearing3.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Appearing3.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Appearing4.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Appearing4.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Appearing5.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Appearing5.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Appearing6.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Appearing6.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Appearing7.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Appearing7.png"
   }
   fps: 20
 }
 animations {
   id: "player-die"
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Desappearing1.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Desappearing1.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Desappearing2.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Desappearing2.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Desappearing3.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Desappearing3.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Desappearing4.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Desappearing4.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Desappearing5.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Desappearing5.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Desappearing6.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Desappearing6.png"
   }
   images {
-    image: "/assets/png/pixel-adventure/Main Characters/Desappearing7.png"
+    image: "/assets/images/pixel-adventure/Main Characters/Desappearing7.png"
   }
   playback: PLAYBACK_LOOP_FORWARD
   fps: 20

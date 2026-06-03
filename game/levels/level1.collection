@@ -55,8 +55,8 @@ instances {
   id: "rotating_platform_controller"
   prototype: "/game/platforms/rotating-platform/rotating_platform_controller.go"
   position {
-    x: 982.0
-    y: 235.0
+    x: 1108.0
+    y: 215.0
   }
   rotation {
     y: 0.0040008402
@@ -88,8 +88,8 @@ instances {
   id: "spring1"
   prototype: "/game/platforms/spring/spring.go"
   position {
-    x: 873.0
-    y: 388.0
+    x: 1009.0
+    y: 168.0
   }
 }
 instances {
@@ -142,6 +142,14 @@ collection_instances {
         type: PROPERTY_TYPE_NUMBER
       }
     }
+  }
+}
+collection_instances {
+  id: "endpoint"
+  collection: "/game/items/endpoint/endpoint.collection"
+  position {
+    x: 1249.0
+    y: 208.0
   }
 }
 scale_along_z: 0
@@ -197,7 +205,7 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 459.0
+    x: 1199.0
     y: 207.0
   }
 }

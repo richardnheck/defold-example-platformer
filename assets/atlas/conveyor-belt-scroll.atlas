@@ -1,6 +1,3 @@
 images {
-  image: "/assets/png/conveyor-belt-block.png"
+  image: "/assets/images/conveyor-belt-block.png"
 }
-margin: 0
-extrude_borders: 0
-inner_padding: 0

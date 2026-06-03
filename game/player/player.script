@@ -1,7 +1,6 @@
 local stately = require("stately.stately")
 local data = require("main.data")
 local debugdraw = require("debug-draw.debug-draw")
-local msg_def = require("game.messages")
 local const = require("game.lib.const")
 
 -- Player controller configuration
@@ -554,7 +553,7 @@ function on_message(self, message_id, message, sender)
 		end
 	elseif message_id == MSG_QUIT then
 		quit2menu()
-	elseif message_id == msg_def.MSG_APPLY_IMPULSE then
+	elseif message_id == const.MSG.APPLY_IMPULSE then
 		self.floor_buffer = 0
 		self.fsm.handle_event(EV_JUMP, message.impulse, false, false)
 	end

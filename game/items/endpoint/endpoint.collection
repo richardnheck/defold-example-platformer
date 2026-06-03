@@ -1,0 +1,24 @@
+name: "endpoint"
+instances {
+  id: "endpoint"
+  prototype: "/game/items/endpoint/endpoint.go"
+}
+scale_along_z: 0
+embedded_instances {
+  id: "confetti"
+  data: "components {\n"
+  "  id: \"confetti\"\n"
+  "  component: \"/game/items/endpoint/confetti.particlefx\"\n"
+  "  position {\n"
+  "    z: 0.1\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    z: -1.0
+  }
+  scale3 {
+    x: 0.2
+    y: 0.2
+  }
+}

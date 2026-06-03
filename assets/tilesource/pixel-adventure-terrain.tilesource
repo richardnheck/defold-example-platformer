@@ -1,7 +1,7 @@
-image: "/assets/png/pixel-adventure/Terrain/Terrain (16x16).png"
+image: "/assets/images/pixel-adventure/Terrain/Terrain (16x16).png"
 tile_width: 16
 tile_height: 16
-collision: "/assets/png/pixel-adventure/Terrain/Terrain (16x16).png"
+collision: "/assets/images/pixel-adventure/Terrain/Terrain (16x16).png"
 convex_hulls {
   index: 0
   count: 4

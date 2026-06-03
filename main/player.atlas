@@ -1,16 +1,16 @@
 animations {
   id: "idle"
   images {
-    image: "/assets/png/player/player-idle1.png"
+    image: "/assets/images/player/player-idle1.png"
   }
   images {
-    image: "/assets/png/player/player-idle2.png"
+    image: "/assets/images/player/player-idle2.png"
   }
   images {
-    image: "/assets/png/player/player-idle3.png"
+    image: "/assets/images/player/player-idle3.png"
   }
   images {
-    image: "/assets/png/player/player-idle4.png"
+    image: "/assets/images/player/player-idle4.png"
   }
   playback: PLAYBACK_LOOP_FORWARD
   fps: 8
@@ -18,22 +18,22 @@ animations {
 animations {
   id: "run"
   images {
-    image: "/assets/png/player/player-run5.png"
+    image: "/assets/images/player/player-run5.png"
   }
   images {
-    image: "/assets/png/player/player-run6.png"
+    image: "/assets/images/player/player-run6.png"
   }
   images {
-    image: "/assets/png/player/player-run7.png"
+    image: "/assets/images/player/player-run7.png"
   }
   images {
-    image: "/assets/png/player/player-run8.png"
+    image: "/assets/images/player/player-run8.png"
   }
   images {
-    image: "/assets/png/player/player-run9.png"
+    image: "/assets/images/player/player-run9.png"
   }
   images {
-    image: "/assets/png/player/player-run10.png"
+    image: "/assets/images/player/player-run10.png"
   }
   playback: PLAYBACK_LOOP_FORWARD
   fps: 15
@@ -41,24 +41,24 @@ animations {
 animations {
   id: "jump_up"
   images {
-    image: "/assets/png/player/player-jump11.png"
+    image: "/assets/images/player/player-jump11.png"
   }
   fps: 1
 }
 animations {
   id: "jump_down"
   images {
-    image: "/assets/png/player/player-jump12.png"
+    image: "/assets/images/player/player-jump12.png"
   }
   fps: 1
 }
 animations {
   id: "slide"
   images {
-    image: "/assets/png/player/player-slide52.png"
+    image: "/assets/images/player/player-slide52.png"
   }
   images {
-    image: "/assets/png/player/player-slide53.png"
+    image: "/assets/images/player/player-slide53.png"
   }
   playback: PLAYBACK_LOOP_FORWARD
   fps: 5

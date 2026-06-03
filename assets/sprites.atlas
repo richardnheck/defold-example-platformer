@@ -1,0 +1,10 @@
+images {
+  image: "/assets/images/confetti/confetti_curvy.png"
+}
+images {
+  image: "/assets/images/confetti/confetti_star.png"
+}
+images {
+  image: "/assets/images/confetti/confetti_rectangle.png"
+}
+extrude_borders: 2

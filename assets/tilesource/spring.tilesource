@@ -1,4 +1,4 @@
-image: "/assets/png/SpringSpriteSheet.png"
+image: "/assets/images/SpringSpriteSheet.png"
 tile_width: 16
 tile_height: 16
 collision_groups: "default"
