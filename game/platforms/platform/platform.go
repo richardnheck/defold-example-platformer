@@ -1,15 +1,15 @@
 components {
   id: "script"
-  component: "/game/platforms/falling_platform.script"
+  component: "/game/platforms/platform/platform.script"
 }
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "default_animation: \"falling-platform-on\"\n"
+  data: "default_animation: \"platform\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "size {\n"
   "  x: 32.0\n"
-  "  y: 10.0\n"
+  "  y: 16.0\n"
   "}\n"
   "size_mode: SIZE_MODE_MANUAL\n"
   "textures {\n"
@@ -17,9 +17,6 @@ embedded_components {
   "  texture: \"/assets/atlas/platforms-and-items.atlas\"\n"
   "}\n"
   ""
-  position {
-    z: 1.0
-  }
 }
 embedded_components {
   id: "co"
@@ -39,10 +36,9 @@ embedded_components {
   "    }\n"
   "    index: 0\n"
   "    count: 3\n"
-  "    id: \"box\"\n"
   "  }\n"
-  "  data: 16.0\n"
-  "  data: 5.0\n"
+  "  data: 15.985371\n"
+  "  data: 7.8740087\n"
   "  data: 10.0\n"
   "}\n"
   ""

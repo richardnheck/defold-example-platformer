@@ -189,4 +189,41 @@ animations {
   }
   fps: 15
 }
+animations {
+  id: "fire-hit"
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Fire/Hit1.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Fire/Hit2.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Fire/Hit3.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Fire/Hit4.png"
+  }
+  fps: 20
+}
+animations {
+  id: "fire-on"
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Fire/On1.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Fire/On2.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Fire/On3.png"
+  }
+  playback: PLAYBACK_LOOP_PINGPONG
+  fps: 10
+}
+animations {
+  id: "fire-off"
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Fire/Off.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
 extrude_borders: 2

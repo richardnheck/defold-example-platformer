@@ -1,7 +1,7 @@
 name: "level1"
 instances {
   id: "horizontal_platform"
-  prototype: "/game/platforms/platform.go"
+  prototype: "/game/platforms/platform/platform.go"
   position {
     x: 809.0
     y: 152.0
@@ -27,7 +27,7 @@ instances {
 }
 instances {
   id: "vertical_platform"
-  prototype: "/game/platforms/platform.go"
+  prototype: "/game/platforms/platform/platform.go"
   position {
     x: 880.0
     y: 184.0
@@ -78,7 +78,7 @@ instances {
 }
 instances {
   id: "falling_platform"
-  prototype: "/game/platforms/falling_platform.go"
+  prototype: "/game/platforms/falling-platform/falling_platform.go"
   position {
     x: 560.0
     y: 184.0
@@ -94,7 +94,7 @@ instances {
 }
 instances {
   id: "falling_platform1"
-  prototype: "/game/platforms/falling_platform.go"
+  prototype: "/game/platforms/falling-platform/falling_platform.go"
   position {
     x: 617.0
     y: 184.0
@@ -102,7 +102,7 @@ instances {
 }
 instances {
   id: "falling_platform2"
-  prototype: "/game/platforms/falling_platform.go"
+  prototype: "/game/platforms/falling-platform/falling_platform.go"
   position {
     x: 675.0
     y: 184.0
@@ -170,12 +170,12 @@ embedded_instances {
   "}\n"
   "components {\n"
   "  id: \"tilemap\"\n"
-  "  component: \"/game/levels/level1a.tilemap\"\n"
+  "  component: \"/game/levels/level1.tilemap\"\n"
   "}\n"
   "embedded_components {\n"
   "  id: \"level_collision_object\"\n"
   "  type: \"collisionobject\"\n"
-  "  data: \"collision_shape: \\\"/game/levels/level1a.tilemap\\\"\\n"
+  "  data: \"collision_shape: \\\"/game/levels/level1.tilemap\\\"\\n"
   "type: COLLISION_OBJECT_TYPE_KINEMATIC\\n"
   "mass: 0.0\\n"
   "friction: 0.1\\n"

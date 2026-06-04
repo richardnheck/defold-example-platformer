@@ -1,0 +1,56 @@
+local const = require("game.lib.const")
+local stately = require("stately.stately")
+
+local EV_HIT = hash("hit")
+local EV_ON = hash("on")
+local EV_OFF = hash("off")
+
+local ANIM_OFF = "fire-off"
+local ANIM_HIT = "fire-hit"
+local ANIM_ON = "fire-on"
+
+local SPRITE = "#sprite"
+
+local function setup_fsm(self)
+	local fsm = stately.create()
+	local s = {
+		off = fsm.state("off"),
+		hit = fsm.state("hit"),
+		on = fsm.state("on"),
+	}
+
+	fsm.transition(s.off, s.hit, EV_HIT)
+	fsm.transition(s.hit, s.on, EV_ON)
+	fsm.transition(s.on, s.off, EV_OFF)
+
+	fsm.on_enter(s.off, function()
+		sprite.play_flipbook(SPRITE, ANIM_OFF)
+	end)
+
+	fsm.on_enter(s.hit, function()
+		sprite.play_flipbook(SPRITE, ANIM_HIT)
+		-- start a timer to turn the fire on
+		
+	end)
+
+	fsm.start(s.off)
+	self.fsm = fsm
+	self.states = s
+end
+
+function init(self)
+	setup_fsm(self)
+end
+
+function on_message(self, message_id, message, sender)
+	print(">>>>", message_id, message.other_group)
+	if message_id == const.MSG.COLLISION_RESPONSE then
+		local current_state = self.fsm.current_state()
+		
+		if message.other_group == const.GROUP.PLAYER and current_state == self.states.off.id then 
+			-- player has triggered the fire
+			self.fsm.handle_event(EV_HIT)
+		end
+	end
+end
+

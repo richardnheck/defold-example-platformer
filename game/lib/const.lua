@@ -22,7 +22,9 @@ const.GROUP   = {
 const.MSG              = {
 	-- Defold
 	TRIGGER_RESPONSE     = hash("trigger_response"),
-
+	CONTACT_POINT_RESPONSE = hash("contact_point_response"),
+	COLLISION_RESPONSE = hash("collision_response"),
+	
 	-- Game
 	PLAYER_SPAWN         = hash("player_spawn"),
 	APPLY_IMPULSE        = hash("apply_impulse")

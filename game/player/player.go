@@ -14,7 +14,7 @@ embedded_components {
   ""
   position {
     y: 16.0
-    z: 0.2
+    z: 0.5
   }
 }
 embedded_components {
