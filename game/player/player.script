@@ -546,15 +546,21 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == MSG_CONTACT_POINT_RESPONSE then
 		if message.other_group == TRAP_GROUP then
 			-- Player dies immediately when hitting a trap
-			msg.post("game:/loader", "reload_level")
+			player_die()
 		else
 			-- For all other collision groups
 			handle_obstacle_contact(self, message.normal, message.distance, message.position, message.other_id, message.other_group)
 		end
+	elseif message_id == const.MSG.KILL_PLAYER then
+		player_die()
 	elseif message_id == MSG_QUIT then
 		quit2menu()
 	elseif message_id == const.MSG.APPLY_IMPULSE then
 		self.floor_buffer = 0
 		self.fsm.handle_event(EV_JUMP, message.impulse, false, false)
 	end
+end
+
+function player_die() 
+	msg.post("game:/loader", "reload_level")
 end

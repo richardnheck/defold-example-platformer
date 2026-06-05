@@ -5,6 +5,7 @@ local const            = {}
 ----------------------
 const.GROUP   = {
 	PLAYER     = hash("player"),
+	WORLD      = hash("world")
 	-- ENEMY      = 2,
 	-- TILE       = 4,
 	-- ITEM       = 8,
@@ -27,7 +28,9 @@ const.MSG              = {
 	
 	-- Game
 	PLAYER_SPAWN         = hash("player_spawn"),
-	APPLY_IMPULSE        = hash("apply_impulse")
+	APPLY_IMPULSE        = hash("apply_impulse"),
+	KILL_PLAYER          = hash("kill_player")
+	
 	-- RESTART              = hash("restart"),
 	-- PLAYER_DIE           = hash("player_die"),
 	-- GAME_PAUSE           = hash("game_pause"),
