@@ -1,5 +1,109 @@
 name: "level1"
 instances {
+  id: "spring"
+  prototype: "/game/platforms/spring/spring.go"
+  position {
+    x: 136.0
+    y: 120.0
+  }
+}
+instances {
+  id: "fire"
+  prototype: "/game/traps/fire/fire.go"
+  position {
+    x: 520.0
+    y: 192.0
+  }
+}
+instances {
+  id: "fire1"
+  prototype: "/game/traps/fire/fire.go"
+  position {
+    x: 536.0
+    y: 192.0
+  }
+}
+instances {
+  id: "fire2"
+  prototype: "/game/traps/fire/fire.go"
+  position {
+    x: 552.0
+    y: 192.0
+  }
+}
+instances {
+  id: "fire3"
+  prototype: "/game/traps/fire/fire.go"
+  position {
+    x: 568.0
+    y: 192.0
+  }
+}
+instances {
+  id: "fire4"
+  prototype: "/game/traps/fire/fire.go"
+  position {
+    x: 584.0
+    y: 192.0
+  }
+}
+instances {
+  id: "fire5"
+  prototype: "/game/traps/fire/fire.go"
+  position {
+    x: 600.0
+    y: 192.0
+  }
+}
+instances {
+  id: "fire6"
+  prototype: "/game/traps/fire/fire.go"
+  position {
+    x: 616.0
+    y: 192.0
+  }
+}
+instances {
+  id: "fire7"
+  prototype: "/game/traps/fire/fire.go"
+  position {
+    x: 632.0
+    y: 192.0
+  }
+}
+instances {
+  id: "rock_head_vertical"
+  prototype: "/game/traps/rock-head/rock_head.go"
+  position {
+    x: 705.0
+    y: 288.0
+  }
+  component_properties {
+    id: "rock_head"
+    properties {
+      id: "direction"
+      value: "0.0, -1.0, 0.0"
+      type: PROPERTY_TYPE_VECTOR3
+    }
+  }
+}
+instances {
+  id: "rock_head_horizontal"
+  prototype: "/game/traps/rock-head/rock_head.go"
+  position {
+    x: 785.0
+    y: 223.0
+  }
+  component_properties {
+    id: "rock_head"
+    properties {
+      id: "direction"
+      value: "1.0, 0.0, 0.0"
+      type: PROPERTY_TYPE_VECTOR3
+    }
+  }
+}
+instances {
   id: "falling_platform"
   prototype: "/game/platforms/falling-platform/falling_platform.go"
   position {
@@ -24,19 +128,72 @@ instances {
   }
 }
 instances {
-  id: "spring"
-  prototype: "/game/platforms/spring/spring.go"
+  id: "fire8"
+  prototype: "/game/traps/fire/fire.go"
   position {
-    x: 136.0
-    y: 120.0
+    x: 872.0
+    y: 144.0
   }
 }
 instances {
-  id: "fire"
+  id: "fire9"
   prototype: "/game/traps/fire/fire.go"
   position {
-    x: 67.0
-    y: 64.0
+    x: 888.0
+    y: 144.0
+  }
+}
+instances {
+  id: "fire10"
+  prototype: "/game/traps/fire/fire.go"
+  position {
+    x: 904.0
+    y: 144.0
+  }
+}
+instances {
+  id: "fire11"
+  prototype: "/game/traps/fire/fire.go"
+  position {
+    x: 920.0
+    y: 144.0
+  }
+}
+instances {
+  id: "fire12"
+  prototype: "/game/traps/fire/fire.go"
+  position {
+    x: 936.0
+    y: 144.0
+  }
+}
+instances {
+  id: "rock_head_vertical1"
+  prototype: "/game/traps/rock-head/rock_head.go"
+  position {
+    x: 968.0
+    y: 320.0
+  }
+  component_properties {
+    id: "rock_head"
+    properties {
+      id: "speed"
+      value: "75.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "direction"
+      value: "0.0, -1.0, 0.0"
+      type: PROPERTY_TYPE_VECTOR3
+    }
+  }
+}
+instances {
+  id: "checkpoint1"
+  prototype: "/game/items/checkpoint/checkpoint.go"
+  position {
+    x: 1041.0
+    y: 321.0
   }
 }
 collection_instances {
@@ -102,10 +259,6 @@ collection_instances {
 scale_along_z: 0
 embedded_instances {
   id: "level"
-  children: "checkpoint"
-  children: "falling_platform"
-  children: "falling_platform1"
-  children: "player_spawn_position"
   children: "spring"
   data: "components {\n"
   "  id: \"level\"\n"
@@ -125,6 +278,7 @@ embedded_instances {
   "restitution: 0.5\\n"
   "group: \\\"world\\\"\\n"
   "mask: \\\"player\\\"\\n"
+  "mask: \\\"trap\\\"\\n"
   "\"\n"
   "}\n"
   ""
@@ -148,7 +302,7 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 34.0
-    y: 63.0
+    x: 655.0
+    y: 270.0
   }
 }

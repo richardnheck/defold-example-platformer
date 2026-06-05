@@ -1,0 +1,94 @@
+-- =============================================================================
+-- Rock-Head Trap
+--
+-- A patrolling hazard that moves in a straight line (vertical or horizontal,
+-- set via the `direction` property) at `speed` px/s. It bounces off world
+-- tiles -- on contact with a wall/floor/ceiling ahead it reverses direction.
+-- The sprite blinks at a random interval (idle <-> blink) via a stately FSM.
+-- Touching it kills the player (its collision object is in the `trap` group,
+-- which the player's trap-death handler reacts to).
+-- =============================================================================
+
+local stately = require("stately.stately")
+local const = require("game.lib.const")
+
+-- Patrol axis and speed. Set per instance in the level.
+-- Start direction: (0,-1)=down (0,1)=up (1,0)=right (-1,0)=left
+go.property("speed", 50)
+go.property("direction", vmath.vector3(0, -1, 0))
+
+local SPRITE       = "#sprite"
+local ANIM_IDLE    = hash("rock-head-idle")
+local ANIM_BLINK   = hash("rock-head-blink")
+
+local EV_BLINK = hash("ev_blink")
+local EV_DONE  = hash("ev_done")
+
+-- Random seconds between blinks
+local BLINK_MIN = 2.0
+local BLINK_MAX = 6.0
+
+local function schedule_blink(self)
+	local delay = BLINK_MIN + math.random() * (BLINK_MAX - BLINK_MIN)
+	timer.delay(delay, false, function()
+		self.fsm.handle_event(EV_BLINK)
+	end)
+end
+
+local function setup_fsm(self)
+	local fsm = stately.create()
+	local s = {
+		idle  = fsm.state("idle"),
+		blink = fsm.state("blink"),
+	}
+
+	fsm.transition(s.idle, s.blink, EV_BLINK)
+	fsm.transition(s.blink, s.idle, EV_DONE)
+
+	fsm.on_enter(s.idle, function()
+		sprite.play_flipbook(SPRITE, ANIM_IDLE)
+		schedule_blink(self)
+	end)
+
+	fsm.on_enter(s.blink, function()
+		sprite.play_flipbook(SPRITE, ANIM_BLINK, function()
+			self.fsm.handle_event(EV_DONE)
+		end)
+	end)
+
+	fsm.start(s.idle)
+	self.fsm = fsm
+	self.states = s
+end
+
+function init(self)
+	-- Make direction a unit vector so movement speed always equals `speed`,
+	-- regardless of how the direction property was entered (e.g. (0,-2,0)).
+	-- Guard against a zero vector, which can't be normalized.
+	if vmath.length(self.direction) > 0 then
+		self.direction = vmath.normalize(self.direction)
+	end
+
+	-- For blinking, seed per instance so multiple rock-heads blink out of sync.
+	local p = go.get_position()
+	math.randomseed(math.floor(p.x * 73 + p.y * 131))
+	setup_fsm(self)
+end
+
+function fixed_update(self, dt)
+	go.set_position(go.get_position() + self.direction * self.speed * dt)
+	self.fsm.update(dt)
+end
+
+function on_message(self, message_id, message, sender)
+	-- Reverse when the collision box hits a world tile (wall / floor / ceiling).
+	if message_id == const.MSG.CONTACT_POINT_RESPONSE and message.other_group == const.GROUP.WORLD then
+		-- Only react to walls ahead of us; the normal points back toward us,
+		-- so it opposes our travel direction on a head-on hit.
+		if vmath.dot(message.normal, self.direction) < 0 then
+			-- Push out of the tile so we never stick, then turn around.
+			go.set_position(go.get_position() + message.normal * message.distance)
+			self.direction = -self.direction
+		end
+	end
+end

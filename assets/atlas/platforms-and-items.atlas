@@ -226,4 +226,64 @@ animations {
   }
   playback: PLAYBACK_LOOP_FORWARD
 }
+animations {
+  id: "saw-on"
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Saw/On1.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Saw/On2.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Saw/On3.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Saw/On4.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Saw/On5.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Saw/On6.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Saw/On7.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Saw/On8.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 15
+}
+animations {
+  id: "saw-off"
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Saw/Off.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "rock-head-idle"
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Rock Head/Idle.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "rock-head-blink"
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Rock Head/Blink1.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Rock Head/Blink2.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Rock Head/Blink3.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Rock Head/Blink4.png"
+  }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 5
+}
 extrude_borders: 2

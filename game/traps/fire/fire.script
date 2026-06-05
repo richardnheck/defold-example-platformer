@@ -9,6 +9,12 @@ local ANIM_OFF = "fire-off"
 local ANIM_HIT = "fire-hit"
 local ANIM_ON = "fire-on"
 
+-- Time in seconds to delay before fire appears after triggering
+local DELAY_TIME = 0.5
+
+-- Time in seconds the fire is on for
+local ON_TIME = 1
+
 local SPRITE = "#sprite"
 
 local function setup_fsm(self)
@@ -30,7 +36,18 @@ local function setup_fsm(self)
 	fsm.on_enter(s.hit, function()
 		sprite.play_flipbook(SPRITE, ANIM_HIT)
 		-- start a timer to turn the fire on
-		
+		timer.delay(DELAY_TIME, false, function() 
+			self.fsm.handle_event(EV_ON)
+		end)	
+	end)
+
+	fsm.on_enter(s.on, function()
+		print("on entered")
+		sprite.play_flipbook(SPRITE, ANIM_ON)
+		-- start a timer to turn on off the fire after a period
+		timer.delay(ON_TIME, false, function() 
+			self.fsm.handle_event(EV_OFF)
+		end)	
 	end)
 
 	fsm.start(s.off)
@@ -43,13 +60,16 @@ function init(self)
 end
 
 function on_message(self, message_id, message, sender)
-	print(">>>>", message_id, message.other_group)
 	if message_id == const.MSG.COLLISION_RESPONSE then
 		local current_state = self.fsm.current_state()
 		
-		if message.other_group == const.GROUP.PLAYER and current_state == self.states.off.id then 
-			-- player has triggered the fire
-			self.fsm.handle_event(EV_HIT)
+		if message.other_group == const.GROUP.PLAYER then
+			if current_state == self.states.off.id then 
+				-- player has triggered the fire
+				self.fsm.handle_event(EV_HIT)
+			elseif current_state == self.states.on.id then
+				msg.post(message.other_id, const.MSG.KILL_PLAYER)
+			end
 		end
 	end
 end
