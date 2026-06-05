@@ -4,12 +4,11 @@
 -- A patrolling hazard that moves in a straight line (vertical or horizontal,
 -- set via the `direction` property) at `speed` px/s. It bounces off world
 -- tiles -- on contact with a wall/floor/ceiling ahead it reverses direction.
--- The sprite blinks at a random interval (idle <-> blink) via a stately FSM.
+-- The sprite blinks at a random interval (idle -> blink -> idle).
 -- Touching it kills the player (its collision object is in the `trap` group,
 -- which the player's trap-death handler reacts to).
 -- =============================================================================
 
-local stately = require("stately.stately")
 local const = require("game.lib.const")
 
 -- Patrol axis and speed. Set per instance in the level.
@@ -17,48 +16,23 @@ local const = require("game.lib.const")
 go.property("speed", 50)
 go.property("direction", vmath.vector3(0, -1, 0))
 
-local SPRITE       = "#sprite"
-local ANIM_IDLE    = hash("rock-head-idle")
-local ANIM_BLINK   = hash("rock-head-blink")
-
-local EV_BLINK = hash("ev_blink")
-local EV_DONE  = hash("ev_done")
+local SPRITE     = "#sprite"
+local ANIM_IDLE  = hash("rock-head-idle")
+local ANIM_BLINK = hash("rock-head-blink")
 
 -- Random seconds between blinks
 local BLINK_MIN = 2.0
 local BLINK_MAX = 6.0
 
-local function schedule_blink(self)
+-- Wait a random delay, play the one-shot blink, then return to idle and repeat.
+local function schedule_blink()
 	local delay = BLINK_MIN + math.random() * (BLINK_MAX - BLINK_MIN)
 	timer.delay(delay, false, function()
-		self.fsm.handle_event(EV_BLINK)
-	end)
-end
-
-local function setup_fsm(self)
-	local fsm = stately.create()
-	local s = {
-		idle  = fsm.state("idle"),
-		blink = fsm.state("blink"),
-	}
-
-	fsm.transition(s.idle, s.blink, EV_BLINK)
-	fsm.transition(s.blink, s.idle, EV_DONE)
-
-	fsm.on_enter(s.idle, function()
-		sprite.play_flipbook(SPRITE, ANIM_IDLE)
-		schedule_blink(self)
-	end)
-
-	fsm.on_enter(s.blink, function()
 		sprite.play_flipbook(SPRITE, ANIM_BLINK, function()
-			self.fsm.handle_event(EV_DONE)
+			sprite.play_flipbook(SPRITE, ANIM_IDLE)
+			schedule_blink()
 		end)
 	end)
-
-	fsm.start(s.idle)
-	self.fsm = fsm
-	self.states = s
 end
 
 function init(self)
@@ -72,12 +46,13 @@ function init(self)
 	-- For blinking, seed per instance so multiple rock-heads blink out of sync.
 	local p = go.get_position()
 	math.randomseed(math.floor(p.x * 73 + p.y * 131))
-	setup_fsm(self)
+
+	sprite.play_flipbook(SPRITE, ANIM_IDLE)
+	schedule_blink()
 end
 
 function fixed_update(self, dt)
 	go.set_position(go.get_position() + self.direction * self.speed * dt)
-	self.fsm.update(dt)
 end
 
 function on_message(self, message_id, message, sender)
