@@ -285,4 +285,11 @@ animations {
   }
   fps: 10
 }
+animations {
+  id: "saw-chain"
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Saw/Chain.png"
+  }
+  playback: PLAYBACK_NONE
+}
 extrude_borders: 2
