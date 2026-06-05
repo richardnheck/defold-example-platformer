@@ -283,7 +283,6 @@ animations {
   images {
     image: "/assets/images/pixel-adventure/Traps/Rock Head/Blink4.png"
   }
-  playback: PLAYBACK_ONCE_FORWARD
-  fps: 5
+  fps: 10
 }
 extrude_borders: 2
