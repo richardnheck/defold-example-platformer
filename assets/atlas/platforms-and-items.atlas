@@ -292,4 +292,25 @@ animations {
   }
   playback: PLAYBACK_NONE
 }
+animations {
+  id: "chain-64"
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/chain (64).png"
+  }
+  playback: PLAYBACK_NONE
+}
+animations {
+  id: "spiked-ball"
+  images {
+    image: "/assets/images/pixel-adventure/Traps/Spiked Ball/Spiked Ball.png"
+  }
+  playback: PLAYBACK_NONE
+}
+animations {
+  id: "spiked-ball-base"
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/base.png"
+  }
+  playback: PLAYBACK_NONE
+}
 extrude_borders: 2

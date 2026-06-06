@@ -228,7 +228,7 @@ collection_instances {
   id: "endpoint"
   collection: "/game/items/endpoint/endpoint.collection"
   position {
-    x: 1249.0
+    x: 1626.0
     y: 208.0
   }
 }
@@ -251,6 +251,111 @@ collection_instances {
       properties {
         id: "length"
         value: "3.0"
+        type: PROPERTY_TYPE_NUMBER
+      }
+    }
+  }
+}
+collection_instances {
+  id: "spiked-ball-swing"
+  collection: "/game/traps/spiked-ball/spiked-ball.collection"
+  position {
+    x: 1160.0
+    y: 328.0
+  }
+  instance_properties {
+    id: "spiked-ball"
+    properties {
+      id: "spike-ball"
+      properties {
+        id: "mode"
+        value: "0.0"
+        type: PROPERTY_TYPE_NUMBER
+      }
+    }
+  }
+}
+collection_instances {
+  id: "spiked-ball1-swing"
+  collection: "/game/traps/spiked-ball/spiked-ball.collection"
+  position {
+    x: 1272.0
+    y: 329.0
+  }
+  instance_properties {
+    id: "spiked-ball"
+    properties {
+      id: "spike-ball"
+      properties {
+        id: "mode"
+        value: "0.0"
+        type: PROPERTY_TYPE_NUMBER
+      }
+    }
+  }
+}
+collection_instances {
+  id: "spiked-ball-spin"
+  collection: "/game/traps/spiked-ball/spiked-ball.collection"
+  position {
+    x: 1424.0
+    y: 216.0
+  }
+  instance_properties {
+    id: "spiked-ball"
+    properties {
+      id: "spike-ball"
+      properties {
+        id: "mode"
+        value: "1.0"
+        type: PROPERTY_TYPE_NUMBER
+      }
+    }
+  }
+}
+collection_instances {
+  id: "spiked-ball-spin1"
+  collection: "/game/traps/spiked-ball/spiked-ball.collection"
+  position {
+    x: 1528.0
+    y: 232.0
+  }
+  instance_properties {
+    id: "spiked-ball"
+    properties {
+      id: "spike-ball"
+      properties {
+        id: "mode"
+        value: "1.0"
+        type: PROPERTY_TYPE_NUMBER
+      }
+      properties {
+        id: "direction"
+        value: "1.0"
+        type: PROPERTY_TYPE_NUMBER
+      }
+    }
+  }
+}
+collection_instances {
+  id: "spiked-ball1-swing1"
+  collection: "/game/traps/spiked-ball/spiked-ball.collection"
+  position {
+    x: 1304.0
+    y: 184.0
+  }
+  instance_properties {
+    id: "spiked-ball"
+    properties {
+      id: "spike-ball"
+      properties {
+        id: "mode"
+        value: "0.0"
+        type: PROPERTY_TYPE_NUMBER
+      }
+      properties {
+        id: "direction"
+        value: "1.0"
         type: PROPERTY_TYPE_NUMBER
       }
     }
@@ -302,7 +407,7 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 35.0
-    y: 66.0
+    x: 1056.0
+    y: 304.0
   }
 }

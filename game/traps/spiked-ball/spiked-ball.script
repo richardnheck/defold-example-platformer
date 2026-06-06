@@ -1,0 +1,49 @@
+go.property("mode", 0)			-- default mode: SWING
+go.property("direction", -1)		-- default direction: clockwise (for swing this is the initial swing direction)
+go.property("time", 3.0)        -- time for a complete revolution.  NB: a swing will take roughly half this time
+
+local Mode = {
+	SWING = 0,
+	SPIN = 1,
+}
+
+local Direction = {
+	CLOCKWISE = -1,
+	ANTI_CLOCKWISE = 1
+}
+
+local swing_left
+local swing_right
+
+swing_left = function(self)
+	go.animate(".", "euler.z", go.PLAYBACK_ONCE_FORWARD, -85, go.EASING_INOUTQUAD, self.time/2, 0, swing_right)
+	-- if data.onscreen(go.get_position(), 32) then
+	-- 	if self.start then sound.play("main:/sound#axe", {gain = 0.25})
+	-- 	else self.start = true
+	-- 	end
+	-- end
+end
+
+swing_right = function(self)
+	go.animate(".", "euler.z", go.PLAYBACK_ONCE_FORWARD, 85, go.EASING_INOUTQUAD, self.time/2, 0, swing_left)
+	-- if data.onscreen(go.get_position(), 32) then sound.play("main:/sound#axe", {gain = 0.25}) end
+end
+
+local function spin(self)
+	go.animate(".", "euler.z", go.PLAYBACK_LOOP_FORWARD, self.direction * 360, go.EASING_LINEAR, self.time, 0)
+end
+
+function init(self)
+	-- self.start = false
+
+	if self.mode == Mode.SWING then
+		if self.direction == Direction.CLOCKWISE then
+			swing_left(self)
+		else 
+			swing_right(self)
+		end
+	elseif self.mode == Mode.SPIN then
+		spin(self)
+	end	
+end
+
