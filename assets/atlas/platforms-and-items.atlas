@@ -313,4 +313,50 @@ animations {
   }
   playback: PLAYBACK_NONE
 }
+animations {
+  id: "bomb-explosion"
+  images {
+    image: "/assets/images/kings-and-pigs/09-Bomb/Boooooom1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/09-Bomb/Boooooom2.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/09-Bomb/Boooooom3.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/09-Bomb/Boooooom4.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/09-Bomb/Boooooom5.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/09-Bomb/Boooooom6.png"
+  }
+  fps: 15
+}
+animations {
+  id: "bomb-off"
+  images {
+    image: "/assets/images/kings-and-pigs/09-Bomb/Bomb Off.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "bomb-on"
+  images {
+    image: "/assets/images/kings-and-pigs/09-Bomb/Bomb On1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/09-Bomb/Bomb On2.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/09-Bomb/Bomb On3.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/09-Bomb/Bomb On4.png"
+  }
+  playback: PLAYBACK_LOOP_PINGPONG
+  fps: 10
+}
 extrude_borders: 2

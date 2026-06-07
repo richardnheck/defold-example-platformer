@@ -1,0 +1,41 @@
+local const = require("game.lib.const")
+
+-- urls
+local BOMB = "#bomb"
+local EXPLOSION = "#explosion"
+local CO_EXPLOSION = "#co_explosion"
+
+-- time bomb is on before exploding
+local BOMB_ON_TIME = 1
+
+local ANIM_BOMB_ON = "bomb-on"
+local ANIM_BOMB_OFF = "bomb-off"
+local ANIM_EXPLOSION = "bomb-explosion"
+
+function init(self)
+	-- disable explosion
+	msg.post(EXPLOSION, "disable")
+	msg.post(CO_EXPLOSION, "disable")
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == const.MSG.TRIGGER_RESPONSE then
+		print("trigger")
+		if message.other_group == const.GROUP.PLAYER then
+			-- start the bomb countdown
+			sprite.play_flipbook(BOMB, ANIM_BOMB_ON)
+			timer.delay(BOMB_ON_TIME, false, function()
+				-- explode the bomb
+				msg.post(BOMB, "disable")          -- hide the bomb
+				msg.post(EXPLOSION, "enable")      -- show the explosion
+				sprite.play_flipbook(EXPLOSION, ANIM_EXPLOSION, function()
+					go.delete()
+				end)
+				-- delay a little so the explosion can show a bit before killing the player
+				timer.delay(0.2, false, function() 
+					msg.post(CO_EXPLOSION, "enable")   -- enable the explosion collision
+				end)
+			end)
+		end
+	end
+end
