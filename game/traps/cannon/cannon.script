@@ -1,0 +1,35 @@
+go.property("time", 2)			-- time in seconds between shots
+go.property("delay", 0)			-- delay in seconds before the first shot
+go.property("ball_speed", 100)	-- speed of the cannon ball
+go.property("direction", vmath.vector3(-1, 0, 0))	-- direction the cannon fires (-1 = left, 1 = right)
+
+-- Urls
+local SPRITE = "#sprite"
+local BALL_FACTORY = "#ball_factory"
+
+-- Animations
+local ANIM_IDLE = "cannon-idle"
+local ANIM_SHOOT = "cannon-shoot"
+
+local function shoot(self) 
+	-- animate the cannon
+	sprite.play_flipbook(SPRITE, ANIM_SHOOT, function()
+		sprite.play_flipbook(SPRITE, ANIM_IDLE)
+	end)
+
+	-- spawn the cannon ball travelling in the cannon's firing direction
+	local p = go.get_position()
+	factory.create(BALL_FACTORY, p, nil, { speed = self.ball_speed, direction = self.direction }, 1.0)
+end
+
+function init(self)
+	-- flip the sprite to face the firing direction (default art faces left)
+	sprite.set_hflip(SPRITE, self.direction.x > 0)
+
+	timer.delay(self.delay, false, function()
+		shoot(self)
+		timer.delay(self.time, true, function()
+			shoot(self)
+		end)
+	end)
+end

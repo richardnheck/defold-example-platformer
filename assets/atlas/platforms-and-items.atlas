@@ -359,4 +359,55 @@ animations {
   playback: PLAYBACK_LOOP_PINGPONG
   fps: 10
 }
+animations {
+  id: "cannon-idle"
+  images {
+    image: "/assets/images/kings-and-pigs/10-Cannon/Idle.png"
+  }
+  playback: PLAYBACK_NONE
+}
+animations {
+  id: "cannon-shoot"
+  images {
+    image: "/assets/images/kings-and-pigs/10-Cannon/Shoot1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/10-Cannon/Shoot2.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/10-Cannon/Shoot3.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/10-Cannon/Shoot4.png"
+  }
+  fps: 10
+}
+animations {
+  id: "cannon-ball"
+  images {
+    image: "/assets/images/kings-and-pigs/10-Cannon/Cannon Ball.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "cannon-ball-explosion"
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Collected_1.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Collected_2.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Collected_3.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Collected_4.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Collected_5.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Collected_6.png"
+  }
+}
 extrude_borders: 2

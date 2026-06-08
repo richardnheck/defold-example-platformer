@@ -196,6 +196,22 @@ instances {
     y: 321.0
   }
 }
+instances {
+  id: "cannon"
+  prototype: "/game/traps/cannon/cannon.go"
+  position {
+    x: 116.0
+    y: 58.0
+  }
+  component_properties {
+    id: "cannon"
+    properties {
+      id: "direction"
+      value: "1.0, 0.0, 0.0"
+      type: PROPERTY_TYPE_VECTOR3
+    }
+  }
+}
 collection_instances {
   id: "common"
   collection: "/game/core/common.collection"

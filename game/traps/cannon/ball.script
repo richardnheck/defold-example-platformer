@@ -1,0 +1,42 @@
+local const = require("game.lib.const")
+
+go.property("speed", 200)
+go.property("direction", vmath.vector3(-1, 0, 0))
+
+-- Urls
+local BALL = "#ball"
+local EXPLOSION = "#explosion"
+
+-- Animations
+local ANIM_EXPLOSION = "cannon-ball-explosion"
+
+function init(self)
+	self.exploding = false
+	msg.post(EXPLOSION, "disable")		-- hide the explosion
+end
+
+function fixed_update(self, dt)
+	if not self.exploding then
+		-- move the cannon ball if not exploding
+		go.set_position(go.get_position() + self.direction * self.speed * dt)
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == const.MSG.COLLISION_RESPONSE then
+		if not self.exploding and (message.other_group == const.GROUP.PLAYER or message.other_group == const.GROUP.WORLD) then
+			-- the cannon ball hit the player or world so explode
+			self.exploding = true
+
+			-- hide the ball sprite
+			msg.post(BALL, "disable")		
+
+			-- show the explosion
+			msg.post(EXPLOSION, "enable")   
+			sprite.play_flipbook(EXPLOSION, ANIM_EXPLOSION, function()
+				-- explosion animation finished so delete the game object
+				go.delete()
+			end)
+		end 
+	end
+end
