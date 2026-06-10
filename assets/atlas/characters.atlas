@@ -262,4 +262,29 @@ animations {
   playback: PLAYBACK_LOOP_FORWARD
   fps: 12
 }
+animations {
+  id: "pig-hit"
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Hit1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Hit2.png"
+  }
+  fps: 5
+}
+animations {
+  id: "pig-dead"
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Dead1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Dead2.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Dead3.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Dead4.png"
+  }
+}
 extrude_borders: 2

@@ -29,6 +29,7 @@ embedded_components {
   "mask: \"platform\"\n"
   "mask: \"one_way_platform\"\n"
   "mask: \"item\"\n"
+  "mask: \"enemy\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_SPHERE\n"

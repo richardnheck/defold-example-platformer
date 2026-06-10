@@ -16,6 +16,7 @@ local SPEED         = 110
 local GRAVITY       = 15
 local GRAVITY_WALL  = 3
 local JUMP          = 280
+local STOMP_BOUNCE  = 250 -- fixed upward hop after stomping an enemy
 local AIR_JUMP      = 240
 local WALL_JUMP_Y   = 245
 local WALL_JUMP_X   = 100
@@ -49,9 +50,7 @@ local ANIM_JUMP_DOWN = hash("player-fall")
 local ANIM_SLIDE     = hash("player-wall-grab")
 
 -- Groups for collisions
-local WORLD_GROUP = hash("world")
 local ONE_WAY_PLATFORM_GROUP = hash("one_way_platform")
-local TRAP_GROUP = hash("trap")
 
 -- Input actions
 local ACTION_LEFT    = hash("left")
@@ -252,6 +251,7 @@ local function reset_player_state(self)
 	self.floor_buffer = 0            -- frames remaining of grace floor contact (smooths moving-platform jitter)
 	self.platform_id = nil           -- id of the GO we're standing on (identity check for cache invalidation)
 	self.platform_url = nil          -- cached msg.url to that GO's "script" component, for go.get(_, "vel")
+	self.stomped = false             -- guard: an enemy was stomped this physics step (ignore further enemy contacts until next step)
 end
 
 local function is_grounded(self)
@@ -264,20 +264,13 @@ function init(self)
 	msg.post(".", "acquire_input_focus")
 end
 
-local function pick(self)
-	local pos = data.world2tile(go.get_position())
-	local t = tilemap.get_tile("/level#tilemap", "world", pos.x, pos.y)
-	if t == 4 then
-		tilemap.set_tile("/level#tilemap", "world", pos.x, pos.y, 0)
-		data.sound("beep")
-	end
-end
-
 local RAY_TOP_YOFFSET = 16
 local RAY_BOTTOM_YOFFSET = 4
 
 function fixed_update(self, dt)
 	if data.state ~= data.STATE_PLAYING then return end
+
+	self.stomped = false -- reset per-step guard against double-processing enemy contacts
 
 	-- End-of-last-frame Y, captured before any motion this frame. Used by the
 	-- one-way-platform contact handler to tell a real top-landing apart from
@@ -297,13 +290,13 @@ function fixed_update(self, dt)
 	local pos = go.get_position()
 	debugdraw.cross(pos.x, pos.y, 3, 3, debugdraw.COLORS.white )
 	
-	local hit_l_top    = physics.raycast(pos + vmath.vector3(0,  RAY_TOP_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN,  RAY_TOP_YOFFSET, 0), {WORLD_GROUP})
+	local hit_l_top    = physics.raycast(pos + vmath.vector3(0,  RAY_TOP_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN,  RAY_TOP_YOFFSET, 0), {const.GROUP.WORLD})
 	debugdraw.ray(pos + vmath.vector3(0,  RAY_TOP_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN,  RAY_TOP_YOFFSET, 0), debugdraw.COLORS.red)
-	local hit_l_bottom = physics.raycast(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN, RAY_BOTTOM_YOFFSET, 0), {WORLD_GROUP})
+	local hit_l_bottom = physics.raycast(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN, RAY_BOTTOM_YOFFSET, 0), {const.GROUP.WORLD})
 	debugdraw.ray(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN, RAY_BOTTOM_YOFFSET, 0), debugdraw.COLORS.blue)
-	local hit_r_top    = physics.raycast(pos + vmath.vector3(0, RAY_TOP_YOFFSET, 0), pos + vmath.vector3( RAY_LEN,  RAY_TOP_YOFFSET, 0), {WORLD_GROUP})
+	local hit_r_top    = physics.raycast(pos + vmath.vector3(0, RAY_TOP_YOFFSET, 0), pos + vmath.vector3( RAY_LEN,  RAY_TOP_YOFFSET, 0), {const.GROUP.WORLD})
 	debugdraw.ray(pos + vmath.vector3(0, RAY_TOP_YOFFSET, 0), pos + vmath.vector3( RAY_LEN,  RAY_TOP_YOFFSET, 0), debugdraw.COLORS.green)
-	local hit_r_bottom = physics.raycast(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3( RAY_LEN, RAY_BOTTOM_YOFFSET, 0), {WORLD_GROUP})
+	local hit_r_bottom = physics.raycast(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3( RAY_LEN, RAY_BOTTOM_YOFFSET, 0), {const.GROUP.WORLD})
 	debugdraw.ray(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3( RAY_LEN, RAY_BOTTOM_YOFFSET, 0), debugdraw.COLORS.yellow)
 	self.next_to_left  = hit_l_top ~= nil or hit_l_bottom ~= nil
 	self.next_to_right = hit_r_top ~= nil or hit_r_bottom ~= nil
@@ -391,15 +384,14 @@ function fixed_update(self, dt)
 
 	if self.vel.y > FALL_MAX then self.vel.y = FALL_MAX end
 
-	
 	-- Y-down vel → Y-up world: negate y when applying.
 	go.set_position(go.get_position() + vmath.vector3(self.vel.x, -self.vel.y, 0) * dt)
 
+	-- handle sprite flipping based on direction faced
 	sprite.set_hflip("#sprite", self.facing < 0)
 
+	-- pass position to for camera tracking
 	msg.post("view#script", "point", {pos = go.get_position() + CAMERA_OFFSET})
-
-	pick(self)
 
 	self.on_floor = false
 	self.next_to_left = false
@@ -422,7 +414,7 @@ local function handle_obstacle_contact(self, normal, distance, position, other_i
 	-- not enough — with two collision spheres (head + body) a head-only
 	-- contact can have small penetration while the body is embedded from
 	-- below. Any other one-way contact is treated as invisible.
-	if other_group == ONE_WAY_PLATFORM_GROUP then
+	if other_group == const.GROUP.ONE_WAY_PLATFORM then
 		-- The GO pivot is at the player's feet, so prev_pos_y is the feet Y
 		-- at end of the previous frame. A real top-landing requires that the
 		-- feet were at or above the platform top then.
@@ -544,9 +536,28 @@ function on_message(self, message_id, message, sender)
 		reset_player_state(self)
 		setup_fsm(self)
 	elseif message_id == MSG_CONTACT_POINT_RESPONSE then
-		if message.other_group == TRAP_GROUP then
+		if message.other_group == const.GROUP.TRAP then
 			-- Player dies immediately when hitting a trap
 			player_die()
+		elseif message.other_group == const.GROUP.ENEMY then
+			-- Stomp (land on the enemy's head) vs. side/below hit (death). The
+			-- contact normal points from the enemy toward us, so a normal pointing
+			-- up means the enemy is below us. Require we're descending too, so a
+			-- side brush while jumping can't read as a stomp.
+			-- normal.y > 0.5 means a stomp is effectively a 120°-wide arc: from 30° above horizontal on one side, over the top, to 30° above horizontal on the other side
+			if not self.stomped and message.normal.y > 0.5 and self.vel.y >= 0 then
+				-- guard so we ignore further enemy contacts until next frame
+				self.stomped = true 
+				
+				-- pass a message to the enemy informing them they have been stomped on
+				msg.post(message.other_id, const.MSG.STOMP_ENEMY)
+				
+				-- Bounce the player off the enemy head
+				self.floor_buffer = 0
+				self.fsm.handle_event(EV_JUMP, STOMP_BOUNCE, false, false)
+			elseif not self.stomped then
+				player_die()
+			end
 		else
 			-- For all other collision groups
 			handle_obstacle_contact(self, message.normal, message.distance, message.position, message.other_id, message.other_group)

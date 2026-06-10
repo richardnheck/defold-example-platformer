@@ -6,16 +6,11 @@ local const            = {}
 const.GROUP   = {
 	PLAYER     = hash("player"),
 	WORLD      = hash("world"),
-	MARKER     = hash("marker")
-	-- ENEMY      = 2,
-	-- TILE       = 4,
-	-- ITEM       = 8,
-	-- PROP       = 16,
-	-- PARTICLES  = 32,
-	-- SLOPE      = 64,
-	-- PLATFORM   = 128,
-	-- DIRECTIONS = 256,
-	-- WATERFALL  = 512
+	ONE_WAY_PLATFORM = hash("one_way_platform"),
+	BOUNDARY     = hash("boundary"),
+	ENEMY      = hash("enemy"),
+	TRAP       = hash("trap"),
+	ITEM       = hash("item")
 }
 
 ----------------------
@@ -30,7 +25,8 @@ const.MSG              = {
 	-- Game
 	PLAYER_SPAWN         = hash("player_spawn"),
 	APPLY_IMPULSE        = hash("apply_impulse"),
-	KILL_PLAYER          = hash("kill_player")
+	KILL_PLAYER          = hash("kill_player"),
+	STOMP_ENEMY          = hash("stomp_enemy")
 	
 	-- RESTART              = hash("restart"),
 	-- PLAYER_DIE           = hash("player_die"),

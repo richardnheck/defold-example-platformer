@@ -1,11 +1,11 @@
 components {
-  id: "marker"
+  id: "boundary"
   component: "/game/items/boundary/boundary.script"
 }
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "default_animation: \"marker\"\n"
+  data: "default_animation: \"boundary\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
@@ -20,7 +20,7 @@ embedded_components {
   "mass: 0.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
-  "group: \"marker\"\n"
+  "group: \"boundary\"\n"
   "mask: \"enemy\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"

@@ -3,16 +3,19 @@
 --
 -- Walks back and forth in a straight line at `speed` px/s, starting in
 -- `start_direction`. An endpoint is reached when the collision box bumps a
--- patrol boundary -- either a `marker` tile on the tilemap's markers layer or
--- a solid `world` tile. At each endpoint it pauses for `pause_time` seconds
--- (idle animation), then turns around and resumes running.
+-- patrol boundary
 --
 -- Boundaries are detected purely via contact_point_response (no raycasts): the
--- pig's `co_world` collision object masks both `world` and `marker`, so the
+-- pig's `co_world` collision object masks both `world` and `boundary`, so the
 -- physics engine reports the bump for us.
 --
--- Behaviour is driven by a stately state machine (run <-> pause) so further
--- states (e.g. chase, hit, die) can be added later.
+-- Touching the pig kills the player, but the player can kill the pig by landing
+-- on its head (a stomp): the player detects the stomp and posts STOMP_ENEMY,
+-- which drives the pig through hit -> dead. A dead pig stays in the level but
+-- can no longer hurt the player (its collision objects are disabled).
+--
+-- Behaviour is driven by a stately state machine (run/pause/hit/dead) so further
+-- states (e.g. chase) can be added later.
 -- =============================================================================
 
 go.property("start_direction", vmath.vector3(-1, 0, 0))  -- (-1,0,0)=left (1,0,0)=right
@@ -22,13 +25,22 @@ go.property("pause_time", 0.5)  -- seconds to wait at each endpoint before turni
 local stately = require("stately.stately")
 local const   = require("game.lib.const")
 
+-- Urls
 local SPRITE    = "#sprite"
+local COLLISION_OBJECT_HIT = "#co_hit"
+local COLLISION_OBJECT_WORLD = "#co_world"
+
+-- Animations
 local ANIM_RUN  = hash("pig-run")
 local ANIM_IDLE = hash("pig-idle")
+local ANIM_HIT  = hash("pig-hit")
+local ANIM_DEAD = hash("pig-dead")
 
 -- FSM events
 local EV_HIT_BOUNDARY = hash("hit_boundary")  -- reached a patrol endpoint
 local EV_RESUME       = hash("resume")        -- pause elapsed, carry on
+local EV_STOMPED      = hash("stomped")       -- player landed on our head
+local EV_DIED         = hash("died")          -- hit animation finished
 
 -- Face the way we're travelling. The art faces left by default, so flip
 -- horizontally when moving right.
@@ -41,10 +53,15 @@ local function setup_fsm(self)
 	local s = {
 		run   = fsm.state("run"),    -- patrolling in the current direction
 		pause = fsm.state("pause"),  -- waiting at an endpoint before turning around
+		hit   = fsm.state("hit"),    -- enemy has been hit/stomped on by the player
+		dead  = fsm.state("dead"),   -- dead: lies on the ground and can't hurt player
 	}
 
 	fsm.transition(s.run,   s.pause, EV_HIT_BOUNDARY)
 	fsm.transition(s.pause, s.run,   EV_RESUME)
+	fsm.transition(s.run,   s.hit,   EV_STOMPED)
+	fsm.transition(s.pause, s.hit,   EV_STOMPED)
+	fsm.transition(s.hit,   s.dead,  EV_DIED)
 
 	--- State: RUN
 	fsm.on_enter(s.run, function()
@@ -65,6 +82,26 @@ local function setup_fsm(self)
 		end)
 	end)
 
+	--- State: HIT
+	fsm.on_enter(s.hit, function()
+		-- Stop being lethal/solid: disable both colliders so a dead pig can
+		-- neither kill the player nor bump patrol boundaries.
+		msg.post(COLLISION_OBJECT_HIT, "disable")
+		msg.post(COLLISION_OBJECT_WORLD, "disable")
+		if self.pause_timer then
+			timer.cancel(self.pause_timer)
+			self.pause_timer = nil
+		end
+		sprite.play_flipbook(SPRITE, ANIM_HIT, function()
+			self.fsm.handle_event(EV_DIED)
+		end)
+	end)
+
+	--- State: DEAD
+	fsm.on_enter(s.dead, function()
+		sprite.play_flipbook(SPRITE, ANIM_DEAD)  -- plays once, holds the final frame
+	end)
+
 	fsm.start(s.run)
 	self.fsm = fsm
 	self.states = s
@@ -81,34 +118,36 @@ function init(self)
 	setup_fsm(self)
 end
 
-function final(self)
-	if self.pause_timer then
-		timer.cancel(self.pause_timer)
-		self.pause_timer = nil
-	end
-end
-
 function fixed_update(self, dt)
 	self.fsm.update(dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id ~= const.MSG.CONTACT_POINT_RESPONSE then return end
-
-	-- Only patrol boundaries count: marker tiles or solid world tiles.
-	if message.other_group ~= const.GROUP.MARKER and message.other_group ~= const.GROUP.WORLD then
+	if message_id == const.MSG.STOMP_ENEMY then
+		-- Player stomped us
+		self.fsm.handle_event(EV_STOMPED)
 		return
+	elseif message_id == const.MSG.CONTACT_POINT_RESPONSE then
+		-- Only patrol boundaries count e.g. boundary objects or world tiles
+		-- Only react while patrolling (ignore contacts during a pause)
+		local is_patrolling = self.fsm.current_state() == self.states.run.id	
+		if (message.other_group == const.GROUP.BOUNDARY or 
+		   message.other_group == const.GROUP.WORLD) and is_patrolling then
+			-- React only to boundaries ahead of us. The contact normal points back
+			-- toward us, so on a head-on bump it opposes our travel direction. This
+			-- ignores the floor we stand on (its normal is perpendicular to travel).
+			if vmath.dot(message.normal, self.direction) >= 0 then return end
+
+			-- Push out of the tile so we never stick, then pause before turning.
+			go.set_position(go.get_position() + message.normal * message.distance)
+			self.fsm.handle_event(EV_HIT_BOUNDARY)		
+		end
 	end
+end
 
-	-- Only react while patrolling (ignore contacts during a pause).
-	if self.fsm.current_state() ~= self.states.run.id then return end
-
-	-- React only to boundaries ahead of us. The contact normal points back
-	-- toward us, so on a head-on bump it opposes our travel direction. This
-	-- ignores the floor we stand on (its normal is perpendicular to travel).
-	if vmath.dot(message.normal, self.direction) >= 0 then return end
-
-	-- Push out of the tile so we never stick, then pause before turning.
-	go.set_position(go.get_position() + message.normal * message.distance)
-	self.fsm.handle_event(EV_HIT_BOUNDARY)
+function final(self)
+	if self.pause_timer then
+		timer.cancel(self.pause_timer)
+		self.pause_timer = nil
+	end
 end

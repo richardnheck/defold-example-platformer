@@ -411,9 +411,9 @@ animations {
   }
 }
 animations {
-  id: "marker"
+  id: "boundary"
   images {
-    image: "/assets/images/markers/direction_left.png"
+    image: "/assets/images/boundary/direction_left.png"
   }
   playback: PLAYBACK_NONE
 }
