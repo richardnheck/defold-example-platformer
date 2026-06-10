@@ -41,7 +41,7 @@ instances {
 }
 instances {
   id: "pig-right-marker"
-  prototype: "/game/items/marker/marker.go"
+  prototype: "/game/items/boundary/boundary.go"
   position {
     x: 400.0
     y: 120.0
@@ -49,7 +49,7 @@ instances {
 }
 instances {
   id: "pig-left-marker"
-  prototype: "/game/items/marker/marker.go"
+  prototype: "/game/items/boundary/boundary.go"
   position {
     x: 235.0
     y: 120.0
