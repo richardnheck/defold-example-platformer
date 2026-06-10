@@ -201,4 +201,65 @@ animations {
   playback: PLAYBACK_LOOP_FORWARD
   fps: 20
 }
+animations {
+  id: "pig-idle"
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Idle1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Idle2.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Idle3.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Idle4.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Idle5.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Idle6.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Idle7.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Idle8.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Idle9.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Idle10.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Idle11.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 15
+}
+animations {
+  id: "pig-run"
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Run1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Run2.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Run3.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Run4.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Run5.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/03-Pig/Pig-Run6.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+}
 extrude_borders: 2

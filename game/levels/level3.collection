@@ -1,0 +1,103 @@
+name: "level3"
+instances {
+  id: "checkpoint"
+  prototype: "/game/items/checkpoint/checkpoint.go"
+  position {
+    x: 489.0
+    y: 223.0
+  }
+}
+instances {
+  id: "checkpoint1"
+  prototype: "/game/items/checkpoint/checkpoint.go"
+  position {
+    x: 1041.0
+    y: 321.0
+  }
+}
+instances {
+  id: "cannon"
+  prototype: "/game/traps/cannon/cannon.go"
+  position {
+    x: 201.0
+    y: 91.0
+  }
+  component_properties {
+    id: "cannon"
+    properties {
+      id: "direction"
+      value: "-1.0, 0.0, 0.0"
+      type: PROPERTY_TYPE_VECTOR3
+    }
+  }
+}
+instances {
+  id: "pig"
+  prototype: "/game/enemies/pig.go"
+  position {
+    x: 301.0
+    y: 127.0
+  }
+}
+collection_instances {
+  id: "common"
+  collection: "/game/core/common.collection"
+}
+collection_instances {
+  id: "endpoint"
+  collection: "/game/items/endpoint/endpoint.collection"
+  position {
+    x: 1626.0
+    y: 208.0
+  }
+}
+scale_along_z: 0
+embedded_instances {
+  id: "level"
+  data: "components {\n"
+  "  id: \"level\"\n"
+  "  component: \"/game/levels/level.script\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"tilemap\"\n"
+  "  component: \"/game/levels/level3.tilemap\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"level_collision_object\"\n"
+  "  type: \"collisionobject\"\n"
+  "  data: \"collision_shape: \\\"/game/levels/level3.tilemap\\\"\\n"
+  "type: COLLISION_OBJECT_TYPE_KINEMATIC\\n"
+  "mass: 0.0\\n"
+  "friction: 0.1\\n"
+  "restitution: 0.5\\n"
+  "group: \\\"world\\\"\\n"
+  "mask: \\\"player\\\"\\n"
+  "mask: \\\"trap\\\"\\n"
+  "mask: \\\"enemy\\\"\\n"
+  "\"\n"
+  "}\n"
+  ""
+}
+embedded_instances {
+  id: "player_spawn_position"
+  data: "embedded_components {\n"
+  "  id: \"sprite\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"default_animation: \\\"player\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "size {\\n"
+  "  x: 32.0\\n"
+  "  y: 32.0\\n"
+  "}\\n"
+  "textures {\\n"
+  "  sampler: \\\"texture_sampler\\\"\\n"
+  "  texture: \\\"/assets/atlas/characters.atlas\\\"\\n"
+  "}\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    x: 209.0
+    y: 125.0
+  }
+}

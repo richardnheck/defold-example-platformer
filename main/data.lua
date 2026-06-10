@@ -19,7 +19,7 @@ M.TILE_SIZE = 16
 M.PIXEL_SIZE = 4
 M.MAX_LEVELS = 10
 
-M.level = 2
+M.level = 3
 M.time = 0
 
 M.offset = vmath.vector3(0)

@@ -1,0 +1,85 @@
+-- =============================================================================
+-- Pig (patroller enemy)
+--
+-- Walks back and forth in a straight line at `speed` px/s, starting in
+-- `start_direction`. An endpoint is reached when the collision box bumps a
+-- patrol boundary -- either a `marker` tile on the tilemap's markers layer or
+-- a solid `world` tile. At each endpoint it pauses for `pause_time` seconds
+-- (playing the idle animation), then turns around and resumes running.
+--
+-- Boundaries are detected purely via contact_point_response (no raycasts): the
+-- pig's `co_world` collision object masks both `world` and `marker`, so the
+-- physics engine reports the bump for us.
+-- =============================================================================
+
+go.property("start_direction", vmath.vector3(-1, 0, 0))  -- (-1,0,0)=left (1,0,0)=right
+go.property("speed", 100)
+go.property("pause_time", 0.5)  -- seconds to wait at each endpoint before turning
+
+local const = require("game.lib.const")
+
+local SPRITE    = "#sprite"
+local ANIM_RUN  = hash("pig-run")
+local ANIM_IDLE = hash("pig-idle")
+
+-- Face the way we're travelling. The art faces left by default, so flip
+-- horizontally when moving right.
+local function update_facing(self)
+	sprite.set_hflip(SPRITE, self.direction.x > 0)
+end
+
+function init(self)
+	-- Normalise so travel speed always equals `speed` regardless of how the
+	-- direction property was entered. Guard against a zero vector.
+	self.direction = self.start_direction
+	if vmath.length(self.direction) > 0 then
+		self.direction = vmath.normalize(self.direction)
+	end
+
+	self.paused = false
+	update_facing(self)
+	sprite.play_flipbook(SPRITE, ANIM_RUN)
+end
+
+function final(self)
+	if self.pause_timer then
+		timer.cancel(self.pause_timer)
+		self.pause_timer = nil
+	end
+end
+
+function fixed_update(self, dt)
+	if self.paused then return end
+	go.set_position(go.get_position() + self.direction * self.speed * dt)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id ~= const.MSG.CONTACT_POINT_RESPONSE then return end
+
+	-- Only patrol boundaries count: marker tiles or solid world tiles.
+	if message.other_group ~= const.GROUP.MARKER and message.other_group ~= const.GROUP.WORLD then
+		return
+	end
+
+	-- Already turning around at an endpoint -- ignore further contacts.
+	if self.paused then return end
+
+	-- React only to boundaries ahead of us. The contact normal points back
+	-- toward us, so on a head-on bump it opposes our travel direction. This
+	-- ignores the floor we stand on (its normal is perpendicular to travel).
+	if vmath.dot(message.normal, self.direction) >= 0 then return end
+
+	-- Push out of the tile so we never stick, then pause before turning.
+	go.set_position(go.get_position() + message.normal * message.distance)
+
+	self.paused = true
+	sprite.play_flipbook(SPRITE, ANIM_IDLE)
+
+	self.pause_timer = timer.delay(self.pause_time, false, function()
+		self.pause_timer = nil
+		self.direction = -self.direction
+		update_facing(self)
+		sprite.play_flipbook(SPRITE, ANIM_RUN)
+		self.paused = false
+	end)
+end

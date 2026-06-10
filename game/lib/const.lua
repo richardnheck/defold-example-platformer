@@ -5,7 +5,8 @@ local const            = {}
 ----------------------
 const.GROUP   = {
 	PLAYER     = hash("player"),
-	WORLD      = hash("world")
+	WORLD      = hash("world"),
+	MARKER     = hash("marker")
 	-- ENEMY      = 2,
 	-- TILE       = 4,
 	-- ITEM       = 8,
