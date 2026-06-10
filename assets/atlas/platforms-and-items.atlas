@@ -410,4 +410,11 @@ animations {
     image: "/assets/images/pixel-adventure/Items/Fruits/Collected_6.png"
   }
 }
+animations {
+  id: "marker"
+  images {
+    image: "/assets/images/markers/direction_left.png"
+  }
+  playback: PLAYBACK_NONE
+}
 extrude_borders: 2

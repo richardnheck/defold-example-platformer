@@ -39,6 +39,25 @@ instances {
     y: 126.0
   }
 }
+instances {
+  id: "pig-right-marker"
+  prototype: "/game/items/marker/marker.go"
+  position {
+    x: 400.0
+    y: 120.0
+  }
+}
+instances {
+  id: "pig-left-marker"
+  prototype: "/game/items/marker/marker.go"
+  position {
+    x: 235.0
+    y: 120.0
+  }
+  scale3 {
+    x: -1.0
+  }
+}
 collection_instances {
   id: "common"
   collection: "/game/core/common.collection"

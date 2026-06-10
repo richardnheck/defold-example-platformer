@@ -1444,125 +1444,124 @@ convex_hulls {
 }
 convex_hulls {
   index: 602
-  count: 4
-  collision_group: "marker"
-}
-convex_hulls {
-  index: 606
-  count: 4
-  collision_group: "marker"
-}
-convex_hulls {
-  index: 610
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
 convex_hulls {
-  index: 610
+  index: 602
   count: 0
   collision_group: ""
 }
-collision_groups: "marker"
+convex_hulls {
+  index: 602
+  count: 0
+  collision_group: ""
+}
+convex_hulls {
+  index: 602
+  count: 0
+  collision_group: ""
+}
 collision_groups: "one_way_platform"
 collision_groups: "trap"
 collision_groups: "world"

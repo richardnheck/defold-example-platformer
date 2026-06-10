@@ -25,7 +25,7 @@ end
 
 function init(self)
 	parse(self)
-	
+
 	-- Spawn the player
 	local player_spawn_position = go.get_position(SPAWN_POSITION)
 	msg.post("common/player", const.MSG.PLAYER_SPAWN, {pos = player_spawn_position})

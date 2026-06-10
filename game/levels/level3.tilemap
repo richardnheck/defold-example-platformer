@@ -7616,15 +7616,5 @@ layers {
 layers {
   id: "markers"
   z: 0.0
-  cell {
-    x: 15
-    y: 7
-    tile: 289
-  }
-  cell {
-    x: 22
-    y: 7
-    tile: 288
-  }
 }
 material: "/builtins/materials/tile_map.material"

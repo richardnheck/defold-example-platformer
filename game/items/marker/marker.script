@@ -1,0 +1,9 @@
+--
+-- This marker is used to mark the boundaries for patrol enemies
+-- At run time the sprite is hidden so it is only visible when editting a level
+--
+
+function init(self)
+	-- hide the marker sprite in the game.  It is just used for enemy collisions
+	msg.post("#sprite", "disable")
+end
