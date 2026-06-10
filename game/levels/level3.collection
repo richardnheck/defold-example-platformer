@@ -36,7 +36,7 @@ instances {
   prototype: "/game/enemies/pig.go"
   position {
     x: 301.0
-    y: 127.0
+    y: 126.0
   }
 }
 collection_instances {
