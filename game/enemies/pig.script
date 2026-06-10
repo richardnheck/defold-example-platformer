@@ -5,27 +5,69 @@
 -- `start_direction`. An endpoint is reached when the collision box bumps a
 -- patrol boundary -- either a `marker` tile on the tilemap's markers layer or
 -- a solid `world` tile. At each endpoint it pauses for `pause_time` seconds
--- (playing the idle animation), then turns around and resumes running.
+-- (idle animation), then turns around and resumes running.
 --
 -- Boundaries are detected purely via contact_point_response (no raycasts): the
 -- pig's `co_world` collision object masks both `world` and `marker`, so the
 -- physics engine reports the bump for us.
+--
+-- Behaviour is driven by a stately state machine (run <-> pause) so further
+-- states (e.g. chase, hit, die) can be added later.
 -- =============================================================================
 
 go.property("start_direction", vmath.vector3(-1, 0, 0))  -- (-1,0,0)=left (1,0,0)=right
 go.property("speed", 100)
 go.property("pause_time", 0.5)  -- seconds to wait at each endpoint before turning
 
-local const = require("game.lib.const")
+local stately = require("stately.stately")
+local const   = require("game.lib.const")
 
 local SPRITE    = "#sprite"
 local ANIM_RUN  = hash("pig-run")
 local ANIM_IDLE = hash("pig-idle")
 
+-- FSM events
+local EV_HIT_BOUNDARY = hash("hit_boundary")  -- reached a patrol endpoint
+local EV_RESUME       = hash("resume")        -- pause elapsed, carry on
+
 -- Face the way we're travelling. The art faces left by default, so flip
 -- horizontally when moving right.
 local function update_facing(self)
 	sprite.set_hflip(SPRITE, self.direction.x > 0)
+end
+
+local function setup_fsm(self)
+	local fsm = stately.create()
+	local s = {
+		run   = fsm.state("run"),    -- patrolling in the current direction
+		pause = fsm.state("pause"),  -- waiting at an endpoint before turning around
+	}
+
+	fsm.transition(s.run,   s.pause, EV_HIT_BOUNDARY)
+	fsm.transition(s.pause, s.run,   EV_RESUME)
+
+	--- State: RUN
+	fsm.on_enter(s.run, function()
+		update_facing(self)
+		sprite.play_flipbook(SPRITE, ANIM_RUN)
+	end)
+	fsm.on_update(s.run, function(dt)
+		go.set_position(go.get_position() + self.direction * self.speed * dt)
+	end)
+
+	--- State: PAUSE
+	fsm.on_enter(s.pause, function()
+		sprite.play_flipbook(SPRITE, ANIM_IDLE)
+		self.pause_timer = timer.delay(self.pause_time, false, function()
+			self.pause_timer = nil
+			self.direction = -self.direction  -- turn around, then RUN re-faces us
+			self.fsm.handle_event(EV_RESUME)
+		end)
+	end)
+
+	fsm.start(s.run)
+	self.fsm = fsm
+	self.states = s
 end
 
 function init(self)
@@ -36,9 +78,7 @@ function init(self)
 		self.direction = vmath.normalize(self.direction)
 	end
 
-	self.paused = false
-	update_facing(self)
-	sprite.play_flipbook(SPRITE, ANIM_RUN)
+	setup_fsm(self)
 end
 
 function final(self)
@@ -49,8 +89,7 @@ function final(self)
 end
 
 function fixed_update(self, dt)
-	if self.paused then return end
-	go.set_position(go.get_position() + self.direction * self.speed * dt)
+	self.fsm.update(dt)
 end
 
 function on_message(self, message_id, message, sender)
@@ -61,8 +100,8 @@ function on_message(self, message_id, message, sender)
 		return
 	end
 
-	-- Already turning around at an endpoint -- ignore further contacts.
-	if self.paused then return end
+	-- Only react while patrolling (ignore contacts during a pause).
+	if self.fsm.current_state() ~= self.states.run.id then return end
 
 	-- React only to boundaries ahead of us. The contact normal points back
 	-- toward us, so on a head-on bump it opposes our travel direction. This
@@ -71,15 +110,5 @@ function on_message(self, message_id, message, sender)
 
 	-- Push out of the tile so we never stick, then pause before turning.
 	go.set_position(go.get_position() + message.normal * message.distance)
-
-	self.paused = true
-	sprite.play_flipbook(SPRITE, ANIM_IDLE)
-
-	self.pause_timer = timer.delay(self.pause_time, false, function()
-		self.pause_timer = nil
-		self.direction = -self.direction
-		update_facing(self)
-		sprite.play_flipbook(SPRITE, ANIM_RUN)
-		self.paused = false
-	end)
+	self.fsm.handle_event(EV_HIT_BOUNDARY)
 end
