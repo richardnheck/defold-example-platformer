@@ -1,6 +1,6 @@
 components {
   id: "pig"
-  component: "/game/enemies/pig.script"
+  component: "/game/enemies/pig/pig.script"
 }
 embedded_components {
   id: "sprite"
@@ -28,20 +28,17 @@ embedded_components {
   "mask: \"boundary\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
-  "    shape_type: TYPE_BOX\n"
+  "    shape_type: TYPE_SPHERE\n"
   "    position {\n"
   "      x: -3.0\n"
-  "      y: -4.0\n"
+  "      y: -6.0\n"
   "    }\n"
   "    rotation {\n"
   "    }\n"
   "    index: 0\n"
-  "    count: 3\n"
-  "    id: \"box\"\n"
+  "    count: 1\n"
   "  }\n"
-  "  data: 6.585109\n"
-  "  data: 10.0\n"
-  "  data: 10.0\n"
+  "  data: 8.0\n"
   "}\n"
   ""
 }

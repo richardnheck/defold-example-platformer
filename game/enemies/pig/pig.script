@@ -133,9 +133,15 @@ function on_message(self, message_id, message, sender)
 		local is_patrolling = self.fsm.current_state() == self.states.run.id	
 		if (message.other_group == const.GROUP.BOUNDARY or 
 		   message.other_group == const.GROUP.WORLD) and is_patrolling then
+			-- Ignore the floor we stand on. A flat floor's normal is straight up,
+			-- but where our box straddles a tile seam a bottom corner catches a tile
+			-- edge and the normal comes back diagonal (an upward component plus a
+			-- sideways one). Either way a real wall/boundary normal is essentially
+			-- horizontal, so reject anything with a meaningful vertical component.
+			if math.abs(message.normal.y) > 0.5 then return end
+
 			-- React only to boundaries ahead of us. The contact normal points back
-			-- toward us, so on a head-on bump it opposes our travel direction. This
-			-- ignores the floor we stand on (its normal is perpendicular to travel).
+			-- toward us, so on a head-on bump it opposes our travel direction.
 			if vmath.dot(message.normal, self.direction) >= 0 then return end
 
 			-- Push out of the tile so we never stick, then pause before turning.
