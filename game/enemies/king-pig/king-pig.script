@@ -1,26 +1,24 @@
 -- =============================================================================
--- King Pig (patroller enemy)
+-- King Pig (chaser enemy)
 --
--- Walks back and forth in a straight line at `speed` px/s, starting in
--- `start_direction`. An endpoint is reached when the collision box bumps a
--- patrol boundary
+-- Stands idle waiting for the player. When the player comes within `chase_range`
+-- AND is roughly on the king pig's own level (within `chase_height`), it chases
+-- them horizontally at `chase_speed`. A player out of range or out of reach
+-- (e.g. clinging to a wall above) is ignored, so the king pig simply waits.
 --
--- Boundaries are detected purely via contact_point_response (no raycasts): the
--- king pig's `co_world` collision object masks both `world` and `boundary`, so
--- the physics engine reports the bump for us.
---
--- Touching the king pig kills the player, but the player can kill it by landing
--- on its head (a stomp): the player detects the stomp and posts STOMP_ENEMY,
--- which drives the king pig through hit -> dead. A dead king pig stays in the
--- level but can no longer hurt the player (its collision objects are disabled).
---
--- Behaviour is driven by a stately state machine (run/pause/hit/dead) so further
--- states (e.g. chase) can be added later.
+-- The chase is still capped by patrol boundaries or a wall
+
 -- =============================================================================
 
-go.property("start_direction", vmath.vector3(-1, 0, 0))  -- (-1,0,0)=left (1,0,0)=right
-go.property("speed", 100)
-go.property("pause_time", 0.5)  -- seconds to wait at each endpoint before turning
+go.property("start_direction", vmath.vector3(-1, 0, 0))  -- (-1,0,0)=left (1,0,0)=right: initial facing
+go.property("chase_range", 75)   	-- distance (px) at which the player is noticed and chased
+go.property("chase_height", 50)  	-- max vertical gap (px) to the player; above this it's unreachable (e.g. on a wall above)
+go.property("chase_speed", 95)  	-- px/s while chasing
+go.property("turn_pause", 0.3)   	-- seconds to hesitate before reversing chase direction
+
+-- Below this horizontal gap (px) the player is "aligned" with the king pig:
+-- close enough that chasing would just jitter it back and forth, so don't.
+local CHASE_X_DEADZONE = 4
 
 local stately = require("stately.stately")
 local const   = require("game.lib.const")
@@ -29,6 +27,7 @@ local const   = require("game.lib.const")
 local SPRITE    = "#sprite"
 local COLLISION_OBJECT_HIT = "#co_hit"
 local COLLISION_OBJECT_WORLD = "#co_world"
+local PLAYER    = "common/player"  -- sibling of the level; see level.script for the same address
 
 -- Animations
 local ANIM_RUN  = hash("king-pig-run")
@@ -37,8 +36,11 @@ local ANIM_HIT  = hash("king-pig-hit")
 local ANIM_DEAD = hash("king-pig-dead")
 
 -- FSM events
-local EV_HIT_BOUNDARY = hash("hit_boundary")  -- reached a patrol endpoint
-local EV_RESUME       = hash("resume")        -- pause elapsed, carry on
+local EV_SEE_PLAYER   = hash("see_player")    -- player entered chase range
+local EV_LOSE_PLAYER  = hash("lose_player")   -- player left chase range
+local EV_HIT_BOUNDARY = hash("hit_boundary")  -- chase ran into a patrol boundary
+local EV_TURN         = hash("turn")          -- player crossed to our other side mid-chase
+local EV_RESUME       = hash("resume")        -- hesitation over, resume chasing
 local EV_STOMPED      = hash("stomped")       -- player landed on our head
 local EV_DIED         = hash("died")          -- hit animation finished
 
@@ -48,38 +50,119 @@ local function update_facing(self)
 	sprite.set_hflip(SPRITE, self.direction.x > 0)
 end
 
+-- Watch for the player and drive the chase transitions. Called once per physics
+-- step before the FSM update. Detection is a circle of radius `chase_range`
+-- around the king pig; the chase itself is purely horizontal, so the direction
+-- is the sign of the player's x offset.
+local function update_detection(self)
+	local cur = self.fsm.current_state()
+	local s   = self.states
+
+	-- Hit/dead are terminal: a dead king pig never chases.
+	if cur == s.hit.id or cur == s.dead.id then return end
+
+	local to_player = go.get_position(PLAYER) - go.get_position()
+	local toward    = to_player.x >= 0 and 1 or -1  -- horizontal sign toward the player
+
+	-- The king pig runs along the ground, so it can only chase a target it can
+	-- actually reach that way: within range and roughly on its own level (not,
+	-- say, clinging to a wall above it).
+	local in_reach = vmath.length(to_player) <= self.chase_range
+		and math.abs(to_player.y) <= self.chase_height
+
+	if cur == s.idle.id then
+		-- Start a chase only for a reachable player that's actually off to one
+		-- side. A player essentially on top of us (within the deadzone) is left
+		-- to idle: contact handles that, and chasing would only overshoot.
+		if in_reach and math.abs(to_player.x) > CHASE_X_DEADZONE then
+			-- Don't charge into a boundary we're already parked against: chase
+			-- only when the player is on a reachable side.
+			if self.blocked_direction and toward == self.blocked_direction.x then return end
+			self.direction = vmath.vector3(toward, 0, 0)
+			self.fsm.handle_event(EV_SEE_PLAYER)
+		end
+	elseif cur == s.chase.id then
+		if not in_reach then
+			-- Out of range, or no longer reachable by running (e.g. the player
+			-- jumped to a wall above): clear the block and drop back to idle.
+			self.blocked_direction = nil
+			self.fsm.handle_event(EV_LOSE_PLAYER)
+		elseif toward ~= self.direction.x then
+			-- Player crossed to our other side: hesitate before reversing. This
+			-- is independent of the deadzone, so a side change always pauses.
+			self.fsm.handle_event(EV_TURN)
+		end
+	elseif cur == s.turn.id then
+		-- Hesitating before a reversal. Bail to idle if the player slips out of
+		-- reach; otherwise the turn timer resumes the chase facing the player.
+		if not in_reach then
+			self.blocked_direction = nil
+			self.fsm.handle_event(EV_LOSE_PLAYER)
+		end
+	end
+end
+
 local function setup_fsm(self)
 	local fsm = stately.create()
 	local s = {
-		run   = fsm.state("run"),    -- patrolling in the current direction
-		pause = fsm.state("pause"),  -- waiting at an endpoint before turning around
+		idle  = fsm.state("idle"),   -- standing still: waiting for, or blocked from, the player
+		chase = fsm.state("chase"),  -- pursuing the player horizontally
+		turn  = fsm.state("turn"),   -- brief hesitation before reversing chase direction
 		hit   = fsm.state("hit"),    -- enemy has been hit/stomped on by the player
 		dead  = fsm.state("dead"),   -- dead: lies on the ground and can't hurt player
 	}
 
-	fsm.transition(s.run,   s.pause, EV_HIT_BOUNDARY)
-	fsm.transition(s.pause, s.run,   EV_RESUME)
-	fsm.transition(s.run,   s.hit,   EV_STOMPED)
-	fsm.transition(s.pause, s.hit,   EV_STOMPED)
-	fsm.transition(s.hit,   s.dead,  EV_DIED)
+	
+	fsm.transition(s.idle,  s.chase, EV_SEE_PLAYER)		-- Spotting / losing the player swaps between waiting and chasing
+	fsm.transition(s.chase, s.idle,  EV_LOSE_PLAYER)
+	fsm.transition(s.chase, s.idle,  EV_HIT_BOUNDARY)	-- A chase that runs into a boundary parks the king pig back in idle
+	fsm.transition(s.chase, s.turn,  EV_TURN)			-- Reversing direction goes through a short hesitation
+	fsm.transition(s.turn,  s.chase, EV_RESUME)			-- after pause resume the chase
+	fsm.transition(s.turn,  s.idle,  EV_LOSE_PLAYER)
 
-	--- State: RUN
-	fsm.on_enter(s.run, function()
+	-- A stomp ends any active state	
+	fsm.transition(s.idle,  s.hit,   EV_STOMPED)
+	fsm.transition(s.chase, s.hit,   EV_STOMPED)
+	fsm.transition(s.turn,  s.hit,   EV_STOMPED)
+	fsm.transition(s.hit,   s.dead,  EV_DIED)			-- transition from being hit to dead
+
+	--- State: IDLE
+	-- Stand still until the player comes within reach. Also where a chase ends,
+	-- whether the player escaped or we ran into a boundary.
+	fsm.on_enter(s.idle, function()
+		update_facing(self)
+		sprite.play_flipbook(SPRITE, ANIM_IDLE)
+	end)
+
+	--- State: CHASE
+	-- Direction is re-pointed at the player every frame by update_detection, so
+	-- on_enter just refreshes the facing/animation and on_update applies motion.
+	fsm.on_enter(s.chase, function()
 		update_facing(self)
 		sprite.play_flipbook(SPRITE, ANIM_RUN)
 	end)
-	fsm.on_update(s.run, function(dt)
-		go.set_position(go.get_position() + self.direction * self.speed * dt)
+	fsm.on_update(s.chase, function(dt)
+		go.set_position(go.get_position() + self.direction * self.chase_speed * dt)
 	end)
 
-	--- State: PAUSE
-	fsm.on_enter(s.pause, function()
+	--- State: TURN
+	-- Stand still for `turn_pause` seconds, then re-point at the player's current
+	-- side and resume the chase. update_detection bails us to idle if the player
+	-- escapes during the pause (on_leave cancels the timer).
+	fsm.on_enter(s.turn, function()
 		sprite.play_flipbook(SPRITE, ANIM_IDLE)
-		self.pause_timer = timer.delay(self.pause_time, false, function()
-			self.pause_timer = nil
-			self.direction = -self.direction  -- turn around, then RUN re-faces us
+		self.turn_timer = timer.delay(self.turn_pause, false, function()
+			self.turn_timer = nil
+			local to_player = go.get_position(PLAYER) - go.get_position()
+			self.direction = vmath.vector3(to_player.x >= 0 and 1 or -1, 0, 0)
 			self.fsm.handle_event(EV_RESUME)
 		end)
+	end)
+	fsm.on_leave(s.turn, function()
+		if self.turn_timer then
+			timer.cancel(self.turn_timer)
+			self.turn_timer = nil
+		end
 	end)
 
 	--- State: HIT
@@ -88,10 +171,6 @@ local function setup_fsm(self)
 		-- neither kill the player nor bump patrol boundaries.
 		msg.post(COLLISION_OBJECT_HIT, "disable")
 		msg.post(COLLISION_OBJECT_WORLD, "disable")
-		if self.pause_timer then
-			timer.cancel(self.pause_timer)
-			self.pause_timer = nil
-		end
 		sprite.play_flipbook(SPRITE, ANIM_HIT, function()
 			self.fsm.handle_event(EV_DIED)
 		end)
@@ -102,23 +181,36 @@ local function setup_fsm(self)
 		sprite.play_flipbook(SPRITE, ANIM_DEAD)  -- plays once, holds the final frame
 	end)
 
-	fsm.start(s.run)
+	-- Log every transition for debugging.
+	fsm.on_state_change(function(from, to)
+		local function name(id)
+			if id == nil then return "nil" end
+			for k, v in pairs(s) do if v.id == id then return k end end
+			return tostring(id)
+		end
+		print(string.format("dbg king-pig FSM %s -> %s", name(from), name(to)))
+	end)
+
+	fsm.start(s.idle)
 	self.fsm = fsm
 	self.states = s
 end
 
 function init(self)
-	-- Normalise so travel speed always equals `speed` regardless of how the
+	-- Normalise so the initial facing is well-defined regardless of how the
 	-- direction property was entered. Guard against a zero vector.
 	self.direction = self.start_direction
 	if vmath.length(self.direction) > 0 then
 		self.direction = vmath.normalize(self.direction)
 	end
+	self.blocked_direction = nil  -- set to the blocked direction when a chase hits a boundary
+	self.turn_timer = nil         -- active only during the turn-around hesitation
 
 	setup_fsm(self)
 end
 
 function fixed_update(self, dt)
+	update_detection(self)
 	self.fsm.update(dt)
 end
 
@@ -128,11 +220,11 @@ function on_message(self, message_id, message, sender)
 		self.fsm.handle_event(EV_STOMPED)
 		return
 	elseif message_id == const.MSG.CONTACT_POINT_RESPONSE then
-		-- Only patrol boundaries count e.g. boundary objects or world tiles
-		-- Only react while patrolling (ignore contacts during a pause)
-		local is_patrolling = self.fsm.current_state() == self.states.run.id
+		-- Only boundaries count e.g. boundary objects or world tiles, and only
+		-- while chasing (idle already ignores them — it isn't moving).
+		local is_chasing = self.fsm.current_state() == self.states.chase.id
 		if (message.other_group == const.GROUP.BOUNDARY or
-		   message.other_group == const.GROUP.WORLD) and is_patrolling then		
+		   message.other_group == const.GROUP.WORLD) and is_chasing then
 			-- Ignore the floor we stand on. A flat floor's normal is straight up,
 			-- but where our box straddles a tile seam a bottom corner catches a tile
 			-- edge and the normal comes back diagonal (an upward component plus a
@@ -144,16 +236,18 @@ function on_message(self, message_id, message, sender)
 			-- toward us, so on a head-on bump it opposes our travel direction.
 			if vmath.dot(message.normal, self.direction) >= 0 then return end
 
-			-- Push out of the tile so we never stick, then pause before turning.
+			-- Push out of the tile so we never stick, remember the blocked side so
+			-- idle won't immediately charge back into it, then park in idle.
 			go.set_position(go.get_position() + message.normal * message.distance)
+			self.blocked_direction = self.direction
 			self.fsm.handle_event(EV_HIT_BOUNDARY)
 		end
 	end
 end
 
 function final(self)
-	if self.pause_timer then
-		timer.cancel(self.pause_timer)
-		self.pause_timer = nil
+	if self.turn_timer then
+		timer.cancel(self.turn_timer)
+		self.turn_timer = nil
 	end
 end

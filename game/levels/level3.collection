@@ -43,8 +43,8 @@ instances {
   id: "pig-right-marker"
   prototype: "/game/items/boundary/boundary.go"
   position {
-    x: 400.0
-    y: 120.0
+    x: 503.0
+    y: 223.0
   }
 }
 instances {
@@ -62,7 +62,7 @@ instances {
   id: "king-pig"
   prototype: "/game/enemies/king-pig/king-pig.go"
   position {
-    x: 276.0
+    x: 333.0
     y: 126.0
   }
 }
