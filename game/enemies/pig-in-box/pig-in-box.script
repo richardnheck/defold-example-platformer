@@ -22,7 +22,7 @@ go.property("jump_speed_x", 40)        -- horizontal launch speed (px/s)
 go.property("jump_speed_y", 250)       -- vertical launch speed (px/s)
 go.property("gravity", 700)            -- downward acceleration while airborne (px/s^2)
 go.property("stomp_disable_time", 0.3) -- seconds the player-hit collider stays off after a stomp, so the player can bounce clear
-go.property("stomp_rebound", 350)      -- fixed upward rebound handed to the player on a stomp, enough to pop them clear of the box
+go.property("stomp_rebound", 300)      -- fixed upward rebound handed to the player on a stomp, enough to pop them clear of the box
 
 local stately = require("stately.stately")
 local const   = require("game.lib.const")
