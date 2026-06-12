@@ -7,8 +7,11 @@
 -- The "looking out" peek telegraphs the upcoming hop.
 --
 -- Touching the pig from the side kills the player (handled player-side on enemy
--- contact). The box is armoured, though: a stomp just bounces the player off
--- harmlessly (there are no hit/dead frames), so we don't handle STOMP_ENEMY.
+-- contact). The box is armoured, though: a stomp doesn't kill it (there are no
+-- hit/dead frames), the player just bounces off. To stop the player dying to a
+-- follow-up side contact while still overlapping a rising box, we briefly switch
+-- off the player-hit collider on a stomp and reply with a fixed APPLY_IMPULSE so
+-- the player pops clear of the box.
 -- =============================================================================
 
 go.property("start_direction", vmath.vector3(-1, 0, 0))  -- (-1,0,0)=left (1,0,0)=right
@@ -18,12 +21,15 @@ go.property("anticipate_time", 0.25)   -- seconds crouched before launching
 go.property("jump_speed_x", 40)        -- horizontal launch speed (px/s)
 go.property("jump_speed_y", 250)       -- vertical launch speed (px/s)
 go.property("gravity", 700)            -- downward acceleration while airborne (px/s^2)
+go.property("stomp_disable_time", 0.3) -- seconds the player-hit collider stays off after a stomp, so the player can bounce clear
+go.property("stomp_rebound", 350)      -- fixed upward rebound handed to the player on a stomp, enough to pop them clear of the box
 
 local stately = require("stately.stately")
 local const   = require("game.lib.const")
 
 -- Urls
-local SPRITE = "#sprite"
+local SPRITE               = "#sprite"
+local COLLISION_OBJECT_HIT = "#co_hit"
 
 -- Animations
 local ANIM_GROUND     = hash("pig-in-box-ground")
@@ -146,6 +152,7 @@ function init(self)
 	end
 	self.vel = vmath.vector3()
 	self.phase_timer = nil  -- active only during a stationary (ground/look/anticipate) phase
+	self.hit_timer = nil    -- active while the player-hit collider is temporarily disabled after a stomp
 
 	setup_fsm(self)
 end
@@ -161,6 +168,24 @@ local function is_airborne(self)
 end
 
 function on_message(self, message_id, message, sender)
+	if message_id == const.MSG.STOMP_ENEMY then
+		-- The box survives, but go non-lethal for a moment so the bouncing player
+		-- can separate without a rising box catching it with a lethal side contact.
+		-- Refresh the window if stomped again mid-disable.
+		if self.hit_timer then timer.cancel(self.hit_timer) end
+		msg.post(COLLISION_OBJECT_HIT, "disable")
+		self.hit_timer = timer.delay(self.stomp_disable_time, false, function()
+			self.hit_timer = nil
+			msg.post(COLLISION_OBJECT_HIT, "enable")
+		end)
+
+		-- Pop the player clear with a fixed rebound, bigger than their default
+		-- stomp bounce so they clear the box. `sender` is the player script that
+		-- posted the stomp.
+		msg.post(sender, const.MSG.APPLY_IMPULSE, { impulse = self.stomp_rebound })
+		return
+	end
+
 	if message_id ~= const.MSG.CONTACT_POINT_RESPONSE then return end
 
 	-- Only world/boundary contacts matter, and only mid-hop. On the ground the
@@ -190,4 +215,8 @@ end
 
 function final(self)
 	cancel_phase_timer(self)
+	if self.hit_timer then
+		timer.cancel(self.hit_timer)
+		self.hit_timer = nil
+	end
 end
