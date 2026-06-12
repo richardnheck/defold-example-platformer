@@ -62,8 +62,27 @@ instances {
   id: "king-pig"
   prototype: "/game/enemies/king-pig/king-pig.go"
   position {
-    x: 333.0
-    y: 126.0
+    x: 576.0
+    y: 190.0
+  }
+}
+instances {
+  id: "pig-in-box"
+  prototype: "/game/enemies/pig-in-box/pig-in-box.go"
+  position {
+    x: 342.0
+    y: 122.0
+  }
+}
+instances {
+  id: "pig-left-marker1"
+  prototype: "/game/items/boundary/boundary.go"
+  position {
+    x: 235.0
+    y: 147.0
+  }
+  scale3 {
+    x: -1.0
   }
 }
 collection_instances {

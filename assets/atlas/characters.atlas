@@ -376,4 +376,54 @@ animations {
     image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Dead4.png"
   }
 }
+animations {
+  id: "pig-in-box-jump"
+  images {
+    image: "/assets/images/kings-and-pigs/06-Pig Hide in the Box/Jump1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/06-Pig Hide in the Box/Jump2.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 5
+}
+animations {
+  id: "pig-in-box-jump-anticipation"
+  images {
+    image: "/assets/images/kings-and-pigs/06-Pig Hide in the Box/Jump Anticipation1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/06-Pig Hide in the Box/Jump Anticipation2.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+}
+animations {
+  id: "pig-in-box-looking-out"
+  images {
+    image: "/assets/images/kings-and-pigs/06-Pig Hide in the Box/Looking Out1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/06-Pig Hide in the Box/Looking Out2.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/06-Pig Hide in the Box/Looking Out3.png"
+  }
+  playback: PLAYBACK_ONCE_PINGPONG
+  fps: 4
+}
+animations {
+  id: "pig-in-box-ground"
+  images {
+    image: "/assets/images/kings-and-pigs/06-Pig Hide in the Box/Ground (26x20).png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "pig-in-box-fall"
+  images {
+    image: "/assets/images/kings-and-pigs/06-Pig Hide in the Box/Fall (26x20).png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
 extrude_borders: 2

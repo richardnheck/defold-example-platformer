@@ -1,0 +1,193 @@
+-- =============================================================================
+-- Pig in Box (hopping patroller enemy)
+--
+-- Sits in its box on the ground, then hops back and forth between patrol
+-- boundaries. Each cycle is: sit (ground) -> peek (looking out) -> crouch
+-- (jump anticipation) -> launch (jump) -> descend (fall) -> land -> sit again.
+-- The "looking out" peek telegraphs the upcoming hop.
+--
+-- Touching the pig from the side kills the player (handled player-side on enemy
+-- contact). The box is armoured, though: a stomp just bounces the player off
+-- harmlessly (there are no hit/dead frames), so we don't handle STOMP_ENEMY.
+-- =============================================================================
+
+go.property("start_direction", vmath.vector3(-1, 0, 0))  -- (-1,0,0)=left (1,0,0)=right
+go.property("ground_time", 1.0)        -- seconds sitting in the box before peeking
+go.property("look_time", 0.6)          -- seconds peeking out (telegraph) before crouching
+go.property("anticipate_time", 0.25)   -- seconds crouched before launching
+go.property("jump_speed_x", 40)        -- horizontal launch speed (px/s)
+go.property("jump_speed_y", 250)       -- vertical launch speed (px/s)
+go.property("gravity", 700)            -- downward acceleration while airborne (px/s^2)
+
+local stately = require("stately.stately")
+local const   = require("game.lib.const")
+
+-- Urls
+local SPRITE = "#sprite"
+
+-- Animations
+local ANIM_GROUND     = hash("pig-in-box-ground")
+local ANIM_LOOK_OUT   = hash("pig-in-box-looking-out")
+local ANIM_ANTICIPATE = hash("pig-in-box-jump-anticipation")
+local ANIM_JUMP       = hash("pig-in-box-jump")
+local ANIM_FALL       = hash("pig-in-box-fall")
+
+-- FSM events
+local EV_LOOK       = hash("look")        -- done sitting: peek out of the box
+local EV_ANTICIPATE = hash("anticipate")  -- done peeking: crouch to launch
+local EV_JUMP       = hash("jump")         -- crouch done: leave the ground
+local EV_APEX       = hash("apex")         -- upward velocity spent: start descending
+local EV_LAND       = hash("land")         -- touched the ground again
+
+-- Face the way we're travelling. The art faces left by default, so flip
+-- horizontally when moving right.
+local function update_facing(self)
+	sprite.set_hflip(SPRITE, self.direction.x > 0)
+end
+
+-- Run a stationary phase for `seconds`, then fire `event`. Stored on self so a
+-- state we leave early (e.g. on death/final) can cancel it.
+local function start_phase_timer(self, seconds, event)
+	self.phase_timer = timer.delay(seconds, false, function()
+		self.phase_timer = nil
+		self.fsm.handle_event(event)
+	end)
+end
+
+local function cancel_phase_timer(self)
+	if self.phase_timer then
+		timer.cancel(self.phase_timer)
+		self.phase_timer = nil
+	end
+end
+
+-- Integrate the ballistic arc one physics step: gravity pulls velocity down,
+-- velocity moves the position. Shared by the jump (rising) and fall (descending)
+-- states.
+local function integrate(self, dt)
+	self.vel.y = self.vel.y - self.gravity * dt
+	go.set_position(go.get_position() + self.vel * dt)
+end
+
+local function setup_fsm(self)
+	local fsm = stately.create()
+	local s = {
+		ground     = fsm.state("ground"),      -- sitting in the box on the ground
+		look_out   = fsm.state("look_out"),    -- peeking out to telegraph the hop
+		anticipate = fsm.state("anticipate"),  -- crouched, about to launch
+		jump       = fsm.state("jump"),        -- rising part of the hop
+		fall       = fsm.state("fall"),        -- descending part of the hop
+	}
+
+	fsm.transition(s.ground,     s.look_out,   EV_LOOK)
+	fsm.transition(s.look_out,   s.anticipate, EV_ANTICIPATE)
+	fsm.transition(s.anticipate, s.jump,       EV_JUMP)
+	fsm.transition(s.jump,       s.fall,       EV_APEX)
+	fsm.transition(s.fall,       s.ground,     EV_LAND)
+
+	--- State: GROUND
+	-- Sit still, then peek after `ground_time`.
+	fsm.on_enter(s.ground, function()
+		self.vel = vmath.vector3()
+		update_facing(self)
+		sprite.play_flipbook(SPRITE, ANIM_GROUND)
+		start_phase_timer(self, self.ground_time, EV_LOOK)
+	end)
+	fsm.on_leave(s.ground, function() cancel_phase_timer(self) end)
+
+	--- State: LOOK_OUT
+	-- Peek out of the box (telegraph) facing the way we're about to hop.
+	fsm.on_enter(s.look_out, function()
+		update_facing(self)
+		sprite.play_flipbook(SPRITE, ANIM_LOOK_OUT)
+		start_phase_timer(self, self.look_time, EV_ANTICIPATE)
+	end)
+	fsm.on_leave(s.look_out, function() cancel_phase_timer(self) end)
+
+	--- State: ANTICIPATE
+	-- Brief crouch before launching.
+	fsm.on_enter(s.anticipate, function()
+		sprite.play_flipbook(SPRITE, ANIM_ANTICIPATE)
+		start_phase_timer(self, self.anticipate_time, EV_JUMP)
+	end)
+	fsm.on_leave(s.anticipate, function() cancel_phase_timer(self) end)
+
+	--- State: JUMP
+	-- Leave the ground with a fixed launch velocity, then climb until gravity
+	-- spends the upward velocity, at which point we start falling.
+	fsm.on_enter(s.jump, function()
+		update_facing(self)
+		sprite.play_flipbook(SPRITE, ANIM_JUMP)
+		self.vel = vmath.vector3(self.direction.x * self.jump_speed_x, self.jump_speed_y, 0)
+	end)
+	fsm.on_update(s.jump, function(dt)
+		integrate(self, dt)
+		if self.vel.y <= 0 then self.fsm.handle_event(EV_APEX) end
+	end)
+
+	--- State: FALL
+	-- Descend until co_world reports a landing (handled in on_message).
+	fsm.on_enter(s.fall, function()
+		sprite.play_flipbook(SPRITE, ANIM_FALL)
+	end)
+	fsm.on_update(s.fall, function(dt) integrate(self, dt) end)
+
+	fsm.start(s.ground)
+	self.fsm = fsm
+	self.states = s
+end
+
+function init(self)
+	-- Normalise so the launch direction is well-defined regardless of how the
+	-- direction property was entered. Guard against a zero vector.
+	self.direction = self.start_direction
+	if vmath.length(self.direction) > 0 then
+		self.direction = vmath.normalize(self.direction)
+	end
+	self.vel = vmath.vector3()
+	self.phase_timer = nil  -- active only during a stationary (ground/look/anticipate) phase
+
+	setup_fsm(self)
+end
+
+function fixed_update(self, dt)
+	self.fsm.update(dt)
+end
+
+-- True while the hop is in the air (the only time we react to world contacts).
+local function is_airborne(self)
+	local cur = self.fsm.current_state()
+	return cur == self.states.jump.id or cur == self.states.fall.id
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id ~= const.MSG.CONTACT_POINT_RESPONSE then return end
+
+	-- Only world/boundary contacts matter, and only mid-hop. On the ground the
+	-- floor reports a contact every step, which we want to ignore.
+	if message.other_group ~= const.GROUP.BOUNDARY and
+	   message.other_group ~= const.GROUP.WORLD then return end
+	if not is_airborne(self) then return end
+
+	if message.normal.y > 0.5 then
+		-- Near-vertical contact beneath us: we've landed. Push out of the tile so
+		-- we never sink, stop, and go back to sitting.
+		go.set_position(go.get_position() + message.normal * message.distance)
+		self.vel = vmath.vector3()
+		self.fsm.handle_event(EV_LAND)
+	elseif math.abs(message.normal.y) <= 0.5 then
+		-- Near-horizontal contact: a wall/boundary. React only to one ahead of us
+		-- (the normal points back toward us, so it opposes our travel direction).
+		if vmath.dot(message.normal, self.direction) >= 0 then return end
+		-- Push out, kill horizontal motion (keep falling straight down), and flip
+		-- direction so the next hop heads back the other way.
+		go.set_position(go.get_position() + message.normal * message.distance)
+		self.vel.x = 0
+		self.direction = -self.direction
+		update_facing(self)
+	end
+end
+
+function final(self)
+	cancel_phase_timer(self)
+end
