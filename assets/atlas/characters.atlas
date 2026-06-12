@@ -287,4 +287,93 @@ animations {
     image: "/assets/images/kings-and-pigs/03-Pig/Pig-Dead4.png"
   }
 }
+animations {
+  id: "king-pig-idle"
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Idle1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Idle2.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Idle3.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Idle4.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Idle5.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Idle6.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Idle7.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Idle8.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Idle9.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Idle10.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Idle11.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Idle12.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 15
+}
+animations {
+  id: "king-pig-run"
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Run1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Run2.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Run3.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Run4.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Run5.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Run6.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+}
+animations {
+  id: "king-pig-hit"
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Hit1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Hit2.png"
+  }
+  fps: 5
+}
+animations {
+  id: "king-pig-dead"
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Dead1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Dead2.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Dead3.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/02-King Pig/KingPig-Dead4.png"
+  }
+}
 extrude_borders: 2

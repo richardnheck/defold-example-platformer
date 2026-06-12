@@ -33,10 +33,10 @@ instances {
 }
 instances {
   id: "pig"
-  prototype: "/game/enemies/pig.go"
+  prototype: "/game/enemies/pig/pig.go"
   position {
-    x: 301.0
-    y: 126.0
+    x: 102.0
+    y: 62.0
   }
 }
 instances {
@@ -56,6 +56,14 @@ instances {
   }
   scale3 {
     x: -1.0
+  }
+}
+instances {
+  id: "king-pig"
+  prototype: "/game/enemies/king-pig/king-pig.go"
+  position {
+    x: 276.0
+    y: 126.0
   }
 }
 collection_instances {
