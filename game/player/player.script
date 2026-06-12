@@ -215,15 +215,16 @@ local function setup_fsm(self)
 	fsm.on_update(s.wall_jump, airborne_update)
 
 	fsm.on_state_change(function(from, to)
-		local function name(id)
-			if id == nil then return "nil" end
-			for k, v in pairs(s) do if v.id == id then return k end end
-			return tostring(id)
-		end
-		print(string.format("dbg FSM %s -> %s vel=(%.1f,%.1f) on_floor=%s dir=%d held=%s nL=%s nR=%s",
-			name(from), name(to), self.vel.x, self.vel.y,
-			tostring(self.on_floor), self.dir, tostring(self.jump_held),
-			tostring(self.next_to_left), tostring(self.next_to_right)))
+		-- Uncomment to debug state transitions
+		-- local function name(id)
+		-- 	if id == nil then return "nil" end
+		-- 	for k, v in pairs(s) do if v.id == id then return k end end
+		-- 	return tostring(id)
+		-- end
+		-- print(string.format("dbg FSM %s -> %s vel=(%.1f,%.1f) on_floor=%s dir=%d held=%s nL=%s nR=%s",
+		-- 	name(from), name(to), self.vel.x, self.vel.y,
+		-- 	tostring(self.on_floor), self.dir, tostring(self.jump_held),
+		-- 	tostring(self.next_to_left), tostring(self.next_to_right)))
 	end)
 
 	fsm.start(s.spawn)
