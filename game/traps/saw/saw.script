@@ -1,3 +1,14 @@
+--
+-- Saw trap that travels a path defined by point game objects.
+--
+-- A path is a set of points named "path<path_id>-point1", "path<path_id>-point2", ...
+-- (e.g. path1-point1, path1-point2). The saw and its points are children of the same
+-- group game object, so the saw moves in their shared local frame. The saw gathers the
+-- points in order and either ping-pongs back and forth along them or, with `loop`, runs
+-- a closed circuit. With `show_chain` it lays a static chain of link sprites along the path.
+--
+-- Configure per-instance in the collection via the properties below.
+--
 go.property("speed", 50)        -- px/s, constant traversal speed along the path
 go.property("path_id", 1)       -- which numbered path to follow. n.b. defold does not allow string properties so we need to use a specific convention based on a number instead
 go.property("loop", false)      -- true: travel a closed circuit (...->N->1->...); false: ping-pong back and forth. Needs more than 2 points to differ from ping-pong
@@ -5,12 +16,7 @@ go.property("show_chain", false) -- true: lay a static chain of link sprites alo
 
 -- Urls
 local CHAIN_FACTORY = "#chain_factory"
-
--- Absolute id (leading "/") so it resolves from the saw's own socket root, where
--- the points live. A relative id won't work here: a pre-hashed value skips the
--- naming-context resolution that relative string addressing relies on.
 local POINT_PATH_TEMPLATE = "/path%d-point%d"
-
 
 -- Forward declaration so the movement function can chain to itself
 local move_to_next
