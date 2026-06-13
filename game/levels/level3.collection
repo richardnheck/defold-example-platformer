@@ -35,13 +35,13 @@ instances {
   id: "pig"
   prototype: "/game/enemies/pig/pig.go"
   position {
-    x: 102.0
-    y: 62.0
+    x: 277.0
+    y: 126.0
   }
 }
 instances {
   id: "pig-right-marker"
-  prototype: "/game/items/boundary/boundary.go"
+  prototype: "/game/common/boundary/boundary.go"
   position {
     x: 503.0
     y: 223.0
@@ -49,7 +49,7 @@ instances {
 }
 instances {
   id: "pig-left-marker"
-  prototype: "/game/items/boundary/boundary.go"
+  prototype: "/game/common/boundary/boundary.go"
   position {
     x: 235.0
     y: 120.0
@@ -76,13 +76,97 @@ instances {
 }
 instances {
   id: "pig-left-marker1"
-  prototype: "/game/items/boundary/boundary.go"
+  prototype: "/game/common/boundary/boundary.go"
   position {
     x: 235.0
     y: 147.0
   }
   scale3 {
     x: -1.0
+  }
+}
+instances {
+  id: "saw1"
+  prototype: "/game/traps/saw/saw.go"
+  component_properties {
+    id: "saw"
+    properties {
+      id: "loop"
+      value: "false"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+    properties {
+      id: "show_chain"
+      value: "true"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+  }
+}
+instances {
+  id: "saw2"
+  prototype: "/game/traps/saw/saw.go"
+  component_properties {
+    id: "saw"
+    properties {
+      id: "path_id"
+      value: "2.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "loop"
+      value: "true"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+    properties {
+      id: "show_chain"
+      value: "true"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+  }
+}
+instances {
+  id: "path2-point1"
+  prototype: "/game/common/point/point.go"
+}
+instances {
+  id: "path2-point2"
+  prototype: "/game/common/point/point.go"
+  position {
+    x: 82.0
+  }
+}
+instances {
+  id: "path2-point3"
+  prototype: "/game/common/point/point.go"
+  position {
+    x: 82.0
+    y: 48.0
+  }
+}
+instances {
+  id: "path2-point4"
+  prototype: "/game/common/point/point.go"
+  position {
+    y: 48.0
+  }
+}
+instances {
+  id: "path1-point1"
+  prototype: "/game/common/point/point.go"
+}
+instances {
+  id: "path1-point2"
+  prototype: "/game/common/point/point.go"
+  position {
+    x: 96.0
+  }
+}
+instances {
+  id: "path1-point3"
+  prototype: "/game/common/point/point.go"
+  position {
+    x: 55.0
+    y: 50.0
   }
 }
 collection_instances {
@@ -143,7 +227,32 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 209.0
-    y: 125.0
+    x: 28.0
+    y: 64.0
+  }
+}
+embedded_instances {
+  id: "saw-with-path1"
+  children: "path1-point1"
+  children: "path1-point2"
+  children: "path1-point3"
+  children: "saw1"
+  data: ""
+  position {
+    x: 36.0
+    y: 147.0
+  }
+}
+embedded_instances {
+  id: "saw-with-path2"
+  children: "path2-point1"
+  children: "path2-point2"
+  children: "path2-point3"
+  children: "path2-point4"
+  children: "saw2"
+  data: ""
+  position {
+    x: 74.0
+    y: 48.0
   }
 }

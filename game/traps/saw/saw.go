@@ -1,0 +1,45 @@
+components {
+  id: "saw"
+  component: "/game/traps/saw/saw.script"
+}
+embedded_components {
+  id: "chain_factory"
+  type: "factory"
+  data: "prototype: \"/game/traps/saw/chain.go\"\n"
+  ""
+}
+embedded_components {
+  id: "sprite"
+  type: "sprite"
+  data: "default_animation: \"saw-on\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/assets/atlas/platforms-and-items.atlas\"\n"
+  "}\n"
+  ""
+}
+embedded_components {
+  id: "co"
+  type: "collisionobject"
+  data: "type: COLLISION_OBJECT_TYPE_KINEMATIC\n"
+  "mass: 0.0\n"
+  "friction: 0.1\n"
+  "restitution: 0.5\n"
+  "group: \"trap\"\n"
+  "mask: \"player\"\n"
+  "embedded_collision_shape {\n"
+  "  shapes {\n"
+  "    shape_type: TYPE_SPHERE\n"
+  "    position {\n"
+  "    }\n"
+  "    rotation {\n"
+  "    }\n"
+  "    index: 0\n"
+  "    count: 1\n"
+  "    id: \"circle\"\n"
+  "  }\n"
+  "  data: 17.0\n"
+  "}\n"
+  ""
+}

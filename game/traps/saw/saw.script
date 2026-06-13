@@ -1,0 +1,120 @@
+go.property("speed", 50)        -- px/s, constant traversal speed along the path
+go.property("path_id", 1)       -- which numbered path to follow. n.b. defold does not allow string properties so we need to use a specific convention based on a number instead
+go.property("loop", false)      -- true: travel a closed circuit (...->N->1->...); false: ping-pong back and forth. Needs more than 2 points to differ from ping-pong
+go.property("show_chain", false) -- true: lay a static chain of link sprites along the path
+
+-- Urls
+local CHAIN_FACTORY = "#chain_factory"
+
+-- Absolute id (leading "/") so it resolves from the saw's own socket root, where
+-- the points live. A relative id won't work here: a pre-hashed value skips the
+-- naming-context resolution that relative string addressing relies on.
+local POINT_PATH_TEMPLATE = "/path%d-point%d"
+
+
+-- Forward declaration so the movement function can chain to itself
+local move_to_next
+
+-- Gather the path's waypoints by naming convention: "/path<path>-point1",
+-- "/path<path>-point2", ... in order, stopping at the first one that doesn't
+-- exist. (go.property can't hold a string, so a number selects the path and the
+-- ids are built from it.) The points are siblings of the saw under the same
+-- group, so their local positions share the saw's frame.
+-- Returns two parallel lists: local positions (for moving the saw, which shares
+-- the points' parent frame) and world positions (for placing the static chain,
+-- whose links are spawned unparented).
+local function gather_waypoints(self)
+	local local_points, world_points = {}, {}
+	local i = 1
+	while true do
+		local id = hash(string.format(POINT_PATH_TEMPLATE, self.path_id, i))
+		local exists, pos = pcall(go.get_position, id)
+		if not exists then break end
+		local_points[i] = pos
+		world_points[i] = go.get_world_position(id)
+		i = i + 1
+	end
+	return local_points, world_points
+end
+
+local CHAIN_LINK_SIZE = 8   -- px; matches the 8x8 Chain.png link sprite
+local CHAIN_Z = -0.1        -- render just behind the saw (z 0), inside the render's [-1, 1] clip
+
+-- Spawn a line of chain-link sprites from `from` to `to` (both world positions).
+-- The end link is left to the next segment's start link so corners aren't doubled.
+local function spawn_chain_segment(from, to)
+	local delta = to - from
+	local length = vmath.length(delta)
+	if length < CHAIN_LINK_SIZE then return end
+
+	local links = math.floor(length / CHAIN_LINK_SIZE)
+	local step = delta / links
+	for k = 0, links - 1 do
+		local pos = from + step * k
+		pos.z = CHAIN_Z
+		factory.create(CHAIN_FACTORY, pos)
+	end
+end
+
+-- Lay a static chain along the whole path (plus the closing segment when looping).
+local function spawn_chain(self)
+	local count = #self.world_points
+	if count < 2 then return end
+	for i = 1, count - 1 do
+		spawn_chain_segment(self.world_points[i], self.world_points[i + 1])
+	end
+	if self.looping then
+		spawn_chain_segment(self.world_points[count], self.world_points[1])
+	end
+end
+
+-- Animate toward the next waypoint, reversing direction at either end.
+move_to_next = function(self)
+	local count = #self.waypoints
+	if count < 2 then return end  -- need at least two points to move between
+
+	local next_index
+	if self.looping then
+		-- Closed circuit: after the last waypoint, wrap back to the first.
+		next_index = (self.index % count) + 1
+	else
+		-- Ping-pong: reverse direction when we reach either end.
+		next_index = self.index + self.direction
+		if next_index > count or next_index < 1 then
+			self.direction = -self.direction        -- bounce off the end
+			next_index = self.index + self.direction
+		end
+	end
+
+	local target = self.waypoints[next_index]
+	local distance = vmath.length(target - go.get_position())
+	local duration = distance / self.speed
+
+	go.animate(".", "position", go.PLAYBACK_ONCE_FORWARD, target, go.EASING_LINEAR, duration, 0,
+		function(self)
+			self.index = next_index
+			move_to_next(self)
+		end)
+end
+
+function init(self)
+	self.waypoints, self.world_points = gather_waypoints(self)
+	self.index = 1          -- start parked at the first waypoint
+	self.direction = 1      -- ping-pong travel direction (+1 forward, -1 back)
+
+	-- A circuit only makes sense with more than 2 points; otherwise a "loop" is
+	-- identical to a ping-pong, so fall back to ping-pong.
+	self.looping = self.loop and #self.waypoints > 2
+
+	if self.show_chain then
+		spawn_chain(self)
+	end
+
+	-- Snap exactly onto the first waypoint so the path is precise regardless of
+	-- where the saw was placed in the editor.
+	if #self.waypoints >= 1 then
+		go.set_position(self.waypoints[1])
+	end
+
+	move_to_next(self)
+end

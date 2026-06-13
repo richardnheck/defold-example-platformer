@@ -7,6 +7,12 @@ images {
 images {
   image: "/assets/images/pixel-adventure-tweaks/platform.png"
 }
+images {
+  image: "/assets/images/point.png"
+}
+images {
+  image: "/assets/images/pixel-adventure/Traps/Saw/Chain.png"
+}
 animations {
   id: "falling-platform-on"
   images {

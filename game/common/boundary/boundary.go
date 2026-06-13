@@ -1,6 +1,6 @@
 components {
   id: "boundary"
-  component: "/game/items/boundary/boundary.script"
+  component: "/game/common/boundary/boundary.script"
 }
 embedded_components {
   id: "sprite"
