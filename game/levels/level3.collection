@@ -1,26 +1,26 @@
 name: "level3"
 instances {
-  id: "checkpoint"
+  id: "checkpoint2"
   prototype: "/game/items/checkpoint/checkpoint.go"
   position {
-    x: 489.0
-    y: 223.0
+    x: 1153.0
+    y: 304.0
   }
 }
 instances {
   id: "checkpoint1"
   prototype: "/game/items/checkpoint/checkpoint.go"
   position {
-    x: 1041.0
-    y: 321.0
+    x: 714.0
+    y: 272.0
   }
 }
 instances {
   id: "cannon"
   prototype: "/game/traps/cannon/cannon.go"
   position {
-    x: 201.0
-    y: 91.0
+    x: 426.0
+    y: 171.0
   }
   component_properties {
     id: "cannon"
@@ -35,16 +35,16 @@ instances {
   id: "pig"
   prototype: "/game/enemies/pig/pig.go"
   position {
-    x: 277.0
-    y: 126.0
+    x: 520.0
+    y: 206.0
   }
 }
 instances {
   id: "pig-right-marker"
   prototype: "/game/common/boundary/boundary.go"
   position {
-    x: 503.0
-    y: 223.0
+    x: 599.0
+    y: 200.0
   }
 }
 instances {
@@ -52,7 +52,7 @@ instances {
   prototype: "/game/common/boundary/boundary.go"
   position {
     x: 235.0
-    y: 120.0
+    y: 219.0
   }
   scale3 {
     x: -1.0
@@ -62,24 +62,24 @@ instances {
   id: "king-pig"
   prototype: "/game/enemies/king-pig/king-pig.go"
   position {
-    x: 576.0
-    y: 190.0
+    x: 1281.0
+    y: 221.0
   }
 }
 instances {
   id: "pig-in-box"
   prototype: "/game/enemies/pig-in-box/pig-in-box.go"
   position {
-    x: 342.0
-    y: 122.0
+    x: 1421.0
+    y: 202.0
   }
 }
 instances {
   id: "pig-left-marker1"
   prototype: "/game/common/boundary/boundary.go"
   position {
-    x: 235.0
-    y: 147.0
+    x: 441.0
+    y: 201.0
   }
   scale3 {
     x: -1.0
@@ -88,11 +88,14 @@ instances {
 instances {
   id: "saw1"
   prototype: "/game/traps/saw/saw.go"
+  position {
+    x: 43.0
+  }
   component_properties {
     id: "saw"
     properties {
       id: "loop"
-      value: "false"
+      value: "true"
       type: PROPERTY_TYPE_BOOLEAN
     }
     properties {
@@ -114,12 +117,12 @@ instances {
     }
     properties {
       id: "loop"
-      value: "true"
+      value: "false"
       type: PROPERTY_TYPE_BOOLEAN
     }
     properties {
       id: "show_chain"
-      value: "true"
+      value: "false"
       type: PROPERTY_TYPE_BOOLEAN
     }
   }
@@ -132,41 +135,81 @@ instances {
   id: "path2-point2"
   prototype: "/game/common/point/point.go"
   position {
-    x: 82.0
-  }
-}
-instances {
-  id: "path2-point3"
-  prototype: "/game/common/point/point.go"
-  position {
-    x: 82.0
-    y: 48.0
-  }
-}
-instances {
-  id: "path2-point4"
-  prototype: "/game/common/point/point.go"
-  position {
-    y: 48.0
+    x: 2.0
+    y: 91.0
   }
 }
 instances {
   id: "path1-point1"
   prototype: "/game/common/point/point.go"
+  position {
+    x: 44.0
+    y: -1.0
+  }
 }
 instances {
   id: "path1-point2"
   prototype: "/game/common/point/point.go"
   position {
-    x: 96.0
+    x: -3.0
+    y: -1.0
   }
 }
 instances {
   id: "path1-point3"
   prototype: "/game/common/point/point.go"
   position {
-    x: 55.0
-    y: 50.0
+    x: -3.0
+    y: 45.0
+  }
+}
+instances {
+  id: "path1-point4"
+  prototype: "/game/common/point/point.go"
+  position {
+    x: 44.0
+    y: 45.0
+  }
+}
+instances {
+  id: "path3-point1"
+  prototype: "/game/common/point/point.go"
+  position {
+    x: -2.0
+    y: -9.0
+  }
+}
+instances {
+  id: "path3-point2"
+  prototype: "/game/common/point/point.go"
+  position {
+    x: 153.0
+    y: 61.0
+  }
+}
+instances {
+  id: "saw"
+  prototype: "/game/traps/saw/saw.go"
+  position {
+    y: -1.0
+  }
+  component_properties {
+    id: "saw"
+    properties {
+      id: "path_id"
+      value: "3.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "loop"
+      value: "false"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+    properties {
+      id: "show_chain"
+      value: "true"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
   }
 }
 collection_instances {
@@ -227,8 +270,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 28.0
-    y: 64.0
+    x: 1144.0
+    y: 308.0
   }
 }
 embedded_instances {
@@ -236,23 +279,33 @@ embedded_instances {
   children: "path1-point1"
   children: "path1-point2"
   children: "path1-point3"
+  children: "path1-point4"
   children: "saw1"
   data: ""
   position {
-    x: 36.0
-    y: 147.0
+    x: 100.0
+    y: 82.0
   }
 }
 embedded_instances {
   id: "saw-with-path2"
   children: "path2-point1"
   children: "path2-point2"
-  children: "path2-point3"
-  children: "path2-point4"
   children: "saw2"
   data: ""
   position {
-    x: 74.0
-    y: 48.0
+    x: 639.0
+    y: 148.0
+  }
+}
+embedded_instances {
+  id: "saw-with-path3"
+  children: "path3-point1"
+  children: "path3-point2"
+  children: "saw"
+  data: ""
+  position {
+    x: 930.0
+    y: 201.0
   }
 }
