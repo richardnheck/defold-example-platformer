@@ -1,3 +1,7 @@
+components {
+  id: "point"
+  component: "/game/common/point/point.script"
+}
 embedded_components {
   id: "sprite"
   type: "sprite"
