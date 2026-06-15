@@ -3,8 +3,8 @@ instances {
   id: "checkpoint2"
   prototype: "/game/items/checkpoint/checkpoint.go"
   position {
-    x: 1153.0
-    y: 304.0
+    x: 1360.0
+    y: 270.0
   }
 }
 instances {
@@ -48,17 +48,6 @@ instances {
   }
 }
 instances {
-  id: "pig-left-marker"
-  prototype: "/game/common/boundary/boundary.go"
-  position {
-    x: 235.0
-    y: 219.0
-  }
-  scale3 {
-    x: -1.0
-  }
-}
-instances {
   id: "king-pig"
   prototype: "/game/enemies/king-pig/king-pig.go"
   position {
@@ -70,7 +59,7 @@ instances {
   id: "pig-in-box"
   prototype: "/game/enemies/pig-in-box/pig-in-box.go"
   position {
-    x: 1421.0
+    x: 1505.0
     y: 202.0
   }
 }
@@ -100,7 +89,7 @@ instances {
     }
     properties {
       id: "show_chain"
-      value: "true"
+      value: "false"
       type: PROPERTY_TYPE_BOOLEAN
     }
   }
@@ -212,6 +201,111 @@ instances {
     }
   }
 }
+instances {
+  id: "cannon1"
+  prototype: "/game/traps/cannon/cannon.go"
+  position {
+    x: 1740.0
+    y: 155.0
+  }
+  component_properties {
+    id: "cannon"
+    properties {
+      id: "direction"
+      value: "-1.0, 0.0, 0.0"
+      type: PROPERTY_TYPE_VECTOR3
+    }
+  }
+}
+instances {
+  id: "cannon2"
+  prototype: "/game/traps/cannon/cannon.go"
+  position {
+    x: 1770.0
+    y: 187.0
+  }
+  component_properties {
+    id: "cannon"
+    properties {
+      id: "delay"
+      value: "1.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "direction"
+      value: "-1.0, 0.0, 0.0"
+      type: PROPERTY_TYPE_VECTOR3
+    }
+  }
+}
+instances {
+  id: "pig-left-marker2"
+  prototype: "/game/common/boundary/boundary.go"
+  position {
+    x: 1849.0
+    y: 183.0
+  }
+  scale3 {
+    x: -1.0
+  }
+}
+instances {
+  id: "pig-right-marker1"
+  prototype: "/game/common/boundary/boundary.go"
+  position {
+    x: 1991.0
+    y: 184.0
+  }
+}
+instances {
+  id: "king-pig1"
+  prototype: "/game/enemies/king-pig/king-pig.go"
+  position {
+    x: 1936.0
+    y: 190.0
+  }
+}
+instances {
+  id: "path4-point1"
+  prototype: "/game/common/point/point.go"
+  position {
+    x: -2.0
+    y: -18.0
+  }
+}
+instances {
+  id: "saw4"
+  prototype: "/game/traps/saw/saw.go"
+  position {
+    y: -18.0
+  }
+  component_properties {
+    id: "saw"
+    properties {
+      id: "path_id"
+      value: "4.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+    properties {
+      id: "loop"
+      value: "false"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+    properties {
+      id: "show_chain"
+      value: "true"
+      type: PROPERTY_TYPE_BOOLEAN
+    }
+  }
+}
+instances {
+  id: "path4-point2"
+  prototype: "/game/common/point/point.go"
+  position {
+    x: 1.0
+    y: 74.0
+  }
+}
 collection_instances {
   id: "common"
   collection: "/game/core/common.collection"
@@ -220,8 +314,8 @@ collection_instances {
   id: "endpoint"
   collection: "/game/items/endpoint/endpoint.collection"
   position {
-    x: 1626.0
-    y: 208.0
+    x: 2105.0
+    y: 239.0
   }
 }
 scale_along_z: 0
@@ -270,8 +364,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 1144.0
-    y: 308.0
+    x: 30.0
+    y: 67.0
   }
 }
 embedded_instances {
@@ -307,5 +401,16 @@ embedded_instances {
   position {
     x: 930.0
     y: 201.0
+  }
+}
+embedded_instances {
+  id: "saw-with-path4"
+  children: "path4-point1"
+  children: "path4-point2"
+  children: "saw4"
+  data: ""
+  position {
+    x: 2007.0
+    y: 159.0
   }
 }
