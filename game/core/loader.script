@@ -1,4 +1,5 @@
 local data = require "main.data"
+local const = require "game.lib.const"
 
 local function unloadlevel(self)
 	if self.loaded > 0 then
@@ -19,12 +20,12 @@ function init(self)
 end
 
 function on_message(self, message_id, message,sender)
-	if message_id == hash("new_level") then
+	if message_id == const.MSG.NEW_LEVEL then
 		unloadlevel(self)
 		loadlevel(self)
 	elseif message_id == hash("proxy_loaded") then
 		msg.post(sender, "enable")
-	elseif message_id == hash("reload_level") then 
+	elseif message_id == const.MSG.RELOAD_LEVEL then 
 		unloadlevel(self)
 		self.reload = true
 	elseif message_id == hash("proxy_unloaded") then

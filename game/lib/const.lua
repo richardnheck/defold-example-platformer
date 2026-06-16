@@ -26,7 +26,12 @@ const.MSG              = {
 	PLAYER_SPAWN         = hash("player_spawn"),
 	APPLY_IMPULSE        = hash("apply_impulse"),
 	KILL_PLAYER          = hash("kill_player"),
-	STOMP_ENEMY          = hash("stomp_enemy")
+	STOMP_ENEMY          = hash("stomp_enemy"),
+	ENDPOINT_REACHED     = hash("endpoint_reached"),
+
+	RELOAD_LEVEL         = hash("reload_level"),
+	NEW_LEVEL            = hash("new_level"),
+	
 	
 	-- RESTART              = hash("restart"),
 	-- PLAYER_DIE           = hash("player_die"),

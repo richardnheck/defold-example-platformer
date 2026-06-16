@@ -17,9 +17,9 @@ M.CANV_W = 0
 M.CANV_H = 0
 M.TILE_SIZE = 16
 M.PIXEL_SIZE = 4
-M.MAX_LEVELS = 10
+M.MAX_LEVELS = 3
 
-M.level = 3
+M.level = 1
 M.time = 0
 
 M.offset = vmath.vector3(0)

@@ -40,6 +40,7 @@ local EV_LEAVE_WALL = hash("ev_leave_wall")
 local EV_WALL_JUMP  = hash("ev_wall_jump")
 local EV_LAND_IDLE  = hash("ev_land_idle")
 local EV_LAND_MOVE  = hash("ev_land_move")
+local EV_CELEBRATE  = hash("ev_celebrate")
 
 -- Player animations
 local ANIM_SPAWN     = hash("player-spawn")
@@ -80,6 +81,7 @@ local function setup_fsm(self)
 		air_jump   = fsm.state("air_jump"),
 		wall_slide = fsm.state("wall_slide"),
 		wall_jump  = fsm.state("wall_jump"),
+		celebrate  = fsm.state("celebrate")
 	}
 
 	local function t(from, to, ev) fsm.transition(from, to, ev) end
@@ -108,6 +110,10 @@ local function setup_fsm(self)
 	t(s.wall_jump,  s.idle,       EV_LAND_IDLE)
 	t(s.wall_jump,  s.move,       EV_LAND_MOVE)
 	t(s.wall_jump,  s.jump,       EV_JUMP) -- spring while wall-jumping
+	t(s.move,       s.celebrate,  EV_CELEBRATE)
+	t(s.idle,       s.celebrate,  EV_CELEBRATE)
+	t(s.jump,       s.celebrate,  EV_CELEBRATE)
+	t(s.air_jump,   s.celebrate,  EV_CELEBRATE)
 
 	local function play(anim) sprite.play_flipbook("#sprite", anim) end
 	local function apply_gravity(g) self.vel.y = self.vel.y + g end
@@ -214,6 +220,17 @@ local function setup_fsm(self)
 	end)
 	fsm.on_update(s.wall_jump, airborne_update)
 
+	--- State: CELEBRATE
+	fsm.on_enter(s.celebrate, function()
+		play(ANIM_IDLE)
+		self.vel.x = 0
+	end)
+	fsm.on_update(s.celebrate, function(dt) 
+		self.vel.x = 0
+		apply_gravity(GRAVITY) 
+	end)
+
+	
 	fsm.on_state_change(function(from, to)
 		-- Uncomment to debug state transitions
 		-- local function name(id)
@@ -260,6 +277,7 @@ local function is_grounded(self)
 end
 
 function init(self)
+	self.locked = falseh
 	reset_player_state(self)
 	setup_fsm(self)
 	msg.post(".", "acquire_input_focus")
@@ -477,6 +495,8 @@ local function handle_obstacle_contact(self, normal, distance, position, other_i
 end
 
 local function input_playing(self, action_id, action)
+	if self.locked then return end
+	
 	if action_id == ACTION_LEFT then
 		if action.pressed then self.input_left = true
 		elseif action.released then self.input_left = false end
@@ -517,6 +537,33 @@ local function input_endscreen(self, action_id, action)
 	end
 end
 
+local function player_die() 
+	msg.post("game:/loader", const.MSG.RELOAD_LEVEL)
+end
+
+local function goto_next_level() 
+	data.level = data.level + 1
+	if data.level > data.MAX_LEVELS then
+		data.maxlevel = 1
+		quit2menu()
+	else
+		msg.post("game:/loader", const.MSG.NEW_LEVEL, {})
+		data.maxlevel = data.level
+	end
+end
+
+local function handle_endpoint_reached(self)
+	-- lock player input for releading input focus
+	--self.locked = true
+	self.fsm.handle_event(EV_CELEBRATE)
+
+	-- wait a moment to celebrate before going to next level
+	timer.delay(2, false, function()
+		goto_next_level()
+	end)
+end 
+
+	
 function on_input(self, action_id, action)
 	if data.state == data.STATE_PLAYING then
 		input_playing(self, action_id, action)
@@ -565,6 +612,8 @@ function on_message(self, message_id, message, sender)
 		end
 	elseif message_id == const.MSG.KILL_PLAYER then
 		player_die()
+	elseif message_id == const.MSG.ENDPOINT_REACHED then
+		handle_endpoint_reached(self)
 	elseif message_id == MSG_QUIT then
 		quit2menu()
 	elseif message_id == const.MSG.APPLY_IMPULSE then
@@ -573,6 +622,3 @@ function on_message(self, message_id, message, sender)
 	end
 end
 
-function player_die() 
-	msg.post("game:/loader", "reload_level")
-end

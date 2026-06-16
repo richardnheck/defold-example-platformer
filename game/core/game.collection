@@ -19,7 +19,7 @@ embedded_instances {
   "\"\n"
   "}\n"
   "embedded_components {\n"
-  "  id: \"level\"\n"
+  "  id: \"level2\"\n"
   "  type: \"collectionproxy\"\n"
   "  data: \"collection: \\\"/game/levels/level2.collection\\\"\\n"
   "\"\n"

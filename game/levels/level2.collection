@@ -196,22 +196,6 @@ instances {
     y: 321.0
   }
 }
-instances {
-  id: "cannon"
-  prototype: "/game/traps/cannon/cannon.go"
-  position {
-    x: 116.0
-    y: 58.0
-  }
-  component_properties {
-    id: "cannon"
-    properties {
-      id: "direction"
-      value: "1.0, 0.0, 0.0"
-      type: PROPERTY_TYPE_VECTOR3
-    }
-  }
-}
 collection_instances {
   id: "common"
   collection: "/game/core/common.collection"
@@ -244,7 +228,7 @@ collection_instances {
   id: "endpoint"
   collection: "/game/items/endpoint/endpoint.collection"
   position {
-    x: 1626.0
+    x: 1635.0
     y: 208.0
   }
 }
@@ -423,7 +407,7 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 28.0
-    y: 63.0
+    x: 1479.0
+    y: 150.0
   }
 }
