@@ -277,10 +277,12 @@ local function is_grounded(self)
 end
 
 function init(self)
-	self.locked = falseh
-	reset_player_state(self)
-	setup_fsm(self)
 	msg.post(".", "acquire_input_focus")
+
+	reset_player_state(self)
+
+	-- setup the player's state machine
+	setup_fsm(self)
 end
 
 local RAY_TOP_YOFFSET = 16
@@ -494,9 +496,7 @@ local function handle_obstacle_contact(self, normal, distance, position, other_i
 	end
 end
 
-local function input_playing(self, action_id, action)
-	if self.locked then return end
-	
+local function input_playing(self, action_id, action)	
 	if action_id == ACTION_LEFT then
 		if action.pressed then self.input_left = true
 		elseif action.released then self.input_left = false end
@@ -553,8 +553,7 @@ local function goto_next_level()
 end
 
 local function handle_endpoint_reached(self)
-	-- lock player input for releading input focus
-	--self.locked = true
+	-- go to celebrate state (which prevents player from moving)
 	self.fsm.handle_event(EV_CELEBRATE)
 
 	-- wait a moment to celebrate before going to next level
