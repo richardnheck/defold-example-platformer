@@ -423,4 +423,135 @@ animations {
   }
   playback: PLAYBACK_NONE
 }
+animations {
+  id: "strawberry"
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem1.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem2.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem3.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem4.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem5.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem6.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem7.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem8.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem9.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem10.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem11.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem12.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem13.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem14.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem15.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem16.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem17.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "banana"
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana1.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana2.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana3.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana4.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana5.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana6.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana7.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana8.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana9.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana10.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana11.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana12.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana13.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana14.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana15.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana16.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana17.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "collected"
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Collected_1.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Collected_2.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Collected_3.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Collected_4.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Collected_5.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Collected_6.png"
+  }
+}
 extrude_borders: 2
