@@ -1,6 +1,7 @@
 local data = require "main.data"
+local const = require "game.lib.const"
 
--- Load the game menu first
+-- Load the game menu first (set false for testing levels directly)
 local load_game_menu = false
 
 function init(self)
@@ -16,19 +17,17 @@ function init(self)
 	math.randomseed(os.time())
 	for n = 1, 5 do
 		local r = math.random()
-	end
-
-	
+	end	
 end
 
 function on_message(self, message_id, message,sender)
-	if message_id == hash("show_game") then
+	if message_id == const.MSG.SHOW_GAME then
 		msg.post("handler#menu", "unload")
 		msg.post("handler#game", "load")
-	elseif message_id == hash("show_menu") then
+	elseif message_id == const.MSG.SHOW_MENU then
 		msg.post("handler#game", "unload")
 		msg.post("handler#menu", "load")
-	elseif message_id == hash("proxy_loaded") then
+	elseif message_id == const.MSG.PROXY_LOADED then
 		msg.post(sender, "enable")
 	end
 end	

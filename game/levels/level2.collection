@@ -195,6 +195,14 @@ instances {
     x: 1041.0
     y: 321.0
   }
+  component_properties {
+    id: "checkpoint"
+    properties {
+      id: "identifier"
+      value: "2.0"
+      type: PROPERTY_TYPE_NUMBER
+    }
+  }
 }
 collection_instances {
   id: "common"
@@ -407,7 +415,7 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 1479.0
-    y: 150.0
+    x: 28.0
+    y: 73.0
   }
 }

@@ -23,12 +23,12 @@ function on_message(self, message_id, message,sender)
 	if message_id == const.MSG.NEW_LEVEL then
 		unloadlevel(self)
 		loadlevel(self)
-	elseif message_id == hash("proxy_loaded") then
+	elseif message_id == const.MSG.PROXY_LOADED then
 		msg.post(sender, "enable")
 	elseif message_id == const.MSG.RELOAD_LEVEL then 
 		unloadlevel(self)
 		self.reload = true
-	elseif message_id == hash("proxy_unloaded") then
+	elseif message_id == const.MSG.PROXY_UNLOADED then
 		if self.reload then
 			self.reload = false
 			loadlevel(self)

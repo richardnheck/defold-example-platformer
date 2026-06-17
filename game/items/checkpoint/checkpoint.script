@@ -1,18 +1,32 @@
 local const = require("game.lib.const")
+local data = require("main.data")
 
+-- Properties
+go.property("identifier", 1)
+
+-- Animations
 local ANIM_FLAG_OUT = "checkpoint-flag-out"
 local ANIM_FLAG_WAVE = "checkpoint-flag-wave"
 
+-- Urls
 local SPRITE_URL = "#sprite"
 
 function init(self)
 	self.checkpoint_reached = false
+
+	-- register this checkpoint's position so the level can spawn here on respawn
+	data.checkpoints[self.identifier] = go.get_position()
 end
 
 function on_message(self, message_id, message, sender)
 	if message_id == const.MSG.TRIGGER_RESPONSE then
-		if message.other_group == const.GROUP.PLAYER and message.enter and not checkpoint_reached then 
+		if message.other_group == const.GROUP.PLAYER and message.enter and not self.checkpoint_reached then 
 			self.checkpoint_reached = true
+
+			-- message the player that they reached a checkpoint
+			msg.post(message.other_id, const.MSG.CHECKPOINT_REACHED, { checkpoint = self.identifier} )
+
+			-- animate the checkpoint
 			sprite.play_flipbook(SPRITE_URL, ANIM_FLAG_OUT, function() 
 				sprite.play_flipbook(SPRITE_URL, ANIM_FLAG_WAVE)
 			end)

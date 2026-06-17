@@ -1,6 +1,9 @@
 local data = require "main.data"
+local const = require "game.lib.const"
 
 local MENU_LEN = 3
+
+local MAIN_HANDLER = "main:/handler"
 
 function init(self)
 	self.handpos = 1
@@ -23,7 +26,7 @@ end
 local function close(self)
 	gui.set_enabled(self.node, false)
 	data.state = data.STATE_PLAYING
-	msg.post("main:/handler", "set_time_step", {factor = 1, mode = 0})
+	msg.post(MAIN_HANDLER, "set_time_step", {factor = 1, mode = 0})
 end
 
 local function input(self, action_id, action)
@@ -44,13 +47,14 @@ local function input(self, action_id, action)
 			-- Continue
 			close(self)
 		elseif self.handpos == 2 then
-			-- Restart
-			msg.post("main:/handler", "set_time_step", {factor = 1, mode = 0})
+			-- Restart from the start of the level, ignoring any reached checkpoint
+			msg.post(MAIN_HANDLER, "set_time_step", {factor = 1, mode = 0})
 			data.state = data.STATE_PLAYING
-			msg.post("game:/loader", "reload_level")
+			data.clear_checkpoint()
+			msg.post("game:/loader", const.MSG.RELOAD_LEVEL)
 		elseif self.handpos == 3 then
 			-- Quit
-			msg.post("main:/handler", "set_time_step", {factor = 1, mode = 0})
+			msg.post(MAIN_HANDLER, "set_time_step", {factor = 1, mode = 0})
 			msg.post("/common/player", "quit")
 		end
 	elseif action_id == hash("exit") and action.pressed then
@@ -62,7 +66,7 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("show") then
 		gui.set_enabled(self.node, true)
 		data.state = data.STATE_PAUSE
-		msg.post("main:/handler", "set_time_step", {factor = 0, mode = 0})
+		msg.post(MAIN_HANDLER, "set_time_step", {factor = 0, mode = 0})
 	elseif message_id == hash("input") then
 		input(self, message.action_id, message.action)
 	end

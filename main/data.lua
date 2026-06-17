@@ -20,6 +20,8 @@ M.PIXEL_SIZE = 4
 M.MAX_LEVELS = 3
 
 M.level = 1
+M.checkpoint = 0	  -- the identifier (number) of the current checkpoint reached
+M.checkpoints = {}    -- identifier -> world position, populated by each checkpoint on load
 M.time = 0
 
 M.offset = vmath.vector3(0)
@@ -27,6 +29,50 @@ M.scrollpos = vmath.vector3(0)
 M.bounds = vmath.vector3(0)
 
 M.gate = {}
+
+local function reset_checkpoints()
+	M.checkpoint = 0
+	M.checkpoints = {}
+end
+
+-- Set the current level
+function M.set_level(level)
+	M.level = level
+	reset_checkpoints()
+end
+
+-- Set the next level
+function M.next_level()
+	-- increment the level
+	M.level = M.level + 1
+
+	-- clear checkpoints 
+	reset_checkpoints()
+end
+
+-- Set the current checkpoint
+function M.set_checkpoint(checkpoint_identifier)
+	M.checkpoint = checkpoint_identifier
+end
+
+function M.clear_checkpoint()
+	M.checkpoint = 0
+end 
+
+-- Determine if a checkpoint has been reached 
+function M.checkpoint_reached()
+	return M.checkpoint > 0 and M.checkpoints[M.checkpoint]
+end
+
+-- Get the position of current checkpoint reached (if any)
+function M.get_checkpoint_pos()
+	if M.checkpoint_reached() then
+		return M.checkpoints[M.checkpoint]
+	else
+		return nil
+	end
+end
+
 
 function M.world2tile(p)
 	return vmath.vector3(math.floor((p.x + M.TILE_SIZE) / M.TILE_SIZE), math.floor((p.y + M.TILE_SIZE) / M.TILE_SIZE), p.z)

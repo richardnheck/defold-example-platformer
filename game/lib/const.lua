@@ -18,20 +18,26 @@ const.GROUP   = {
 ----------------------
 const.MSG              = {
 	-- Defold
-	TRIGGER_RESPONSE     = hash("trigger_response"),
+	TRIGGER_RESPONSE       = hash("trigger_response"),
 	CONTACT_POINT_RESPONSE = hash("contact_point_response"),
-	COLLISION_RESPONSE = hash("collision_response"),
+	COLLISION_RESPONSE     = hash("collision_response"),
+	PROXY_LOADED           = hash("proxy_loaded"),
+	PROXY_UNLOADED         = hash("proxy_unloaded"),
+
+	-- Game Control
+	SHOW_GAME            = hash("show_game"),
+	SHOW_MENU            = hash("show_menu"),
+	RELOAD_LEVEL         = hash("reload_level"),
+	NEW_LEVEL            = hash("new_level"),
 	
 	-- Game
 	PLAYER_SPAWN         = hash("player_spawn"),
 	APPLY_IMPULSE        = hash("apply_impulse"),
 	KILL_PLAYER          = hash("kill_player"),
 	STOMP_ENEMY          = hash("stomp_enemy"),
+	CHECKPOINT_REACHED   = hash("checkpoint_reached"),
 	ENDPOINT_REACHED     = hash("endpoint_reached"),
 
-	RELOAD_LEVEL         = hash("reload_level"),
-	NEW_LEVEL            = hash("new_level"),
-	
 	
 	-- RESTART              = hash("restart"),
 	-- PLAYER_DIE           = hash("player_die"),
@@ -40,14 +46,6 @@ const.MSG              = {
 	-- COLLECT              = hash("collect"),
 	-- PLAYER_HEALTH_UPDATE = hash("player_health_update"),
 	-- TOGGLE_AUDIO         = hash("toggle_audio"),
-
-	
-	-- PROXY
-	-- PROXY_LOADED         = hash("proxy_loaded"),
-	-- GUY_REMOVED          = hash("guy_removed"),
-	-- ENABLE_GAME          = hash("enable_game"),
-	-- LOAD_GAME            = hash("load_game"),
-	-- DOWNLOAD_ARCHIVE     = hash("download_archive")
 }
 
 return const

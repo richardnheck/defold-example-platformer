@@ -2703,11 +2703,6 @@ layers {
     tile: 98
   }
   cell {
-    x: 3
-    y: 3
-    tile: 228
-  }
-  cell {
     x: 12
     y: 3
     tile: 39

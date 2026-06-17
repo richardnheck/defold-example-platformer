@@ -519,6 +519,7 @@ local function input_playing(self, action_id, action)
 	end
 end
 
+
 local function input_clear(self, action_id, action)
 	if action_id == ACTION_CONFIRM and action.pressed then
 		data.level = data.level + 1
@@ -537,18 +538,19 @@ local function input_endscreen(self, action_id, action)
 	end
 end
 
+
 local function player_die() 
 	msg.post("game:/loader", const.MSG.RELOAD_LEVEL)
 end
 
 local function goto_next_level() 
-	data.level = data.level + 1
+	-- Set the next level in the data
+	data.next_level()
+	
 	if data.level > data.MAX_LEVELS then
-		data.maxlevel = 1
 		quit2menu()
 	else
 		msg.post("game:/loader", const.MSG.NEW_LEVEL, {})
-		data.maxlevel = data.level
 	end
 end
 
@@ -611,6 +613,9 @@ function on_message(self, message_id, message, sender)
 		end
 	elseif message_id == const.MSG.KILL_PLAYER then
 		player_die()
+	elseif message_id == const.MSG.CHECKPOINT_REACHED then
+		-- persist the current checkpoint reached
+		data.set_checkpoint(message.checkpoint)
 	elseif message_id == const.MSG.ENDPOINT_REACHED then
 		handle_endpoint_reached(self)
 	elseif message_id == MSG_QUIT then
