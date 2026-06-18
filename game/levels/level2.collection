@@ -1,13 +1,5 @@
 name: "level2"
 instances {
-  id: "spring"
-  prototype: "/game/platforms/spring/spring.go"
-  position {
-    x: 136.0
-    y: 120.0
-  }
-}
-instances {
   id: "fire"
   prototype: "/game/traps/fire/fire.go"
   position {
@@ -204,6 +196,230 @@ instances {
     }
   }
 }
+instances {
+  id: "spring"
+  prototype: "/game/platforms/spring/spring.go"
+  position {
+    x: 136.0
+    y: 120.0
+  }
+}
+instances {
+  id: "banana"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 221.0
+    y: 209.0
+  }
+}
+instances {
+  id: "banana1"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 253.0
+    y: 209.0
+  }
+}
+instances {
+  id: "banana2"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 285.0
+    y: 209.0
+  }
+}
+instances {
+  id: "strawberry"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 328.0
+    y: 123.0
+  }
+}
+instances {
+  id: "strawberry1"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 424.0
+    y: 123.0
+  }
+}
+instances {
+  id: "banana3"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 555.0
+    y: 236.0
+  }
+}
+instances {
+  id: "banana4"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 555.0
+    y: 260.0
+  }
+}
+instances {
+  id: "banana5"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 577.0
+    y: 260.0
+  }
+}
+instances {
+  id: "banana6"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 577.0
+    y: 236.0
+  }
+}
+instances {
+  id: "banana7"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 600.0
+    y: 236.0
+  }
+}
+instances {
+  id: "banana8"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 600.0
+    y: 260.0
+  }
+}
+instances {
+  id: "strawberry2"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 849.0
+    y: 281.0
+  }
+}
+instances {
+  id: "strawberry3"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 849.0
+    y: 257.0
+  }
+}
+instances {
+  id: "strawberry4"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 849.0
+    y: 233.0
+  }
+}
+instances {
+  id: "strawberry5"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 849.0
+    y: 209.0
+  }
+}
+instances {
+  id: "banana9"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 929.0
+    y: 260.0
+  }
+}
+instances {
+  id: "banana10"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 929.0
+    y: 234.0
+  }
+}
+instances {
+  id: "strawberry6"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 1218.0
+    y: 306.0
+  }
+}
+instances {
+  id: "strawberry7"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 1218.0
+    y: 282.0
+  }
+}
+instances {
+  id: "banana11"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1168.0
+    y: 168.0
+  }
+}
+instances {
+  id: "banana12"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1190.0
+    y: 168.0
+  }
+}
+instances {
+  id: "banana13"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1190.0
+    y: 146.0
+  }
+}
+instances {
+  id: "banana14"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1168.0
+    y: 146.0
+  }
+}
+instances {
+  id: "strawberry8"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 1425.0
+    y: 274.0
+  }
+}
+instances {
+  id: "strawberry9"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 1425.0
+    y: 295.0
+  }
+}
+instances {
+  id: "strawberry10"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 1529.0
+    y: 295.0
+  }
+}
+instances {
+  id: "strawberry11"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 1529.0
+    y: 274.0
+  }
+}
 collection_instances {
   id: "common"
   collection: "/game/core/common.collection"
@@ -372,7 +588,7 @@ collection_instances {
 scale_along_z: 0
 embedded_instances {
   id: "level"
-  children: "spring"
+  children: "player_spawn_position"
   data: "components {\n"
   "  id: \"level\"\n"
   "  component: \"/game/levels/level.script\"\n"
@@ -415,7 +631,38 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 28.0
-    y: 73.0
+    x: 37.0
+    y: 84.0
   }
+}
+embedded_instances {
+  id: "fruit"
+  children: "banana"
+  children: "banana1"
+  children: "banana10"
+  children: "banana11"
+  children: "banana12"
+  children: "banana13"
+  children: "banana14"
+  children: "banana2"
+  children: "banana3"
+  children: "banana4"
+  children: "banana5"
+  children: "banana6"
+  children: "banana7"
+  children: "banana8"
+  children: "banana9"
+  children: "strawberry"
+  children: "strawberry1"
+  children: "strawberry10"
+  children: "strawberry11"
+  children: "strawberry2"
+  children: "strawberry3"
+  children: "strawberry4"
+  children: "strawberry5"
+  children: "strawberry6"
+  children: "strawberry7"
+  children: "strawberry8"
+  children: "strawberry9"
+  data: ""
 }

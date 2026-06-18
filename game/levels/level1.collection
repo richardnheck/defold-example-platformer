@@ -120,7 +120,7 @@ instances {
   id: "banana"
   prototype: "/game/items/fruits/banana.go"
   position {
-    x: 183.0
+    x: 188.0
     y: 88.0
   }
 }
@@ -144,7 +144,7 @@ instances {
   id: "banana1"
   prototype: "/game/items/fruits/banana.go"
   position {
-    x: 211.0
+    x: 214.0
     y: 88.0
   }
 }
@@ -152,8 +152,104 @@ instances {
   id: "banana2"
   prototype: "/game/items/fruits/banana.go"
   position {
-    x: 239.0
+    x: 247.0
     y: 88.0
+  }
+}
+instances {
+  id: "strawberry2"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 18.0
+    y: 218.0
+  }
+}
+instances {
+  id: "strawberry3"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 591.0
+    y: 225.0
+  }
+}
+instances {
+  id: "strawberry4"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 648.0
+    y: 225.0
+  }
+}
+instances {
+  id: "strawberry5"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 708.0
+    y: 225.0
+  }
+}
+instances {
+  id: "strawberry6"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 524.0
+    y: 225.0
+  }
+}
+instances {
+  id: "banana3"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 63.0
+    y: 131.0
+  }
+}
+instances {
+  id: "banana4"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 818.0
+    y: 226.0
+  }
+}
+instances {
+  id: "strawberry7"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 882.0
+    y: 276.0
+  }
+}
+instances {
+  id: "strawberry8"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 882.0
+    y: 299.0
+  }
+}
+instances {
+  id: "banana5"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1009.0
+    y: 221.0
+  }
+}
+instances {
+  id: "banana6"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1009.0
+    y: 250.0
+  }
+}
+instances {
+  id: "banana7"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1009.0
+    y: 278.0
   }
 }
 collection_instances {
@@ -214,7 +310,7 @@ embedded_instances {
   ""
   position {
     x: 63.0
-    y: 69.0
+    y: 79.0
   }
 }
 embedded_instances {
@@ -222,7 +318,19 @@ embedded_instances {
   children: "banana"
   children: "banana1"
   children: "banana2"
+  children: "banana3"
+  children: "banana4"
+  children: "banana5"
+  children: "banana6"
+  children: "banana7"
   children: "strawberry"
   children: "strawberry1"
+  children: "strawberry2"
+  children: "strawberry3"
+  children: "strawberry4"
+  children: "strawberry5"
+  children: "strawberry6"
+  children: "strawberry7"
+  children: "strawberry8"
   data: ""
 }

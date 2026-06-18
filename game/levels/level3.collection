@@ -314,6 +314,222 @@ instances {
     y: 74.0
   }
 }
+instances {
+  id: "strawberry"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 119.0
+    y: 149.0
+  }
+}
+instances {
+  id: "strawberry1"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 119.0
+    y: 170.0
+  }
+}
+instances {
+  id: "banana"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 264.0
+    y: 214.0
+  }
+}
+instances {
+  id: "banana1"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 264.0
+    y: 235.0
+  }
+}
+instances {
+  id: "banana2"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 264.0
+    y: 257.0
+  }
+}
+instances {
+  id: "strawberry2"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 489.0
+    y: 241.0
+  }
+}
+instances {
+  id: "strawberry3"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 520.0
+    y: 241.0
+  }
+}
+instances {
+  id: "strawberry4"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 551.0
+    y: 241.0
+  }
+}
+instances {
+  id: "banana3"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 929.0
+    y: 215.0
+  }
+}
+instances {
+  id: "banana4"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 929.0
+    y: 248.0
+  }
+}
+instances {
+  id: "banana5"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1000.0
+    y: 248.0
+  }
+}
+instances {
+  id: "banana6"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1000.0
+    y: 280.0
+  }
+}
+instances {
+  id: "banana7"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1072.0
+    y: 280.0
+  }
+}
+instances {
+  id: "banana8"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1072.0
+    y: 311.0
+  }
+}
+instances {
+  id: "strawberry5"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 1208.0
+    y: 247.0
+  }
+}
+instances {
+  id: "strawberry6"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 1241.0
+    y: 270.0
+  }
+}
+instances {
+  id: "strawberry7"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 1273.0
+    y: 248.0
+  }
+}
+instances {
+  id: "banana9"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1417.0
+    y: 238.0
+  }
+}
+instances {
+  id: "banana10"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1448.0
+    y: 238.0
+  }
+}
+instances {
+  id: "banana11"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1480.0
+    y: 238.0
+  }
+}
+instances {
+  id: "strawberry8"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 1656.0
+    y: 154.0
+  }
+}
+instances {
+  id: "strawberry9"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 1688.0
+    y: 154.0
+  }
+}
+instances {
+  id: "strawberry10"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 1688.0
+    y: 184.0
+  }
+}
+instances {
+  id: "strawberry11"
+  prototype: "/game/items/fruits/strawberry.go"
+  position {
+    x: 1656.0
+    y: 184.0
+  }
+}
+instances {
+  id: "banana12"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1959.0
+    y: 231.0
+  }
+}
+instances {
+  id: "banana13"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1881.0
+    y: 232.0
+  }
+}
+instances {
+  id: "banana14"
+  prototype: "/game/items/fruits/banana.go"
+  position {
+    x: 1920.0
+    y: 231.0
+  }
+}
 collection_instances {
   id: "common"
   collection: "/game/core/common.collection"
@@ -329,6 +545,7 @@ collection_instances {
 scale_along_z: 0
 embedded_instances {
   id: "level"
+  children: "player_spawn_position"
   data: "components {\n"
   "  id: \"level\"\n"
   "  component: \"/game/levels/level.script\"\n"
@@ -352,29 +569,6 @@ embedded_instances {
   "\"\n"
   "}\n"
   ""
-}
-embedded_instances {
-  id: "player_spawn_position"
-  data: "embedded_components {\n"
-  "  id: \"sprite\"\n"
-  "  type: \"sprite\"\n"
-  "  data: \"default_animation: \\\"player\\\"\\n"
-  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
-  "size {\\n"
-  "  x: 32.0\\n"
-  "  y: 32.0\\n"
-  "}\\n"
-  "textures {\\n"
-  "  sampler: \\\"texture_sampler\\\"\\n"
-  "  texture: \\\"/assets/atlas/characters.atlas\\\"\\n"
-  "}\\n"
-  "\"\n"
-  "}\n"
-  ""
-  position {
-    x: 2056.0
-    y: 240.0
-  }
 }
 embedded_instances {
   id: "saw-with-path1"
@@ -421,4 +615,58 @@ embedded_instances {
     x: 2007.0
     y: 159.0
   }
+}
+embedded_instances {
+  id: "player_spawn_position"
+  data: "embedded_components {\n"
+  "  id: \"sprite\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"default_animation: \\\"player\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "size {\\n"
+  "  x: 32.0\\n"
+  "  y: 32.0\\n"
+  "}\\n"
+  "textures {\\n"
+  "  sampler: \\\"texture_sampler\\\"\\n"
+  "  texture: \\\"/assets/atlas/characters.atlas\\\"\\n"
+  "}\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    x: 845.0
+    y: 226.0
+  }
+}
+embedded_instances {
+  id: "fruit"
+  children: "banana"
+  children: "banana1"
+  children: "banana10"
+  children: "banana11"
+  children: "banana12"
+  children: "banana13"
+  children: "banana14"
+  children: "banana2"
+  children: "banana3"
+  children: "banana4"
+  children: "banana5"
+  children: "banana6"
+  children: "banana7"
+  children: "banana8"
+  children: "banana9"
+  children: "strawberry"
+  children: "strawberry1"
+  children: "strawberry10"
+  children: "strawberry11"
+  children: "strawberry2"
+  children: "strawberry3"
+  children: "strawberry4"
+  children: "strawberry5"
+  children: "strawberry6"
+  children: "strawberry7"
+  children: "strawberry8"
+  children: "strawberry9"
+  data: ""
 }
