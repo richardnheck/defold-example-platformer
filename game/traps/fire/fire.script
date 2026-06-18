@@ -42,7 +42,6 @@ local function setup_fsm(self)
 	end)
 
 	fsm.on_enter(s.on, function()
-		print("on entered")
 		sprite.play_flipbook(SPRITE, ANIM_ON)
 		-- start a timer to turn on off the fire after a period
 		timer.delay(ON_TIME, false, function() 

@@ -7,15 +7,12 @@ local ANIM_COLLECTED = "collected"
 local SPRITE = "#sprite"
 
 
-
 function init(self)
 	self.collected = false	
 end
 
 function on_message(self, message_id, message, sender)
-	
 	if message_id == const.MSG.TRIGGER_RESPONSE and message.enter and message.other_group == const.GROUP.PLAYER and not self.collected then
-		print(">>>touched")
 		-- player has touched the fruit	
 		-- TODO: play collected sound
 		sprite.play_flipbook(SPRITE, ANIM_COLLECTED, function() 
