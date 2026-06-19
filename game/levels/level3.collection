@@ -1,5 +1,17 @@
 name: "level3"
 instances {
+  id: "background"
+  prototype: "/game/levels/background/background.go"
+  component_properties {
+    id: "script"
+    properties {
+      id: "texture"
+      value: "/assets/images/pixel-adventure/Background/Purple.png"
+      type: PROPERTY_TYPE_HASH
+    }
+  }
+}
+instances {
   id: "checkpoint2"
   prototype: "/game/items/checkpoint/checkpoint.go"
   position {
@@ -539,7 +551,7 @@ collection_instances {
   collection: "/game/items/endpoint/endpoint.collection"
   position {
     x: 2105.0
-    y: 239.0
+    y: 240.0
   }
 }
 scale_along_z: 0
