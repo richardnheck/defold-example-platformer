@@ -6,7 +6,7 @@ instances {
     id: "script"
     properties {
       id: "texture"
-      value: "/assets/images/pixel-adventure/Background/Blue.png"
+      value: "/assets/images/pixel-adventure/Background/Gray.png"
       type: PROPERTY_TYPE_HASH
     }
     properties {

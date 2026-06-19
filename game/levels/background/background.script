@@ -5,7 +5,7 @@ local TILE_PX = 64  -- background tiles are 64x64
 -- Per-level texture (override in each level collection), the level's tilemap, and scroll speed.
 go.property("texture", resource.texture("/assets/images/pixel-adventure/Background/Blue.png"))
 go.property("tilemap", msg.url("level#tilemap"))
-go.property("scroll_time", 8)  -- seconds for one full vertical tile scroll (loops seamlessly)
+go.property("scroll_time", 8)  -- seconds for one full horizontal tile scroll (loops seamlessly)
 
 function init(self)
 	-- Read this level's tilemap bounds (tilemap data is loaded before any init runs)
@@ -21,6 +21,6 @@ function init(self)
 	go.set("#model", "texture0", self.texture)
 	go.set("#model", "u_repeat", vmath.vector4(pw / TILE_PX, ph / TILE_PX, 0, 0))
 
-	-- Continuously scroll vertically; fract() in the shader makes the loop seamless
-	go.animate("#model", "u_offset.y", go.PLAYBACK_LOOP_FORWARD, 1, go.EASING_LINEAR, self.scroll_time)
+	-- Continuously scroll horizontally to the right; fract() in the shader makes the loop seamless
+	go.animate("#model", "u_offset.x", go.PLAYBACK_LOOP_FORWARD, -1, go.EASING_LINEAR, self.scroll_time)
 end
