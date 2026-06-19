@@ -49,7 +49,7 @@ nodes {
   }
   type: TYPE_TEXT
   text: "LEVEL CLEAR!"
-  font: "main"
+  font: "large"
   id: "title"
   shadow {
     x: 1.0

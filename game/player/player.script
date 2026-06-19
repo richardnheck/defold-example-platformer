@@ -283,6 +283,8 @@ function init(self)
 
 	-- setup the player's state machine
 	setup_fsm(self)
+
+	data.state = data.STATE_PLAYING
 end
 
 local RAY_TOP_YOFFSET = 16
@@ -519,17 +521,23 @@ local function input_playing(self, action_id, action)
 	end
 end
 
+-- Advance to the next level (resets checkpoints). The final-level guard is
+-- a safety net for the debug shortcut; the normal flow only shows this
+-- screen on non-final levels.
+local function goto_next_leveL() 
+	data.next_level()
+	if data.level > data.MAX_LEVELS then
+		data.set_level(1)
+		quit2menu()
+	else
+		msg.post("game:/loader", const.MSG.NEW_LEVEL, {})
+	end
+end
 
+-- Handle user input for level clear screen
 local function input_clear(self, action_id, action)
-	print(">>>>>> input clear")
 	if action_id == ACTION_CONFIRM and action.pressed then
-		data.level = data.level + 1
-		if data.level > data.MAX_LEVELS then
-			data.level = 1
-			quit2menu()
-		else
-			msg.post("game:/loader", "new_level")
-		end
+		goto_next_leveL()
 	end
 end
 
@@ -539,21 +547,19 @@ local function input_endscreen(self, action_id, action)
 	end
 end
 
-
 local function player_die() 
 	msg.post("game:/loader", const.MSG.RELOAD_LEVEL)
 end
 
-local function goto_next_level() 
-	-- Set the next level in the data
-	data.next_level()
-	
-	if data.level > data.MAX_LEVELS then
+local function show_dialog()
+	if data.level >= data.MAX_LEVELS then
 		-- Finished the final level — show the completion screen.
 		-- input_endscreen (STATE_COMPLETE) returns to the menu on confirm/exit.
 		msg.post("/common/view#complete", "show", {state = data.STATE_COMPLETE})
 	else
-		msg.post("game:/loader", const.MSG.NEW_LEVEL, {})
+		-- Finished a non-final level — show the level-clear screen.
+		-- input_clear (STATE_CLEAR) advances to the next level on confirm.
+		msg.post("/common/view#clear", "show", {state = data.STATE_CLEAR})
 	end
 end
 
@@ -561,9 +567,9 @@ local function handle_endpoint_reached(self)
 	-- go to celebrate state (which prevents player from moving)
 	self.fsm.handle_event(EV_CELEBRATE)
 
-	-- wait a moment to celebrate before going to next level
+	-- wait a moment to celebrate before showing the level clear/complete dialog
 	timer.delay(2, false, function()
-		goto_next_level()
+		show_dialog()
 	end)
 end 
 
@@ -585,8 +591,6 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == const.MSG.PLAYER_SPAWN then
 		go.set_position(message.pos)
-		reset_player_state(self)
-		setup_fsm(self)
 	elseif message_id == MSG_CONTACT_POINT_RESPONSE then
 		if message.other_group == const.GROUP.TRAP then
 			-- Player dies immediately when hitting a trap
