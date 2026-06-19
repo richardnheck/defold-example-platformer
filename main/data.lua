@@ -19,7 +19,7 @@ M.TILE_SIZE = 16
 M.PIXEL_SIZE = 4
 M.MAX_LEVELS = 3
 
-M.level = 1			  -- the current level
+M.level = 3		  -- the current level
 M.checkpoint = 0	  -- the identifier (number) of the current checkpoint reached
 M.checkpoints = {}    -- identifier -> world position, populated by each checkpoint on load
 M.time = 0

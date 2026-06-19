@@ -521,6 +521,7 @@ end
 
 
 local function input_clear(self, action_id, action)
+	print(">>>>>> input clear")
 	if action_id == ACTION_CONFIRM and action.pressed then
 		data.level = data.level + 1
 		if data.level > data.MAX_LEVELS then
@@ -548,7 +549,9 @@ local function goto_next_level()
 	data.next_level()
 	
 	if data.level > data.MAX_LEVELS then
-		quit2menu()
+		-- Finished the final level — show the completion screen.
+		-- input_endscreen (STATE_COMPLETE) returns to the menu on confirm/exit.
+		msg.post("/common/view#complete", "show", {state = data.STATE_COMPLETE})
 	else
 		msg.post("game:/loader", const.MSG.NEW_LEVEL, {})
 	end
