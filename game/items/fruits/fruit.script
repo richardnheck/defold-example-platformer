@@ -1,4 +1,5 @@
 local const = require("game.lib.const")
+local data = require("main.data")
 
 -- Animations
 local ANIM_COLLECTED = "collected"
@@ -6,15 +7,24 @@ local ANIM_COLLECTED = "collected"
 -- Urls
 local SPRITE = "#sprite"
 
-
 function init(self)
-	self.collected = false	
+	self.collected = false
+	-- the sprite's default animation name is the collectible type (banana / strawberry)
+	self.collectible = go.get(SPRITE, "animation")
 end
 
 function on_message(self, message_id, message, sender)
 	if message_id == const.MSG.TRIGGER_RESPONSE and message.enter and message.other_group == const.GROUP.PLAYER and not self.collected then
-		-- player has touched the fruit	
+		-- player has collected the fruit	
 		-- TODO: play collected sound
+
+		if self.collectible == const.COLLECTIBLE.BANANA then
+			data.collect_banana()
+		elseif self.collectible == const.COLLECTIBLE.STRAWBERRY then
+			data.collect_strawberry()
+		end
+		msg.post(const.URLS.GUI, const.MSG.COLLECTED, { collectible = self.collectible})		
+		
 		sprite.play_flipbook(SPRITE, ANIM_COLLECTED, function() 
 			go.delete()
 		end)		

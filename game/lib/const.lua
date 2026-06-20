@@ -14,6 +14,14 @@ const.GROUP   = {
 }
 
 ----------------------
+-- Collectibles
+----------------------
+const.COLLECTIBLE = {
+	BANANA     = hash("banana"),
+	STRAWBERRY = hash("strawberry"),
+}
+
+----------------------
 -- Messages
 ----------------------
 const.MSG              = {
@@ -37,6 +45,7 @@ const.MSG              = {
 	STOMP_ENEMY          = hash("stomp_enemy"),
 	CHECKPOINT_REACHED   = hash("checkpoint_reached"),
 	ENDPOINT_REACHED     = hash("endpoint_reached"),
+	COLLECTED            = hash("collected")
 
 	
 	-- RESTART              = hash("restart"),
@@ -46,6 +55,22 @@ const.MSG              = {
 	-- COLLECT              = hash("collect"),
 	-- PLAYER_HEALTH_UPDATE = hash("player_health_update"),
 	-- TOGGLE_AUDIO         = hash("toggle_audio"),
+}
+
+----------------------
+-- URLs
+----------------------
+const.URLS             = {
+	GUI              = "/common/view#game",
+	-- CAMERA_CONTAINER = "/camera",
+	-- CAMERA_ID        = "/camera#camera",
+	-- MAP              = "",
+	-- MAP_CONTANINER   = "",
+	-- GAME             = "/script#game",
+	-- BACKGROUND       = "/background",
+	-- BACKGROUND_MODEL = "/background#model",
+	-- GUI              = "/gui#game",
+	-- MOBILE_GUI       = ""
 }
 
 return const

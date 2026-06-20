@@ -1,8 +1,30 @@
+local const = require "game.lib.const"
 local data = require "main.data"
 
-function update(self, dt)
+-- Forwards function declarations so functions can be defined
+-- at the bottom of the script for better readability
+local update_strawberries_collected
+local update_bananas_collected
+
+function init()
+	update_bananas_collected()
+	update_strawberries_collected()
 end
 
 function on_message(self, message_id, message, sender)
+	if message_id == const.MSG.COLLECTED then
+		if message.collectible == const.COLLECTIBLE.BANANA then
+			update_bananas_collected()
+		elseif message.collectible == const.COLLECTIBLE.STRAWBERRY then
+			update_strawberries_collected()
+		end
+	end
 end
 
+update_strawberries_collected = function()
+	gui.set_text(gui.get_node("strawberries"), data.get_collected_strawberries())
+end
+
+update_bananas_collected = function()
+	gui.set_text(gui.get_node("bananas"), data.get_collected_bananas())
+end

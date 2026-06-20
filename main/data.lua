@@ -19,10 +19,15 @@ M.TILE_SIZE = 16
 M.PIXEL_SIZE = 4
 M.MAX_LEVELS = 3
 
-M.level = 3		  -- the current level
+M.level = 1 		  -- the current level
 M.checkpoint = 0	  -- the identifier (number) of the current checkpoint reached
 M.checkpoints = {}    -- identifier -> world position, populated by each checkpoint on load
 M.time = 0
+
+M.collected = {
+	bananas = 0,
+	strawberries = 0
+}
 
 M.offset = vmath.vector3(0)
 M.scrollpos = vmath.vector3(0)
@@ -73,6 +78,29 @@ function M.get_checkpoint_pos()
 	end
 end
 
+function M.collect_banana()
+	M.collected.bananas = M.collected.bananas + 1	
+end
+
+function M.reset_collected_bananas()
+	M.collected.bananas = 0
+end
+
+function M.get_collected_bananas()
+	return M.collected.bananas
+end
+
+function M.collect_strawberry()
+	M.collected.strawberries = M.collected.strawberries + 1	
+end
+
+function M.reset_collected_strawberries()
+	M.collected.strawberries = 0
+end
+
+function M.get_collected_strawberries()
+	return M.collected.strawberries
+end
 
 function M.world2tile(p)
 	return vmath.vector3(math.floor((p.x + M.TILE_SIZE) / M.TILE_SIZE), math.floor((p.y + M.TILE_SIZE) / M.TILE_SIZE), p.z)
