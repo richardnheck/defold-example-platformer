@@ -3,12 +3,82 @@ fonts {
   name: "main"
   font: "/assets/font/main.font"
 }
-background_color {
-  x: 0.0
-  y: 0.0
-  z: 0.0
-  w: 1.0
+textures {
+  name: "game"
+  texture: "/assets/atlas/game.atlas"
+}
+nodes {
+  position {
+    x: 1108.25
+    y: 674.5
+  }
+  size {
+    x: 50.0
+    y: 50.0
+  }
+  type: TYPE_TEXT
+  text: "00\n"
+  ""
+  font: "main"
+  id: "strawberries"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -57.0
+    y: 5.0
+  }
+  scale {
+    x: 4.0
+    y: 4.0
+  }
+  size {
+    x: 32.0
+    y: 32.0
+  }
+  type: TYPE_BOX
+  texture: "game/strawberry-icon"
+  id: "strawberry-icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "strawberries"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 1245.0
+    y: 675.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "00"
+  font: "main"
+  id: "bananas"
+  xanchor: XANCHOR_RIGHT
+  yanchor: YANCHOR_TOP
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -63.0
+  }
+  scale {
+    x: 4.0
+    y: 4.0
+  }
+  type: TYPE_BOX
+  texture: "game/banana-icon"
+  id: "banana-icon"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "bananas"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
-max_nodes: 512

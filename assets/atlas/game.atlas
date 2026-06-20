@@ -557,4 +557,18 @@ animations {
     image: "/assets/images/pixel-adventure/Items/Fruits/Collected_6.png"
   }
 }
+animations {
+  id: "strawberry-icon"
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/StrawberryItem4.png"
+  }
+  playback: PLAYBACK_NONE
+}
+animations {
+  id: "banana-icon"
+  images {
+    image: "/assets/images/pixel-adventure/Items/Fruits/Banana2.png"
+  }
+  playback: PLAYBACK_NONE
+}
 extrude_borders: 2
