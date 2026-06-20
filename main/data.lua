@@ -44,6 +44,7 @@ end
 function M.set_level(level)
 	M.level = level
 	reset_checkpoints()
+	M.reset_collected()
 end
 
 -- Set the next level
@@ -51,8 +52,9 @@ function M.next_level()
 	-- increment the level
 	M.level = M.level + 1
 
-	-- clear checkpoints 
+	-- clear checkpoints
 	reset_checkpoints()
+	M.reset_collected()
 end
 
 -- Set the current checkpoint
@@ -82,10 +84,6 @@ function M.collect_banana()
 	M.collected.bananas = M.collected.bananas + 1	
 end
 
-function M.reset_collected_bananas()
-	M.collected.bananas = 0
-end
-
 function M.get_collected_bananas()
 	return M.collected.bananas
 end
@@ -94,12 +92,14 @@ function M.collect_strawberry()
 	M.collected.strawberries = M.collected.strawberries + 1	
 end
 
-function M.reset_collected_strawberries()
-	M.collected.strawberries = 0
-end
-
 function M.get_collected_strawberries()
 	return M.collected.strawberries
+end
+
+-- Reset all collected counts (level start / transition / new game)
+function M.reset_collected()
+	M.collected.bananas = 0
+	M.collected.strawberries = 0
 end
 
 function M.world2tile(p)

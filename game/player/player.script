@@ -558,7 +558,12 @@ local function input_endscreen(self, action_id, action)
 	end
 end
 
-local function player_die() 
+local function player_die()
+	-- Collected fruit only "banks" once a checkpoint is reached. Dying before
+	-- reaching one loses everything picked up since the level start.
+	if not data.checkpoint_reached() then
+		data.reset_collected()
+	end
 	msg.post("game:/loader", const.MSG.RELOAD_LEVEL)
 end
 
