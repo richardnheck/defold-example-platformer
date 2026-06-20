@@ -64,7 +64,7 @@ embedded_components {
   "    count: 3\n"
   "    id: \"feet\"\n"
   "  }\n"
-  "  data: 9.5\n"
+  "  data: 9.0\n"
   "  data: 9.0\n"
   "  data: 5.0\n"
   "  data: 3.0\n"
