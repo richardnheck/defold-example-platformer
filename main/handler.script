@@ -2,11 +2,11 @@ local data = require "main.data"
 local const = require "game.lib.const"
 
 -- Load the game menu first (set false for testing levels directly)
-local load_game_menu = false
+local load_game_menu = true
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
-	msg.post("@render:", "clear_color", {color = data.hex2rgba("#1b1c33")})
+
 	if load_game_menu then
 		msg.post("handler#menu", "load")
 	else

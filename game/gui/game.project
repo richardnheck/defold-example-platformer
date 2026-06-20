@@ -1,0 +1,45 @@
+[bootstrap]
+main_collection = /main/main.collectionc
+render = /main/custom.renderc
+
+[display]
+update_frequency = 60
+width = 1280
+height = 720
+
+[graphics]
+default_texture_min_filter = nearest
+default_texture_mag_filter = nearest
+
+[physics]
+use_fixed_timestep = 1
+
+debug = 0
+debug_alpha = 0.5
+
+[script]
+shared_state = 1
+
+[html5]
+splash_image = /assets/images/splash.png
+cssfile = /builtins/manifests/web/dark_theme.css
+scale_mode = fit
+show_console_banner = 0
+show_made_with_defold = 0
+show_fullscreen_button = 0
+
+[spine]
+max_count = 0
+
+[input]
+game_binding = /main/game.input_bindingc
+
+[project]
+title = Defold Example Platformer
+dependencies#0 = https://github.com/subsoap/defos/archive/master.zip
+dependencies#1 = https://github.com/britzl/stately/archive/master.zip
+dependencies#2 = https://github.com/rgrams/debug-draw/archive/master.zip
+
+[tilemap]
+max_tile_count = 4096
+

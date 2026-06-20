@@ -14,7 +14,7 @@ images {
   image: "/assets/images/pixel-adventure/Traps/Saw/Chain.png"
 }
 images {
-  image: "/assets/images/dialog.png"
+  image: "/assets/images/gui/dialog.png"
 }
 animations {
   id: "falling-platform-on"
@@ -568,6 +568,34 @@ animations {
   id: "banana-icon"
   images {
     image: "/assets/images/pixel-adventure/Items/Fruits/Banana2.png"
+  }
+  playback: PLAYBACK_NONE
+}
+animations {
+  id: "title"
+  images {
+    image: "/assets/images/gui/Platformer-Example-Title.png"
+  }
+  playback: PLAYBACK_NONE
+}
+animations {
+  id: "rotating-platform-marker"
+  images {
+    image: "/assets/images/rotating-platform-marker.png"
+  }
+  playback: PLAYBACK_NONE
+}
+animations {
+  id: "arrow"
+  images {
+    image: "/assets/images/gui/arrow.png"
+  }
+  playback: PLAYBACK_NONE
+}
+animations {
+  id: "defold-logo"
+  images {
+    image: "/assets/images/gui/logo-ver-classic-white-256.png"
   }
   playback: PLAYBACK_NONE
 }

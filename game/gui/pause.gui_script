@@ -13,7 +13,7 @@ function init(self)
 	end
 	self.node = gui.get_node("container")
 	gui.set_enabled(self.node, false)
-	gui.set_position(self.node, vmath.vector3(data.SCR_W/2, (data.SCR_H/2), 0))
+	--gui.set_position(self.node, vmath.vector3(data.SCR_W/2, (data.SCR_H/2), 0))
 end
 
 function update(self, dt)
@@ -51,6 +51,7 @@ local function input(self, action_id, action)
 			msg.post(MAIN_HANDLER, "set_time_step", {factor = 1, mode = 0})
 			data.state = data.STATE_PLAYING
 			data.clear_checkpoint()
+			data.reset_collected()
 			msg.post("game:/loader", const.MSG.RELOAD_LEVEL)
 		elseif self.handpos == 3 then
 			-- Quit

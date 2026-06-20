@@ -5,7 +5,7 @@ components {
 embedded_components {
   id: "marker"
   type: "sprite"
-  data: "default_animation: \"player\"\n"
+  data: "default_animation: \"rotating-platform-marker\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "size {\n"
   "  x: 24.0\n"
@@ -14,7 +14,7 @@ embedded_components {
   "size_mode: SIZE_MODE_MANUAL\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/game/core/game.tilesource\"\n"
+  "  texture: \"/assets/atlas/game.atlas\"\n"
   "}\n"
   ""
 }
