@@ -65,6 +65,7 @@ local ACTION_CONFIRM = hash("action") -- generic confirm/dismiss on clear/gameov
 local MSG_CONTACT_POINT_RESPONSE = hash("contact_point_response")
 local MSG_QUIT    = hash("quit")
 
+
 local function quit2menu()
 	msg.post("main:/sound", "stop_sound")
 	msg.post("main:/handler", "show_menu")
@@ -279,6 +280,9 @@ end
 function init(self)
 	msg.post(".", "acquire_input_focus")
 
+	-- Sync initial boolean state with project settings (1 = true, 0 = false)
+	self.is_physics_debug_on = (sys.get_config("physics.debug") == "1")
+
 	reset_player_state(self)
 
 	-- setup the player's state machine
@@ -311,16 +315,23 @@ function fixed_update(self, dt)
 	local has_wall_contact = false
 
 	local pos = go.get_position()
-	debugdraw.cross(pos.x, pos.y, 3, 3, debugdraw.COLORS.white )
 	
 	local hit_l_top    = physics.raycast(pos + vmath.vector3(0,  RAY_TOP_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN,  RAY_TOP_YOFFSET, 0), {const.GROUP.WORLD})
-	debugdraw.ray(pos + vmath.vector3(0,  RAY_TOP_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN,  RAY_TOP_YOFFSET, 0), debugdraw.COLORS.red)
 	local hit_l_bottom = physics.raycast(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN, RAY_BOTTOM_YOFFSET, 0), {const.GROUP.WORLD})
-	debugdraw.ray(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN, RAY_BOTTOM_YOFFSET, 0), debugdraw.COLORS.blue)
 	local hit_r_top    = physics.raycast(pos + vmath.vector3(0, RAY_TOP_YOFFSET, 0), pos + vmath.vector3( RAY_LEN,  RAY_TOP_YOFFSET, 0), {const.GROUP.WORLD})
-	debugdraw.ray(pos + vmath.vector3(0, RAY_TOP_YOFFSET, 0), pos + vmath.vector3( RAY_LEN,  RAY_TOP_YOFFSET, 0), debugdraw.COLORS.green)
 	local hit_r_bottom = physics.raycast(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3( RAY_LEN, RAY_BOTTOM_YOFFSET, 0), {const.GROUP.WORLD})
-	debugdraw.ray(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3( RAY_LEN, RAY_BOTTOM_YOFFSET, 0), debugdraw.COLORS.yellow)
+	
+	if self.is_physics_debug_on then
+		-- Draw the raycasts if physics debugging setting is on
+		debugdraw.ray(pos + vmath.vector3(0,  RAY_TOP_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN,  RAY_TOP_YOFFSET, 0), debugdraw.COLORS.red)			-- left top
+		debugdraw.ray(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3(-RAY_LEN, RAY_BOTTOM_YOFFSET, 0), debugdraw.COLORS.blue) 	 	-- left bottom
+		debugdraw.ray(pos + vmath.vector3(0, RAY_TOP_YOFFSET, 0), pos + vmath.vector3( RAY_LEN,  RAY_TOP_YOFFSET, 0), debugdraw.COLORS.green)			-- right top
+		debugdraw.ray(pos + vmath.vector3(0, RAY_BOTTOM_YOFFSET, 0), pos + vmath.vector3( RAY_LEN, RAY_BOTTOM_YOFFSET, 0), debugdraw.COLORS.yellow)		-- right bottm
+
+		-- Draw cross hairs for player position
+		debugdraw.cross(pos.x, pos.y, 3, 3, debugdraw.COLORS.white )
+	end
+		
 	self.next_to_left  = hit_l_top ~= nil or hit_l_bottom ~= nil
 	self.next_to_right = hit_r_top ~= nil or hit_r_bottom ~= nil
 	if self.next_to_left then self.wall_side = -1
