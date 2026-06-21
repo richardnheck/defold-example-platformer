@@ -49,6 +49,7 @@ local ANIM_RUN       = hash("player-run")
 local ANIM_JUMP_UP   = hash("player-jump")
 local ANIM_JUMP_DOWN = hash("player-fall")
 local ANIM_SLIDE     = hash("player-wall-grab")
+local ANIM_CELEBRATE = hash("player-celebrate")
 
 -- Groups for collisions
 local ONE_WAY_PLATFORM_GROUP = hash("one_way_platform")
@@ -223,7 +224,7 @@ local function setup_fsm(self)
 
 	--- State: CELEBRATE
 	fsm.on_enter(s.celebrate, function()
-		play(ANIM_IDLE)
+		play(ANIM_CELEBRATE)
 		self.vel.x = 0
 	end)
 	fsm.on_update(s.celebrate, function(dt) 

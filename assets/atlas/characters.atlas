@@ -426,4 +426,56 @@ animations {
   }
   playback: PLAYBACK_LOOP_FORWARD
 }
+animations {
+  id: "player-celebrate"
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate1.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate2.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate3.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate4.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate5.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate6.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate7.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate8.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate9.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate10.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate11.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate12.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate13.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate14.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate15.png"
+  }
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Ninja Frog/Celebrate16.png"
+  }
+  fps: 15
+}
 extrude_borders: 2
