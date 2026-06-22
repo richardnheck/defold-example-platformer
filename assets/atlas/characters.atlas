@@ -198,7 +198,6 @@ animations {
   images {
     image: "/assets/images/pixel-adventure/Main Characters/Desappearing7.png"
   }
-  playback: PLAYBACK_LOOP_FORWARD
   fps: 20
 }
 animations {
