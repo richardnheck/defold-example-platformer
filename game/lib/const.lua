@@ -37,6 +37,7 @@ const.MSG              = {
 	SHOW_MENU            = hash("show_menu"),
 	RELOAD_LEVEL         = hash("reload_level"),
 	NEW_LEVEL            = hash("new_level"),
+	QUIT                 = hash("quit"),
 	
 	-- Game
 	PLAYER_SPAWN         = hash("player_spawn"),
