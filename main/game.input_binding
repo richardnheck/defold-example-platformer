@@ -66,6 +66,10 @@ key_trigger {
   input: KEY_UP
   action: "jump"
 }
+mouse_trigger {
+  input: MOUSE_BUTTON_LEFT
+  action: "touch"
+}
 gamepad_trigger {
   input: GAMEPAD_LSTICK_LEFT
   action: "left"

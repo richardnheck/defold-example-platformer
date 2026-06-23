@@ -71,8 +71,8 @@ local function input(self, action_id, action)
 end
 
 function on_input(self, action_id, action)
-	if action.value < 0.2 then return
-	end
+	--if action.value < 0.2 then return
+	--end
 
 	if data.state == data.STATE_MENU then
 		input(self, action_id, action)

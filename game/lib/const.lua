@@ -74,4 +74,11 @@ const.URLS             = {
 	-- MOBILE_GUI       = ""
 }
 
+----------------------
+-- ACTIONs
+----------------------
+const.ACTION             = {
+	TOUCH       = hash("touch")
+}
+
 return const

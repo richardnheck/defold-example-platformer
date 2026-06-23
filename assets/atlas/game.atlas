@@ -599,4 +599,53 @@ animations {
   }
   playback: PLAYBACK_NONE
 }
+animations {
+  id: "next-button"
+  images {
+    image: "/assets/images/pixel-adventure/Menu/Buttons/Next.png"
+  }
+  playback: PLAYBACK_NONE
+}
+animations {
+  id: "previous-button"
+  images {
+    image: "/assets/images/pixel-adventure/Menu/Buttons/Previous.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "pause-button"
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Buttons/Pause.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "previous-button-disabled"
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Buttons/Previous-Disabled.png"
+  }
+  playback: PLAYBACK_NONE
+}
+animations {
+  id: "next-button-disabled"
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Buttons/Next-Disabled.png"
+  }
+  playback: PLAYBACK_NONE
+}
+animations {
+  id: "volume"
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Buttons/Volume.png"
+  }
+  playback: PLAYBACK_NONE
+}
+animations {
+  id: "volume-off"
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Buttons/Volume-Off.png"
+  }
+  playback: PLAYBACK_NONE
+}
 extrude_borders: 2

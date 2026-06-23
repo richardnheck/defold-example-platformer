@@ -6,9 +6,38 @@ local data = require "main.data"
 local update_strawberries_collected
 local update_bananas_collected
 
+-- Node Ids
+local PAUSE_BUTTON = "pause-button"
+local NEXT_BUTTON = "next-button" 
+local PREVIOUS_BUTTON = "previous-button" 
+local VOLUME_BUTTON = "volume-button"
+
 function init()
+	msg.post(".", "acquire_input_focus") 
+	
 	update_bananas_collected()
 	update_strawberries_collected()
+end
+
+function on_input(self, action_id, action)
+	if action_id == const.ACTION.TOUCH and action.pressed then
+		-- gui.pick_node already accounts for every parent's scale and
+		-- rotation as well as the display adjust, so the 2x scaled
+		-- button-container needs no special handling.
+		if gui.pick_node(gui.get_node(PAUSE_BUTTON), action.x, action.y) then
+			-- Pause button pressed
+			print("pause")
+		elseif gui.pick_node(gui.get_node(PREVIOUS_BUTTON), action.x, action.y) then
+			-- Previous button pressed
+			print("previous")
+		elseif gui.pick_node(gui.get_node(NEXT_BUTTON), action.x, action.y) then
+			-- Next button pressed
+			print("next")
+		elseif gui.pick_node(gui.get_node(VOLUME_BUTTON), action.x, action.y) then
+			-- Volume button pressed
+			print("volume")
+		end
+	end
 end
 
 function on_message(self, message_id, message, sender)

@@ -59,6 +59,7 @@ function update(self)
 	
 	render.draw_debug3d()
 
+	render.set_viewport(0, 0, render.get_window_width(), render.get_window_height())	-- Draw the GUI over the full window so it matches the full-window coordinate space
 	render.set_view(vmath.matrix4())
 	render.set_projection(vmath.matrix4_orthographic(0, render.get_window_width(), 0, render.get_window_height(), -1, 1))
 

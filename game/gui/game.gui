@@ -9,7 +9,7 @@ textures {
 }
 nodes {
   position {
-    x: 1108.25
+    x: 614.25
     y: 674.5
   }
   size {
@@ -21,9 +21,7 @@ nodes {
   ""
   font: "main"
   id: "strawberries"
-  xanchor: XANCHOR_RIGHT
-  yanchor: YANCHOR_TOP
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: true
 }
 nodes {
@@ -42,13 +40,13 @@ nodes {
   type: TYPE_BOX
   texture: "game/strawberry-icon"
   id: "strawberry-icon"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "strawberries"
   inherit_alpha: true
 }
 nodes {
   position {
-    x: 1242.0
+    x: 750.0
     y: 675.0
   }
   size {
@@ -59,9 +57,7 @@ nodes {
   text: "00"
   font: "main"
   id: "bananas"
-  xanchor: XANCHOR_RIGHT
-  yanchor: YANCHOR_TOP
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: true
 }
 nodes {
@@ -75,8 +71,88 @@ nodes {
   type: TYPE_BOX
   texture: "game/banana-icon"
   id: "banana-icon"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "bananas"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 1148.0
+    y: 661.0
+  }
+  scale {
+    x: 2.0
+    y: 2.0
+  }
+  size {
+    x: 120.0
+    y: 50.0
+  }
+  color {
+    x: 0.2403005
+    y: 0.2843825
+    z: 0.50479233
+  }
+  type: TYPE_BOX
+  id: "button-container"
+  adjust_mode: ADJUST_MODE_FIT
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: 23.5
+    y: 5.5
+  }
+  rotation {
+    z: -0.458
+  }
+  type: TYPE_BOX
+  texture: "game/next-button"
+  id: "next-button"
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "button-container"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: -2.0
+    y: 5.5
+  }
+  type: TYPE_BOX
+  texture: "game/previous-button"
+  id: "previous-button"
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "button-container"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: -27.0
+    y: 5.5
+  }
+  type: TYPE_BOX
+  texture: "game/pause-button"
+  id: "pause-button"
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "button-container"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 48.0
+    y: 5.5
+  }
+  type: TYPE_BOX
+  texture: "game/volume"
+  id: "volume-button"
+  adjust_mode: ADJUST_MODE_FIT
+  parent: "button-container"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
