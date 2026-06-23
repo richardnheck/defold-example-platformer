@@ -23,7 +23,7 @@ nodes {
   }
   type: TYPE_BOX
   id: "container"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: true
 }
 nodes {
@@ -34,7 +34,7 @@ nodes {
   type: TYPE_BOX
   texture: "game/arrow"
   id: "arrow"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "container"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
@@ -63,7 +63,7 @@ nodes {
     y: 1.0
     z: 1.0
   }
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "container"
   inherit_alpha: true
   outline_alpha: 0.0
@@ -93,7 +93,7 @@ nodes {
     y: 1.0
     z: 1.0
   }
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "container"
   inherit_alpha: true
   outline_alpha: 0.0
@@ -123,7 +123,7 @@ nodes {
     y: 1.0
     z: 1.0
   }
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "container"
   inherit_alpha: true
   outline_alpha: 0.0
@@ -151,7 +151,7 @@ nodes {
     y: 1.0
     z: 1.0
   }
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "container"
   inherit_alpha: true
   alpha: 0.2

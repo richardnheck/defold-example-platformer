@@ -24,7 +24,7 @@ nodes {
   type: TYPE_BOX
   blend_mode: BLEND_MODE_MULT
   id: "container"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: true
 }
 nodes {
@@ -42,7 +42,7 @@ nodes {
   type: TYPE_BOX
   texture: "game/dialog"
   id: "bg"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "container"
   inherit_alpha: true
   slice9 {
@@ -75,7 +75,7 @@ nodes {
     y: 1.0
     z: 1.0
   }
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "container"
   inherit_alpha: true
   shadow_alpha: 0.0
@@ -104,7 +104,7 @@ nodes {
     y: 1.0
     z: 1.0
   }
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "container"
   inherit_alpha: true
   outline_alpha: 0.0
@@ -134,7 +134,7 @@ nodes {
     y: 1.0
     z: 1.0
   }
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "container"
   inherit_alpha: true
   outline_alpha: 0.0
@@ -164,7 +164,7 @@ nodes {
     y: 1.0
     z: 1.0
   }
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "container"
   inherit_alpha: true
   outline_alpha: 0.0
@@ -178,7 +178,7 @@ nodes {
   type: TYPE_BOX
   texture: "game/arrow"
   id: "arrow"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "container"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO

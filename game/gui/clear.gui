@@ -18,7 +18,7 @@ nodes {
   }
   type: TYPE_BOX
   id: "container"
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: true
 }
 nodes {
@@ -56,7 +56,7 @@ nodes {
     y: 1.0
     z: 1.0
   }
-  adjust_mode: ADJUST_MODE_STRETCH
+  adjust_mode: ADJUST_MODE_FIT
   parent: "container"
   inherit_alpha: true
   shadow_alpha: 0.0
