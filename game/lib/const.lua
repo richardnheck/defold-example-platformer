@@ -107,33 +107,23 @@ const.AUDIO            = {
 	JUMP             = "#jump",
 	AIR_JUMP         = "#air-jump",
 	DIE              = "#die",
+	LAND             = "#land",
+	SPAWN            = "#spawn",
 
 	-- GAME
 	THUD             = "#thud",
 	CANNON_SHOOT     = "#cannon-shoot",
 	CANNON_BALL_EXPLOSION = "#cannon-ball-explosion",
+	BOMB_TICK        = "#bomb-tick",
+	BOMB_EXPLOSION   = "#bomb-explosion",
 	SPRING           = "#spring",
 	TRIGGER          = "#trigger",
 	CHECKPOINT       = "#checkpoint",
-	COMPLETE         = "#complete"
+	COMPLETE         = "#complete",
+	COLLECT          = "#collect",
+	FIRE             = "#fire",
+	STOMP            = "#stomp",
 	
-	-- ON_GROUND        = "/fx#on_ground",
-	-- JUMP             = "/fx#jump",
-	-- RUN              = "/fx#run",
-	-- TRAMPOLINE       = "/fx#trampoline",
-	-- MUSIC            = "/audio#music",
-	-- COLLECT          = "/fx#collect",
-	-- WALL_JUMP        = "/fx#wall_jump",
-	-- BOX_CRACK        = "/fx#box_crack",
-	-- PIECE_DROP       = "/fx#piece_drop",
-	-- FALLING_PLATFORM = "/fx#falling_platform",
-	-- PLAYER_DEATH     = "/fx#death",
-	-- PLAYER_DISAPPEAR = "/fx#disappear",
-	-- PLAYER_APPEAR    = "/fx#appear",
-	-- SQUEEZE          = "/fx#squeeze",
-	-- FIRE             = "/fx#fire",
-	-- CHECKPOINT       = "/fx#checkpoint",
-	-- END              = "/fx#end",
 }
 
 return const

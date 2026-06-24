@@ -17,13 +17,13 @@
 -- Behaviour is driven by a stately state machine (run/pause/hit/dead) so further
 -- states (e.g. chase) can be added later.
 -- =============================================================================
+local stately = require("stately.stately")
+local const   = require("game.lib.const")
+local audio   = require("main.audio")
 
 go.property("start_direction", vmath.vector3(-1, 0, 0))  -- (-1,0,0)=left (1,0,0)=right
 go.property("speed", 100)
 go.property("pause_time", 0.5)  -- seconds to wait at each endpoint before turning
-
-local stately = require("stately.stately")
-local const   = require("game.lib.const")
 
 -- Urls
 local SPRITE    = "#sprite"
@@ -88,6 +88,7 @@ local function setup_fsm(self)
 		-- neither kill the player nor bump patrol boundaries.
 		msg.post(COLLISION_OBJECT_HIT, "disable")
 		msg.post(COLLISION_OBJECT_WORLD, "disable")
+		audio.sound(const.AUDIO.STOMP)
 		if self.pause_timer then
 			timer.cancel(self.pause_timer)
 			self.pause_timer = nil

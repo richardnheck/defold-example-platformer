@@ -1,13 +1,10 @@
 local data = require "main.data"
 local const = require "game.lib.const"
 
--- Load the game menu first (set false for testing levels directly)
-local load_game_menu = true
-
 function init(self)
 	msg.post(".", "acquire_input_focus")
 
-	if load_game_menu then
+	if data.load_game_menu then
 		msg.post("handler#menu", "load")
 	else
 		msg.post("handler#game", "load")

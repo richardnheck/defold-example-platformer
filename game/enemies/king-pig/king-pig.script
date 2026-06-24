@@ -9,6 +9,9 @@
 -- The chase is still capped by patrol boundaries or a wall
 
 -- =============================================================================
+local stately = require("stately.stately")
+local const   = require("game.lib.const")
+local audio   = require("main.audio")
 
 go.property("start_direction", vmath.vector3(-1, 0, 0))  -- (-1,0,0)=left (1,0,0)=right: initial facing
 go.property("chase_range", 75)   	-- distance (px) at which the player is noticed and chased
@@ -19,9 +22,6 @@ go.property("turn_pause", 0.3)   	-- seconds to hesitate before reversing chase 
 -- Below this horizontal gap (px) the player is "aligned" with the king pig:
 -- close enough that chasing would just jitter it back and forth, so don't.
 local CHASE_X_DEADZONE = 4
-
-local stately = require("stately.stately")
-local const   = require("game.lib.const")
 
 -- Urls
 local SPRITE    = "#sprite"
@@ -171,6 +171,7 @@ local function setup_fsm(self)
 		-- neither kill the player nor bump patrol boundaries.
 		msg.post(COLLISION_OBJECT_HIT, "disable")
 		msg.post(COLLISION_OBJECT_WORLD, "disable")
+		audio.sound(const.AUDIO.STOMP)
 		sprite.play_flipbook(SPRITE, ANIM_HIT, function()
 			self.fsm.handle_event(EV_DIED)
 		end)

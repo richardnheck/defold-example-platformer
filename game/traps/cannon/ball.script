@@ -1,4 +1,5 @@
 local const = require("game.lib.const")
+local audio = require "main.audio"
 
 go.property("speed", 200)
 go.property("direction", vmath.vector3(-1, 0, 0))
@@ -28,8 +29,11 @@ function on_message(self, message_id, message, sender)
 			-- the cannon ball hit the player or world so explode
 			self.exploding = true
 
+			-- play explosion, quieter/panned by distance from the camera centre
+			audio.sound_at(const.AUDIO.CANNON_BALL_EXPLOSION, go.get_world_position())
+
 			-- hide the ball sprite
-			msg.post(BALL, "disable")		
+			msg.post(BALL, "disable")
 
 			-- show the explosion
 			msg.post(EXPLOSION, "enable")   

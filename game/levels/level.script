@@ -1,5 +1,6 @@
 local data = require "main.data"
 local const = require "game.lib.const"
+local audio = require "main.audio"
 
 local SPAWN_POSITION = "player_spawn_position"
 local SPAWN_PLAYER = hash("spawn_player")
@@ -34,7 +35,7 @@ function on_message(self, message_id, message, sender)
 		if checkpoint_pos ~= nil then
 			pos = checkpoint_pos
 		end
-
+		
 		msg.post("common/player", const.MSG.PLAYER_SPAWN, {pos = pos})
 	end
 end

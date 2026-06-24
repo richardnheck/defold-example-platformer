@@ -1,33 +1,51 @@
 local const = require("game.lib.const")
+local audio = require("main.audio")
 
--- urls
+local BOMB_ON_TIME = 1		-- time bomb is on before exploding (in seconds)
+local TICK_TIME = 0.5       -- time between tick sounds
+
+-- Urls
 local BOMB = "#bomb"
 local EXPLOSION = "#explosion"
 local CO_EXPLOSION = "#co_explosion"
 
--- time bomb is on before exploding
-local BOMB_ON_TIME = 1
-
+-- Animations
 local ANIM_BOMB_ON = "bomb-on"
 local ANIM_BOMB_OFF = "bomb-off"
 local ANIM_EXPLOSION = "bomb-explosion"
 
+-- Forward declarations
+local play_ticking_sounds
+
 function init(self)
+	self.triggered = false
+	self.tick_timer_handle = nil
+	self.exploding = false
+	
 	-- disable explosion
 	msg.post(EXPLOSION, "disable")
 	msg.post(CO_EXPLOSION, "disable")
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == const.MSG.TRIGGER_RESPONSE then
-		print("trigger")
+	if message_id == const.MSG.TRIGGER_RESPONSE and not self.triggered then
 		if message.other_group == const.GROUP.PLAYER then
 			-- start the bomb countdown
+			self.triggered = true
+			
+			-- play ticking sounds until the bomb explodes
+			play_ticking_sounds(self)
+			
 			sprite.play_flipbook(BOMB, ANIM_BOMB_ON)
 			timer.delay(BOMB_ON_TIME, false, function()
+				self.exploding = true
+				timer.cancel(self.tick_timer_handle)	-- cancel the tick timer
+				
 				-- explode the bomb
 				msg.post(BOMB, "disable")          -- hide the bomb
 				msg.post(EXPLOSION, "enable")      -- show the explosion
+				audio.sound(const.AUDIO.BOMB_EXPLOSION)
+				
 				sprite.play_flipbook(EXPLOSION, ANIM_EXPLOSION, function()
 					go.delete()
 				end)
@@ -38,4 +56,19 @@ function on_message(self, message_id, message, sender)
 			end)
 		end
 	end
+end
+
+local function sound_tick()
+	audio.sound(const.AUDIO.BOMB_TICK)
+end
+
+play_ticking_sounds = function(self) 
+	sound_tick()	-- play the first tick sound
+
+	-- set a repeating timer to play subsequent ticks
+	self.tick_timer_handle = timer.delay(TICK_TIME, true, function()
+		if not self.exploding then
+			sound_tick()
+		end
+	end)
 end

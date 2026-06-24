@@ -19,7 +19,12 @@ M.TILE_SIZE = 16
 M.PIXEL_SIZE = 4
 M.MAX_LEVELS = 3
 
+-- Load the game menu first
+-- Set false for testing levels directly and set M.level below
+M.load_game_menu = true
+
 M.level = 1 		  -- the current level
+
 M.checkpoint = 0	  -- the identifier (number) of the current checkpoint reached
 M.checkpoints = {}    -- identifier -> world position, populated by each checkpoint on load
 M.time = 0

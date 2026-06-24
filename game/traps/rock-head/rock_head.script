@@ -10,6 +10,7 @@
 -- =============================================================================
 
 local const = require("game.lib.const")
+local audio = require "main.audio"
 
 -- Patrol axis and speed. Set per instance in the level.
 -- Start direction: (0,-1)=down (0,1)=up (1,0)=right (-1,0)=left
@@ -64,6 +65,9 @@ function on_message(self, message_id, message, sender)
 			-- Push out of the tile so we never stick, then turn around.
 			go.set_position(go.get_position() + message.normal * message.distance)
 			self.direction = -self.direction
+
+			-- play a thud sound on impact, quieter/panned by distance from the camera centre
+			audio.sound_at(const.AUDIO.THUD, go.get_world_position())
 		end
 	end
 end

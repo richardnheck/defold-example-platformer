@@ -542,6 +542,22 @@ instances {
     y: 231.0
   }
 }
+instances {
+  id: "bomb"
+  prototype: "/game/traps/bomb/bomb.go"
+  position {
+    x: 264.0
+    y: 123.0
+  }
+}
+instances {
+  id: "bomb1"
+  prototype: "/game/traps/bomb/bomb.go"
+  position {
+    x: 824.0
+    y: 187.0
+  }
+}
 collection_instances {
   id: "common"
   collection: "/game/core/common.collection"

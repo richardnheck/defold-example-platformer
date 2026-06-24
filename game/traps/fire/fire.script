@@ -1,5 +1,6 @@
 local const = require("game.lib.const")
 local stately = require("stately.stately")
+local audio = require("main.audio")
 
 local EV_HIT = hash("hit")
 local EV_ON = hash("on")
@@ -35,6 +36,7 @@ local function setup_fsm(self)
 
 	fsm.on_enter(s.hit, function()
 		sprite.play_flipbook(SPRITE, ANIM_HIT)
+		audio.sound(const.AUDIO.TRIGGER)
 		-- start a timer to turn the fire on
 		timer.delay(DELAY_TIME, false, function() 
 			self.fsm.handle_event(EV_ON)
@@ -43,6 +45,7 @@ local function setup_fsm(self)
 
 	fsm.on_enter(s.on, function()
 		sprite.play_flipbook(SPRITE, ANIM_ON)
+		audio.sound(const.AUDIO.FIRE)
 		-- start a timer to turn on off the fire after a period
 		timer.delay(ON_TIME, false, function() 
 			self.fsm.handle_event(EV_OFF)

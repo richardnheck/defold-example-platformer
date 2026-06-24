@@ -233,6 +233,7 @@ local function setup_fsm(self)
 		self.platform_id = nil
 		self.platform_url = nil
 		play(ANIM_JUMP_UP)
+		audio.sound(const.AUDIO.AIR_JUMP)
 	end)
 	fsm.on_update(s.wall_jump, airborne_update)
 
@@ -250,6 +251,7 @@ local function setup_fsm(self)
 	fsm.on_enter(s.die, function()
 		self.vel.x = 0
 		self.vel.y = 0
+		audio.sound(const.AUDIO.DIE)
 		sprite.play_flipbook(SPRITE, ANIM_DIE, function()
 			player_death_complete(self)
 		end)
@@ -424,11 +426,13 @@ function fixed_update(self, dt)
 
 	if self.on_floor and self.vel.y >= 0
 	   and (cur == s.jump.id or cur == s.air_jump.id or cur == s.wall_jump.id or cur == s.wall_slide.id) then
+		-- player landed
 		if self.dir ~= 0 then
 			self.fsm.handle_event(EV_LAND_MOVE)
 		else
 			self.fsm.handle_event(EV_LAND_IDLE)
 		end
+		audio.sound(const.AUDIO.LAND)
 		cur = self.fsm.current_state()
 	end
 
@@ -640,6 +644,7 @@ function on_message(self, message_id, message, sender)
 	if self.player_dead then return end
 	
 	if message_id == const.MSG.PLAYER_SPAWN then
+		audio.sound(const.AUDIO.SPAWN)
 		go.set_position(message.pos)
 	elseif message_id == const.MSG.CONTACT_POINT_RESPONSE then
 		if message.other_group == const.GROUP.TRAP then
