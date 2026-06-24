@@ -65,9 +65,11 @@ const.URLS             = {
 	GUI              = "/common/view#game",
 
 	MAIN_HANDLER     = "main:/handler",
-
+	MAIN_SOUND       = "main:/sound",
+	
 	GAME_LOADER      = "game:/loader"
 
+	
 	-- CAMERA_CONTAINER = "/camera",
 	-- CAMERA_ID        = "/camera#camera",
 	-- MAP              = "",
@@ -89,6 +91,7 @@ const.ACTIONS             = {
 	UP          = hash("up"),
 	DOWN        = hash("down"),
 	ACTION      = hash("action"),
+	START       = hash("start"),
 	EXIT        = hash("exit"),
 }
 
@@ -96,7 +99,7 @@ const.ACTIONS             = {
 -- Audio
 ----------------------
 const.AUDIO            = {
-	UI_BEEP             = "beep"
+	BEEP             = "#beep"
 	-- ON_GROUND        = "/fx#on_ground",
 	-- JUMP             = "/fx#jump",
 	-- RUN              = "/fx#run",

@@ -34,13 +34,13 @@ local function input(self, action_id, action)
 		if self.handpos < 1 then
 			self.handpos = MENU_LEN
 		end
-		audio.sound("beep")
+		audio.sound(const.AUDIO.BEEP)
 	elseif action_id == const.ACTIONS.DOWN and action.pressed then
 		self.handpos = self.handpos + 1
 		if self.handpos > MENU_LEN then
 			self.handpos = 1
 		end
-		audio.sound("beep")
+		audio.sound(const.AUDIO.BEEP)
 	elseif action_id == const.ACTIONS.ACTION and action.pressed then
 		if self.handpos == 1 then
 			-- Continue

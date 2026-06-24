@@ -1,6 +1,7 @@
 local data = require "main.data"
 local ui = require "main.ui"
 local audio = require "main.audio"
+local const = require "game.lib.const"
 
 local MENU_LEN = 3
 
@@ -43,19 +44,19 @@ function on_message(self, message_id, message, sender)
 end
 
 local function input(self, action_id, action)
-	if action_id == hash("up") and action.pressed then
+	if action_id == const.ACTIONS.UP and action.pressed then
 		self.handpos = self.handpos - 1
 		if self.handpos < 1 then
 			self.handpos = MENU_LEN
 		end
-		audio.sound("beep")
-	elseif action_id == hash("down") and action.pressed then
+		audio.sound(const.AUDIO.BEEP)
+	elseif action_id == const.ACTIONS.DOWN and action.pressed then
 		self.handpos = self.handpos + 1
 		if self.handpos > MENU_LEN then
 			self.handpos = 1
 		end
-		audio.sound("beep")
-	elseif action_id == hash("action") and action.pressed then
+		audio.sound(const.AUDIO.BEEP)
+	elseif action_id == const.ACTIONS.ACTION and action.pressed then
 		ui.hide(self.node)
 		if self.handpos == 1 then
 			startgame(self)
@@ -64,9 +65,9 @@ local function input(self, action_id, action)
 		elseif self.handpos == 3 then
 			msg.post("#credits", "show", {state = data.STATE_CREDITS})
 		end
-	elseif action_id == hash("start") and action.pressed then
+	elseif action_id == const.ACTIONS.START and action.pressed then
 		startgame(self)
-	elseif action_id == hash("exit") and action.pressed and not html5 then
+	elseif action_id == const.ACTIONS.EXIT and action.pressed and not html5 then
 		msg.post("@system:", "exit", {code = 0})
 	end
 end

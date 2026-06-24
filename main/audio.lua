@@ -1,3 +1,5 @@
+local const = require "game.lib.const"
+
 local M = {}
 
 -- Tracks the last play time per sound id (for debouncing).
@@ -12,7 +14,7 @@ function M.sound(id)
 	-- Per-id 50ms cooldown to avoid overlapping/machine-gun playback.
 	if t > 0.05 then
 		M.gate[id] = os.clock()
-		local url = "main:/sound#"..id
+		local url = const.URLS.MAIN_SOUND..id
 		sound.play(url)
 	end
 end
