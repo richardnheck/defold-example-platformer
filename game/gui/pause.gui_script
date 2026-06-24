@@ -44,9 +44,11 @@ local function input(self, action_id, action)
 	elseif action_id == const.ACTIONS.ACTION and action.pressed then
 		if self.handpos == 1 then
 			-- Continue
+			audio.sound(const.AUDIO.SELECT)
 			close(self)
 		elseif self.handpos == 2 then
 			-- Restart from the start of the level, ignoring any reached checkpoint
+			audio.sound(const.AUDIO.SELECT)
 			msg.post(const.URLS.MAIN_HANDLER, "set_time_step", {factor = 1, mode = 0})
 			data.state = data.STATE_PLAYING
 			data.clear_checkpoint()
@@ -54,8 +56,11 @@ local function input(self, action_id, action)
 			msg.post(const.URLS.GAME_LOADER, const.MSG.RELOAD_LEVEL)
 		elseif self.handpos == 3 then
 			-- Quit
-			msg.post(const.URLS.MAIN_HANDLER, "set_time_step", {factor = 1, mode = 0})
-			msg.post("/common/player", "quit")
+			audio.sound(const.AUDIO.SELECT, function()
+				msg.post(const.URLS.MAIN_HANDLER, "set_time_step", {factor = 1, mode = 0})
+				msg.post("/common/player", "quit")
+			end)
+			
 		end
 	elseif action_id == const.ACTIONS.EXIT and action.pressed then
 		close(self)

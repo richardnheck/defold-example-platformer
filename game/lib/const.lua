@@ -99,7 +99,18 @@ const.ACTIONS             = {
 -- Audio
 ----------------------
 const.AUDIO            = {
-	BEEP             = "#beep"
+	-- UI
+	BEEP             = "#beep",
+	SELECT           = "#select",
+
+	-- PLAYER
+	JUMP             = "#jump",
+	AIR_JUMP         = "#air-jump",
+	DIE              = "#die",
+
+	-- GAME
+	COMPLETE         = "#complete"
+	
 	-- ON_GROUND        = "/fx#on_ground",
 	-- JUMP             = "/fx#jump",
 	-- RUN              = "/fx#run",

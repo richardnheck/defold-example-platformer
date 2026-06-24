@@ -2,6 +2,7 @@ local stately = require("stately.stately")
 local data = require("main.data")
 local debugdraw = require("debug-draw.debug-draw")
 local const = require("game.lib.const")
+local audio = require("main.audio")
 
 -- Forward declarations
 local player_death_complete
@@ -183,7 +184,12 @@ local function setup_fsm(self)
 			self.air_jumped = not can_air_jump
 		end
 		self.jump_cut_applied = can_var_cut == false
-		if self.vel.y < 0 then play(ANIM_JUMP_UP) else play(ANIM_JUMP_DOWN) end
+		if self.vel.y < 0 then 
+			audio.sound(const.AUDIO.JUMP)
+			play(ANIM_JUMP_UP) 
+		else 
+			play(ANIM_JUMP_DOWN) 
+		end
 	end)
 	fsm.on_update(s.jump, airborne_update)
 
@@ -195,6 +201,7 @@ local function setup_fsm(self)
 		self.platform_id = nil
 		self.platform_url = nil
 		play(ANIM_JUMP_UP)
+		audio.sound(const.AUDIO.AIR_JUMP)
 	end)
 	fsm.on_update(s.air_jump, airborne_update)
 
@@ -606,6 +613,8 @@ local function handle_endpoint_reached(self)
 	-- go to celebrate state (which prevents player from moving)
 	self.fsm.handle_event(EV_CELEBRATE)
 
+	audio.sound(const.AUDIO.COMPLETE)
+	
 	-- wait a moment to celebrate before showing the level clear/complete dialog
 	timer.delay(2, false, function()
 		show_dialog()

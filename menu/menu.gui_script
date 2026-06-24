@@ -58,6 +58,7 @@ local function input(self, action_id, action)
 		audio.sound(const.AUDIO.BEEP)
 	elseif action_id == const.ACTIONS.ACTION and action.pressed then
 		ui.hide(self.node)
+		audio.sound(const.AUDIO.SELECT)
 		if self.handpos == 1 then
 			startgame(self)
 		elseif self.handpos == 2 then

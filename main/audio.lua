@@ -6,7 +6,7 @@ local M = {}
 M.gate = {}
 
 -- Play a sound by id, debounced so the same sound can't be spammed.
-function M.sound(id)
+function M.sound(id, complete_function)
 	-- Seconds since this id last played (0 if never).
 	local t = M.gate[id] or 0
 	t = os.clock() - t
@@ -15,7 +15,7 @@ function M.sound(id)
 	if t > 0.05 then
 		M.gate[id] = os.clock()
 		local url = const.URLS.MAIN_SOUND..id
-		sound.play(url)
+		sound.play(url, {}, complete_function)
 	end
 end
 

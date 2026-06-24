@@ -1,5 +1,6 @@
 local const = require "game.lib.const"
 local data = require "main.data"
+local audio = require "main.audio"
 
 -- Forwards function declarations so functions can be defined
 -- at the bottom of the script for better readability
@@ -23,15 +24,20 @@ function on_input(self, action_id, action)
 	if action_id == const.ACTIONS.TOUCH and action.pressed then
 		if gui.pick_node(gui.get_node(PAUSE_BUTTON), action.x, action.y) then
 			-- Pause button pressed
+			audio.sound(const.AUDIO.BEEP)
 			print("pause")
+			
 		elseif gui.pick_node(gui.get_node(PREVIOUS_BUTTON), action.x, action.y) then
 			-- Previous button pressed
+			audio.sound(const.AUDIO.BEEP)
 			print("previous")
 		elseif gui.pick_node(gui.get_node(NEXT_BUTTON), action.x, action.y) then
 			-- Next button pressed
+			audio.sound(const.AUDIO.BEEP)
 			print("next")
 		elseif gui.pick_node(gui.get_node(VOLUME_BUTTON), action.x, action.y) then
 			-- Volume button pressed
+			audio.sound(const.AUDIO.BEEP)
 			print("volume")
 		end
 	end
