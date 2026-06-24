@@ -109,6 +109,12 @@ const.AUDIO            = {
 	DIE              = "#die",
 
 	-- GAME
+	THUD             = "#thud",
+	CANNON_SHOOT     = "#cannon-shoot",
+	CANNON_BALL_EXPLOSION = "#cannon-ball-explosion",
+	SPRING           = "#spring",
+	TRIGGER          = "#trigger",
+	CHECKPOINT       = "#checkpoint",
 	COMPLETE         = "#complete"
 	
 	-- ON_GROUND        = "/fx#on_ground",
