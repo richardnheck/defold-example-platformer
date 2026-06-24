@@ -20,10 +20,7 @@ function init()
 end
 
 function on_input(self, action_id, action)
-	if action_id == const.ACTION.TOUCH and action.pressed then
-		-- gui.pick_node already accounts for every parent's scale and
-		-- rotation as well as the display adjust, so the 2x scaled
-		-- button-container needs no special handling.
+	if action_id == const.ACTIONS.TOUCH and action.pressed then
 		if gui.pick_node(gui.get_node(PAUSE_BUTTON), action.x, action.y) then
 			-- Pause button pressed
 			print("pause")

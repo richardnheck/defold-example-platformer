@@ -1,5 +1,6 @@
 local data = require "main.data"
 local ui = require "main.ui"
+local const = require "game.lib.const"
 
 function init(self)
 	self.node = gui.get_node("container")
@@ -7,7 +8,7 @@ function init(self)
 end
 
 local function input(self, action_id, action)
-	if (action_id == hash("action") or action_id == hash("exit")) and action.pressed then
+	if (action_id == const.ACTIONS.ACTION or action_id == const.ACTIONS.EXIT) and action.pressed then
 		ui.hide(self.node)
 		msg.post("#menu", "show", {})
 	end

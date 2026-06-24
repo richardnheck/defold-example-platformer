@@ -33,8 +33,6 @@ M.offset = vmath.vector3(0)
 M.scrollpos = vmath.vector3(0)
 M.bounds = vmath.vector3(0)
 
-M.gate = {}
-
 local function reset_checkpoints()
 	M.checkpoint = 0
 	M.checkpoints = {}
@@ -149,17 +147,6 @@ function M.ms2str(time)
 
 	str = string.format("%s%02d:%02d", str, min, math.floor(sec))
 	return str
-end
-
-function M.sound(id)
-	local t = M.gate[id] or 0
-	t = os.clock() - t
-
-	if t > 0.05 then
-		M.gate[id] = os.clock()
-		local url = "main:/sound#"..id
-		sound.play(url)
-	end
 end
 
 function M.fullscreen(self)

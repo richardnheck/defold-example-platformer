@@ -558,7 +558,7 @@ local function goto_next_leveL()
 		data.set_level(1)
 		quit2menu()
 	else
-		msg.post("game:/loader", const.MSG.NEW_LEVEL, {})
+		msg.post(const.URLS.GAME_LOADER, const.MSG.NEW_LEVEL, {})
 	end
 end
 
@@ -587,7 +587,7 @@ player_death_complete = function(self)
 	end
 
 	-- Reload the level
-	msg.post("game:/loader", const.MSG.RELOAD_LEVEL)
+	msg.post(const.URLS.GAME_LOADER, const.MSG.RELOAD_LEVEL)
 end
 
 local function show_dialog()

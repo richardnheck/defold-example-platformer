@@ -63,6 +63,11 @@ const.MSG              = {
 ----------------------
 const.URLS             = {
 	GUI              = "/common/view#game",
+
+	MAIN_HANDLER     = "main:/handler",
+
+	GAME_LOADER      = "game:/loader"
+
 	-- CAMERA_CONTAINER = "/camera",
 	-- CAMERA_ID        = "/camera#camera",
 	-- MAP              = "",
@@ -77,8 +82,38 @@ const.URLS             = {
 ----------------------
 -- ACTIONs
 ----------------------
-const.ACTION             = {
-	TOUCH       = hash("touch")
+-- Actions defined in game.input_binding
+const.ACTIONS             = {
+	JUMP        = hash("jump"),
+	TOUCH       = hash("touch"),
+	UP          = hash("up"),
+	DOWN        = hash("down"),
+	ACTION      = hash("action"),
+	EXIT        = hash("exit"),
+}
+
+----------------------
+-- Audio
+----------------------
+const.AUDIO            = {
+	UI_BEEP             = "beep"
+	-- ON_GROUND        = "/fx#on_ground",
+	-- JUMP             = "/fx#jump",
+	-- RUN              = "/fx#run",
+	-- TRAMPOLINE       = "/fx#trampoline",
+	-- MUSIC            = "/audio#music",
+	-- COLLECT          = "/fx#collect",
+	-- WALL_JUMP        = "/fx#wall_jump",
+	-- BOX_CRACK        = "/fx#box_crack",
+	-- PIECE_DROP       = "/fx#piece_drop",
+	-- FALLING_PLATFORM = "/fx#falling_platform",
+	-- PLAYER_DEATH     = "/fx#death",
+	-- PLAYER_DISAPPEAR = "/fx#disappear",
+	-- PLAYER_APPEAR    = "/fx#appear",
+	-- SQUEEZE          = "/fx#squeeze",
+	-- FIRE             = "/fx#fire",
+	-- CHECKPOINT       = "/fx#checkpoint",
+	-- END              = "/fx#end",
 }
 
 return const

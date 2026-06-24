@@ -1,5 +1,6 @@
 local data = require "main.data"
 local ui = require "main.ui"
+local audio = require "main.audio"
 
 local MENU_LEN = 3
 
@@ -47,13 +48,13 @@ local function input(self, action_id, action)
 		if self.handpos < 1 then
 			self.handpos = MENU_LEN
 		end
-		data.sound("beep")
+		audio.sound("beep")
 	elseif action_id == hash("down") and action.pressed then
 		self.handpos = self.handpos + 1
 		if self.handpos > MENU_LEN then
 			self.handpos = 1
 		end
-		data.sound("beep")
+		audio.sound("beep")
 	elseif action_id == hash("action") and action.pressed then
 		ui.hide(self.node)
 		if self.handpos == 1 then
