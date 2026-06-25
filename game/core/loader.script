@@ -8,8 +8,9 @@ local function unloadlevel(self)
 end
 
 local function loadlevel(self)
-	msg.post (string.format("#level%d", data.level), "load")
-	self.loaded = data.level
+	local level = data.get_level()
+	msg.post(string.format("#level%d", level), "load")
+	self.loaded = level
 end
 
 function init(self)

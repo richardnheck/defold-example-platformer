@@ -38,26 +38,49 @@ M.offset = vmath.vector3(0)
 M.scrollpos = vmath.vector3(0)
 M.bounds = vmath.vector3(0)
 
+
+
 local function reset_checkpoints()
 	M.checkpoint = 0
 	M.checkpoints = {}
 end
 
+-- Get the current level
+function M.get_level()
+	return M.level
+end
+
 -- Set the current level
 function M.set_level(level)
-	M.level = level
-	reset_checkpoints()
-	M.reset_collected()
+	if level > 0 and level <= M.MAX_LEVELS then
+		M.level = level
+		reset_checkpoints()
+		M.reset_collected()
+	end
 end
 
 -- Set the next level
 function M.next_level()
-	-- increment the level
-	M.level = M.level + 1
+	local next_level = M.level + 1
+	M.set_level(next_level)
+	return M.level == next_level   -- returns true if next level is a valid level
+end
 
-	-- clear checkpoints
-	reset_checkpoints()
-	M.reset_collected()
+-- Set the previous level
+function M.previous_level()
+	local previous_level = M.level - 1
+	M.set_level(previous_level)
+	return M.level == previous_level	-- returns true if previous level is a valid level
+end
+
+-- Has a next level
+function M.has_next_level()
+	return M.level < M.MAX_LEVELS
+end
+
+-- Has a previous level
+function M.has_previous_level()
+	return M.level > 1 
 end
 
 -- Set the current checkpoint

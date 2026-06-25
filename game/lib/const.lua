@@ -31,13 +31,16 @@ const.MSG              = {
 	COLLISION_RESPONSE     = hash("collision_response"),
 	PROXY_LOADED           = hash("proxy_loaded"),
 	PROXY_UNLOADED         = hash("proxy_unloaded"),
+	INPUT                  = hash("input"),
+	SET_TIME_STEP          = hash("set_time_step"),
 
-	-- Game Control
+	-- Game Controls and GUI
 	SHOW_GAME            = hash("show_game"),
 	SHOW_MENU            = hash("show_menu"),
 	RELOAD_LEVEL         = hash("reload_level"),
 	NEW_LEVEL            = hash("new_level"),
 	QUIT                 = hash("quit"),
+	SHOW                 = hash("show"),
 	
 	-- Game
 	PLAYER_SPAWN         = hash("player_spawn"),
@@ -46,7 +49,7 @@ const.MSG              = {
 	STOMP_ENEMY          = hash("stomp_enemy"),
 	CHECKPOINT_REACHED   = hash("checkpoint_reached"),
 	ENDPOINT_REACHED     = hash("endpoint_reached"),
-	COLLECTED            = hash("collected")
+	COLLECTED            = hash("collected"),
 
 	
 	-- RESTART              = hash("restart"),

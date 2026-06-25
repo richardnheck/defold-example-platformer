@@ -25,7 +25,7 @@ end
 local function close(self)
 	gui.set_enabled(self.node, false)
 	data.state = data.STATE_PLAYING
-	msg.post(const.URLS.MAIN_HANDLER, "set_time_step", {factor = 1, mode = 0})
+	msg.post(const.URLS.MAIN_HANDLER, const.MSG.SET_TIME_STEP, {factor = 1, mode = 0})
 end
 
 local function input(self, action_id, action)
@@ -49,7 +49,7 @@ local function input(self, action_id, action)
 		elseif self.handpos == 2 then
 			-- Restart from the start of the level, ignoring any reached checkpoint
 			audio.sound(const.AUDIO.SELECT)
-			msg.post(const.URLS.MAIN_HANDLER, "set_time_step", {factor = 1, mode = 0})
+			msg.post(const.URLS.MAIN_HANDLER, const.MSG.SET_TIME_STEP, {factor = 1, mode = 0})
 			data.state = data.STATE_PLAYING
 			data.clear_checkpoint()
 			data.reset_collected()
@@ -57,7 +57,7 @@ local function input(self, action_id, action)
 		elseif self.handpos == 3 then
 			-- Quit
 			audio.sound(const.AUDIO.SELECT, function()
-				msg.post(const.URLS.MAIN_HANDLER, "set_time_step", {factor = 1, mode = 0})
+				msg.post(const.URLS.MAIN_HANDLER, const.MSG.SET_TIME_STEP, {factor = 1, mode = 0})
 				msg.post("/common/player", "quit")
 			end)
 			
@@ -68,11 +68,11 @@ local function input(self, action_id, action)
 end
 	
 function on_message(self, message_id, message, sender)
-	if message_id == hash("show") then
+	if message_id == const.MSG.SHOW then
 		gui.set_enabled(self.node, true)
 		data.state = data.STATE_PAUSE
-		msg.post(MAIN_HANDLER, "set_time_step", {factor = 0, mode = 0})
-	elseif message_id == hash("input") then
+		msg.post(const.URLS.MAIN_HANDLER, const.MSG.SET_TIME_STEP, {factor = 0, mode = 0})
+	elseif message_id == const.MSG.INPUT then
 		input(self, message.action_id, message.action)
 	end
 end

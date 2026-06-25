@@ -24,7 +24,7 @@ local STOMP_BOUNCE  = 250 -- fixed upward hop after stomping an enemy
 local AIR_JUMP      = 240
 local WALL_JUMP_Y   = 245
 local WALL_JUMP_X   = 100
-local FALL_MAX      = 500
+local FALL_MAX      = 400
 local VAR_JUMP_MULT = 0.5
 local JUMP_BUFFER   = 0.2
 local COYOTE_TIME   = 0.1
@@ -560,16 +560,13 @@ local function input_playing(self, action_id, action)
 	end
 end
 
--- Advance to the next level (resets checkpoints). The final-level guard is
--- a safety net for the debug shortcut; the normal flow only shows this
--- screen on non-final levels.
+-- Advance to the next level
 local function goto_next_leveL() 
-	data.next_level()
-	if data.level > data.MAX_LEVELS then
+	if data.next_level() then
+		msg.post(const.URLS.GAME_LOADER, const.MSG.NEW_LEVEL, {})
+	else 
 		data.set_level(1)
 		quit2menu()
-	else
-		msg.post(const.URLS.GAME_LOADER, const.MSG.NEW_LEVEL, {})
 	end
 end
 
@@ -602,7 +599,7 @@ player_death_complete = function(self)
 end
 
 local function show_dialog()
-	if data.level >= data.MAX_LEVELS then
+	if data.get_level() >= data.MAX_LEVELS then
 		-- Finished the final level — show the completion screen.
 		-- input_endscreen (STATE_COMPLETE) returns to the menu on confirm/exit.
 		msg.post("/common/view#complete", "show", {state = data.STATE_COMPLETE})
