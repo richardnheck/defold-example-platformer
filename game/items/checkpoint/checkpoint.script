@@ -16,7 +16,7 @@ function init(self)
 	self.checkpoint_reached = false
 
 	-- register this checkpoint's position so the level can spawn here on respawn
-	data.checkpoints[self.identifier] = go.get_position()
+	data.register_checkpoint_position(self.identifier, go.get_position())
 end
 
 function on_message(self, message_id, message, sender)

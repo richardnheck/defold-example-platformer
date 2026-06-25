@@ -17,43 +17,39 @@ M.CANV_W = 0
 M.CANV_H = 0
 M.TILE_SIZE = 16
 M.PIXEL_SIZE = 4
-M.MAX_LEVELS = 3
-
--- Load the game menu first
--- Set false for testing levels directly and set M.level below
-M.load_game_menu = true
-
-M.level = 1 		  -- the current level
-
-M.checkpoint = 0	  -- the identifier (number) of the current checkpoint reached
-M.checkpoints = {}    -- identifier -> world position, populated by each checkpoint on load
-M.time = 0
-
-M.collected = {
-	bananas = 0,
-	strawberries = 0
-}
 
 M.offset = vmath.vector3(0)
 M.scrollpos = vmath.vector3(0)
 M.bounds = vmath.vector3(0)
 
+-- Maximum number of levels
+M.MAX_LEVELS = 3
 
+local level = 1 		  -- the current level
+local checkpoint = 0	  -- the identifier (number) of the current checkpoint reached
+local checkpoints = {}    -- identifier -> world position, populated by each checkpoint on load
 
+-- Collected items
+local collected = {
+	bananas = 0,
+	strawberries = 0
+}
+
+-- Reset current checkpoint and registered checkpoints
 local function reset_checkpoints()
-	M.checkpoint = 0
-	M.checkpoints = {}
+	checkpoint = 0
+	checkpoints = {}
 end
 
 -- Get the current level
 function M.get_level()
-	return M.level
+	return level
 end
 
 -- Set the current level
-function M.set_level(level)
-	if level > 0 and level <= M.MAX_LEVELS then
-		M.level = level
+function M.set_level(new_level)
+	if new_level > 0 and new_level <= M.MAX_LEVELS then
+		level = new_level
 		reset_checkpoints()
 		M.reset_collected()
 	end
@@ -61,122 +57,91 @@ end
 
 -- Set the next level
 function M.next_level()
-	local next_level = M.level + 1
+	local next_level = level + 1
 	M.set_level(next_level)
-	return M.level == next_level   -- returns true if next level is a valid level
+	return level == next_level   -- returns true if next level is a valid level
 end
 
 -- Set the previous level
 function M.previous_level()
-	local previous_level = M.level - 1
+	local previous_level = level - 1
 	M.set_level(previous_level)
-	return M.level == previous_level	-- returns true if previous level is a valid level
+	return level == previous_level	-- returns true if previous level is a valid level
 end
 
 -- Has a next level
 function M.has_next_level()
-	return M.level < M.MAX_LEVELS
+	return level < M.MAX_LEVELS
 end
 
 -- Has a previous level
 function M.has_previous_level()
-	return M.level > 1 
+	return level > 1 
+end
+
+-- Register a checkpoints position so it can be spawned at
+function M.register_checkpoint_position(checkpoint_identifier, position)
+	checkpoints[checkpoint_identifier] = position
 end
 
 -- Set the current checkpoint
 function M.set_checkpoint(checkpoint_identifier)
-	M.checkpoint = checkpoint_identifier
+	checkpoint = checkpoint_identifier
 end
 
 function M.clear_checkpoint()
-	M.checkpoint = 0
+	checkpoint = 0
 end 
 
 -- Determine if a checkpoint has been reached 
 function M.checkpoint_reached()
-	return M.checkpoint > 0 and M.checkpoints[M.checkpoint]
+	return checkpoint > 0 and checkpoints[checkpoint]
 end
 
 -- Get the position of current checkpoint reached (if any)
 function M.get_checkpoint_pos()
 	if M.checkpoint_reached() then
-		return M.checkpoints[M.checkpoint]
+		return checkpoints[checkpoint]
 	else
 		return nil
 	end
 end
 
 function M.collect_banana()
-	M.collected.bananas = M.collected.bananas + 1	
+	collected.bananas = collected.bananas + 1	
 end
 
 function M.get_collected_bananas()
-	return M.collected.bananas
+	return collected.bananas
 end
 
 function M.collect_strawberry()
-	M.collected.strawberries = M.collected.strawberries + 1	
+	collected.strawberries = collected.strawberries + 1	
 end
 
 function M.get_collected_strawberries()
-	return M.collected.strawberries
+	return collected.strawberries
 end
 
 -- Reset all collected counts (level start / transition / new game)
 function M.reset_collected()
-	M.collected.bananas = 0
-	M.collected.strawberries = 0
+	collected.bananas = 0
+	collected.strawberries = 0
 end
 
-function M.world2tile(p)
-	return vmath.vector3(math.floor((p.x + M.TILE_SIZE) / M.TILE_SIZE), math.floor((p.y + M.TILE_SIZE) / M.TILE_SIZE), p.z)
-end
-
-function M.tile2world(p)
-	return vmath.vector3((p.x * M.TILE_SIZE) - (M.TILE_SIZE / 2), (p.y * M.TILE_SIZE) - (M.TILE_SIZE / 2), p.z)
-end
-
-function M.hex2rgba(hex)
-	hex = hex:gsub("#","")
-	local rgba = vmath.vector4(tonumber("0x"..hex:sub(1,2))/255, tonumber("0x"..hex:sub(3,4))/255, tonumber("0x"..hex:sub(5,6))/255, 1)
-	return rgba
-end
-
-function M.onscreen(p, m)
-	if p.x > M.scrollpos.x - m and
-		p.x < M.scrollpos.x + m + M.CANV_W and
-		p.y > M.scrollpos.y - m and
-		p.y < M.scrollpos.y + m + M.CANV_H then
+-- Determine if a position is on screen (within a specified margin)
+function M.onscreen(position, margin)
+	if position.x > M.scrollpos.x - margin and
+		position.x < M.scrollpos.x + margin + M.CANV_W and
+		position.y > M.scrollpos.y - margin and
+		position.y < M.scrollpos.y + margin + M.CANV_H then
 		return true
 	else
 		return false
 	end
 end
 
-function M.capdt(dt)
-	if dt > 1/30 then
-		dt = 1/30
-	end
-	return dt
-end
-
-function M.ms2str(time)
-	local day = math.floor(time / 86400)
-	local rem = time % 86400
-	local hr = math.floor(rem / 3600)
-	rem = rem % 3600
-	local min = math.floor(rem / 60)
-	rem = rem % 60
-	local sec = rem
-
-	local str = ""
-	if day > 0 then str = tostring(day) .. "d " end
-	if hr > 0 or day > 0 then str = str .. tostring(hr) .. ":" end
-
-	str = string.format("%s%02d:%02d", str, min, math.floor(sec))
-	return str
-end
-
+-- Set fullscreen
 function M.fullscreen(self)
 	defos.toggle_fullscreen()
 	defos.disable_window_resize()
