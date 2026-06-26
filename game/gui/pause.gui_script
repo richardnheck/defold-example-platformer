@@ -1,6 +1,7 @@
 local data = require "main.data"
 local const = require "game.lib.const"
 local audio = require "main.audio"
+local nav = require "game.lib.nav"
 
 local MENU_LEN = 3
 
@@ -47,19 +48,18 @@ local function input(self, action_id, action)
 			audio.sound(const.AUDIO.SELECT)
 			close(self)
 		elseif self.handpos == 2 then
-			-- Restart from the start of the level, ignoring any reached checkpoint
+			-- Restart from the start of the level, ignoring any reached checkpoint.
+			-- Un-pause first (restore time step + state), then let nav reload.
 			audio.sound(const.AUDIO.SELECT)
 			msg.post(const.URLS.MAIN_HANDLER, const.MSG.SET_TIME_STEP, {factor = 1, mode = 0})
 			data.state = data.STATE_PLAYING
-			data.restart_level()
-			msg.post(const.URLS.GAME_LOADER, const.MSG.RELOAD_LEVEL)
+			nav.restart_level()
 		elseif self.handpos == 3 then
-			-- Quit
+			-- Quit (nav.quit_to_menu restores the time step itself)
 			audio.sound(const.AUDIO.SELECT, function()
-				msg.post(const.URLS.MAIN_HANDLER, const.MSG.SET_TIME_STEP, {factor = 1, mode = 0})
-				msg.post("/common/player", "quit")
+				nav.quit_to_menu()
 			end)
-			
+
 		end
 	elseif action_id == const.ACTIONS.EXIT and action.pressed then
 		close(self)

@@ -2,9 +2,7 @@ local data = require "main.data"
 local ui = require "main.ui"
 local const = require "game.lib.const"
 local audio = require "main.audio"
-
--- Forward declarations
-local quit_to_menu
+local nav = require "game.lib.nav"
 
 -- Node Ids
 local OK_BUTTON = "ok-button"
@@ -30,17 +28,12 @@ function on_input(self, action_id, action)
 		if gui.pick_node(gui.get_node(OK_BUTTON), action.x, action.y) then
 			-- OK button pressed
 			audio.sound(const.AUDIO.BEEP)
-			quit_to_menu(self)
+			nav.quit_to_menu()
 			return true    -- consume input
 		end
 	elseif (action_id == const.ACTIONS.EXIT or action_id == const.ACTIONS.CONFIRM) and action.pressed then
 		-- Confirm or exit action from keyboard or gamepad
-		quit_to_menu(self)
+		nav.quit_to_menu()
 		return true        -- consume input
 	end
-end
-
-quit_to_menu = function(self)
-	msg.post("main:/sound", "stop_sound")
-	msg.post("main:/handler", "show_menu")
 end

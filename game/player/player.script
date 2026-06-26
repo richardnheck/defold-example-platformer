@@ -3,6 +3,7 @@ local data = require("main.data")
 local debugdraw = require("debug-draw.debug-draw")
 local const = require("game.lib.const")
 local audio = require("main.audio")
+local nav = require("game.lib.nav")
 
 -- Forward declarations
 local player_death_complete
@@ -59,11 +60,6 @@ local ANIM_DIE       = hash("player-die")
 
 -- Urls
 local SPRITE = "#sprite"
-
-local function quit_to_menu()
-	msg.post("main:/sound", "stop_sound")
-	msg.post("main:/handler", "show_menu")
-end
 
 -- Setup the player's finite state machine (FSM)
 local function setup_fsm(self)
@@ -564,7 +560,7 @@ player_death_complete = function(self)
 	end
 
 	-- Reload the level
-	msg.post(const.URLS.GAME_LOADER, const.MSG.RELOAD_LEVEL)
+	nav.reload_level()
 end
 
 local function show_dialog()
@@ -640,8 +636,6 @@ function on_message(self, message_id, message, sender)
 		data.set_checkpoint(message.checkpoint)
 	elseif message_id == const.MSG.ENDPOINT_REACHED then
 		handle_endpoint_reached(self)
-	elseif message_id == const.MSG.QUIT then
-		quit_to_menu()
 	elseif message_id == const.MSG.APPLY_IMPULSE then
 		-- Apply an impulse force to the player (e.g. player touched a spring)
 		self.floor_buffer = 0

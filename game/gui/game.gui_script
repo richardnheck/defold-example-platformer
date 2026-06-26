@@ -1,13 +1,12 @@
 local const = require "game.lib.const"
 local data = require "main.data"
 local audio = require "main.audio"
+local nav = require "game.lib.nav"
 
 -- Forwards function declarations so functions can be defined
 -- at the bottom of the script for better readability
 local update_strawberries_collected
 local update_bananas_collected
-local goto_next_level
-local goto_previous_level
 local update_buttons
 
 -- Node Ids
@@ -41,13 +40,13 @@ function on_input(self, action_id, action)
 			-- Previous button pressed
 			if data.has_previous_level() then
 				audio.sound(const.AUDIO.BEEP)
-				goto_previous_level()
+				nav.goto_previous_level()
 			end
 		elseif gui.pick_node(gui.get_node(NEXT_BUTTON), action.x, action.y) then
 			-- Next button pressed
 			if data.has_next_level() then
 				audio.sound(const.AUDIO.BEEP)
-				goto_next_level()
+				nav.goto_next_level()
 			end
 		elseif gui.pick_node(gui.get_node(VOLUME_BUTTON), action.x, action.y) then
 			-- Volume button pressed
@@ -80,16 +79,4 @@ update_buttons = function()
 	local prev_button_texture = data.has_previous_level() and TEXTURE_PREV_BUTTON or TEXTURE_PREV_BUTTON_DISABLED
 	gui.play_flipbook(gui.get_node(NEXT_BUTTON), next_button_texture)
 	gui.play_flipbook(gui.get_node(PREV_BUTTON), prev_button_texture)
-end
-
-goto_next_level = function() 
-	if data.next_level() then
-		msg.post(const.URLS.GAME_LOADER, const.MSG.NEW_LEVEL, {})
-	end
-end
-
-goto_previous_level = function() 
-	if data.previous_level() then
-		msg.post(const.URLS.GAME_LOADER, const.MSG.NEW_LEVEL, {})
-	end
 end
