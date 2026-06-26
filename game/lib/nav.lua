@@ -12,10 +12,9 @@ local const = require "game.lib.const"
 
 local M = {}
 
--- Return to the main menu. Restores normal time step first so quitting from a
--- paused state (time step 0) doesn't leave the menu running stopped.
+-- Return to the main menu. Callers that paused the game are responsible for
+-- resuming it first (see pause.gui_script) — navigation doesn't touch time step.
 function M.quit_to_menu()
-	msg.post(const.URLS.MAIN_HANDLER, const.MSG.SET_TIME_STEP, {factor = 1, mode = 0})
 	msg.post(const.URLS.MAIN_SOUND, "stop_sound")
 	msg.post(const.URLS.MAIN_HANDLER, const.MSG.SHOW_MENU)
 end

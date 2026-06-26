@@ -23,7 +23,15 @@ function update(self, dt)
 	end
 end
 
-local function close(self)
+-- Pause the game
+local function pause_game(self)
+	gui.set_enabled(self.node, true)
+	data.state = data.STATE_PAUSE
+	msg.post(const.URLS.MAIN_HANDLER, const.MSG.SET_TIME_STEP, {factor = 0, mode = 0})
+end
+
+-- Resume the game
+local function resume_game(self)
 	gui.set_enabled(self.node, false)
 	data.state = data.STATE_PLAYING
 	msg.post(const.URLS.MAIN_HANDLER, const.MSG.SET_TIME_STEP, {factor = 1, mode = 0})
@@ -46,31 +54,27 @@ local function input(self, action_id, action)
 		if self.handpos == 1 then
 			-- Continue
 			audio.sound(const.AUDIO.SELECT)
-			close(self)
+			resume_game(self)
 		elseif self.handpos == 2 then
-			-- Restart from the start of the level, ignoring any reached checkpoint.
-			-- Un-pause first (restore time step + state), then let nav reload.
+			-- Restart from the start of the level, ignoring any reached checkpoint
 			audio.sound(const.AUDIO.SELECT)
-			msg.post(const.URLS.MAIN_HANDLER, const.MSG.SET_TIME_STEP, {factor = 1, mode = 0})
-			data.state = data.STATE_PLAYING
+			resume_game(self)
 			nav.restart_level()
 		elseif self.handpos == 3 then
-			-- Quit (nav.quit_to_menu restores the time step itself)
+			-- Quit to the main menu
 			audio.sound(const.AUDIO.SELECT, function()
+				resume_game(self)
 				nav.quit_to_menu()
 			end)
-
 		end
 	elseif action_id == const.ACTIONS.EXIT and action.pressed then
-		close(self)
+		resume_game(self)
 	end
 end
 	
 function on_message(self, message_id, message, sender)
 	if message_id == const.MSG.SHOW then
-		gui.set_enabled(self.node, true)
-		data.state = data.STATE_PAUSE
-		msg.post(const.URLS.MAIN_HANDLER, const.MSG.SET_TIME_STEP, {factor = 0, mode = 0})
+		pause_game(self)
 	elseif message_id == const.MSG.INPUT then
 		input(self, message.action_id, message.action)
 	end
