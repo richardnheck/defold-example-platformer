@@ -89,13 +89,16 @@ const.URLS             = {
 ----------------------
 -- Actions defined in game.input_binding
 const.ACTIONS             = {
-	JUMP        = hash("jump"),
-	TOUCH       = hash("touch"),
-	UP          = hash("up"),
-	DOWN        = hash("down"),
-	ACTION      = hash("action"),
-	START       = hash("start"),
-	EXIT        = hash("exit"),
+	JUMP                = hash("jump"),
+	TOUCH               = hash("touch"),
+	UP                  = hash("up"),
+	DOWN                = hash("down"),
+	LEFT                = hash("left"),
+	RIGHT               = hash("right"),
+	CONFIRM             = hash("action"),
+	START               = hash("start"),
+	EXIT                = hash("exit"),
+	DEBUG               = hash("debug")
 }
 
 ----------------------

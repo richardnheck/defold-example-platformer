@@ -648,4 +648,11 @@ animations {
   }
   playback: PLAYBACK_NONE
 }
+animations {
+  id: "ok-button"
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Buttons/OK.png"
+  }
+  playback: PLAYBACK_NONE
+}
 extrude_borders: 2

@@ -56,7 +56,7 @@ local function input(self, action_id, action)
 			self.handpos = 1
 		end
 		audio.sound(const.AUDIO.BEEP)
-	elseif action_id == const.ACTIONS.ACTION and action.pressed then
+	elseif action_id == const.ACTIONS.CONFIRM and action.pressed then
 		ui.hide(self.node)
 		audio.sound(const.AUDIO.SELECT)
 		if self.handpos == 1 then

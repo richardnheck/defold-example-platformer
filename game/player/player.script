@@ -57,18 +57,10 @@ local ANIM_SLIDE     = hash("player-wall-grab")
 local ANIM_CELEBRATE = hash("player-celebrate")
 local ANIM_DIE       = hash("player-die")
 
--- Input actions
-local ACTION_LEFT    = hash("left")
-local ACTION_RIGHT   = hash("right")
-local ACTION_JUMP    = hash("jump")
-local ACTION_EXIT    = hash("exit")
-local ACTION_DEBUG   = hash("debug")
-local ACTION_CONFIRM = hash("action") -- generic confirm/dismiss on clear/gameover/complete screens
-
 -- Urls
 local SPRITE = "#sprite"
 
-local function quit2menu()
+local function quit_to_menu()
 	msg.post("main:/sound", "stop_sound")
 	msg.post("main:/handler", "show_menu")
 end
@@ -538,48 +530,25 @@ local function handle_obstacle_contact(self, normal, distance, position, other_i
 end
 
 local function input_playing(self, action_id, action)	
-	if action_id == ACTION_LEFT then
+	if action_id == const.ACTIONS.LEFT then
 		if action.pressed then self.input_left = true
 		elseif action.released then self.input_left = false end
 		self.dir = (self.input_right and 1 or 0) - (self.input_left and 1 or 0)
-	elseif action_id == ACTION_RIGHT then
+	elseif action_id == const.ACTIONS.RIGHT then
 		if action.pressed then self.input_right = true
 		elseif action.released then self.input_right = false end
 		self.dir = (self.input_right and 1 or 0) - (self.input_left and 1 or 0)
-	elseif action_id == ACTION_JUMP then
+	elseif action_id == const.ACTIONS.JUMP then
 		if action.pressed then
 			self.jump_buffer = JUMP_BUFFER
 			self.jump_held = true
 		elseif action.released then
 			self.jump_held = false
 		end
-	elseif action_id == ACTION_EXIT and action.pressed then
+	elseif action_id == const.ACTIONS.EXIT and action.pressed then
 		msg.post("view#pause", "show")
-	elseif action_id == ACTION_DEBUG and action.pressed and sys.get_engine_info().is_debug then
+	elseif action_id == const.ACTIONS.DEBUG and action.pressed and sys.get_engine_info().is_debug then
 		msg.post("/common/view#clear", "show", {state = data.STATE_CLEAR})
-	end
-end
-
--- Advance to the next level
-local function goto_next_leveL() 
-	if data.next_level() then
-		msg.post(const.URLS.GAME_LOADER, const.MSG.NEW_LEVEL, {})
-	else 
-		data.set_level(1)
-		quit2menu()
-	end
-end
-
--- Handle user input for level clear screen
-local function input_clear(self, action_id, action)
-	if action_id == ACTION_CONFIRM and action.pressed then
-		goto_next_leveL()
-	end
-end
-
-local function input_endscreen(self, action_id, action)
-	if (action_id == ACTION_EXIT or action_id == ACTION_CONFIRM) and action.pressed then
-		quit2menu()
 	end
 end
 
@@ -628,12 +597,6 @@ function on_input(self, action_id, action)
 		input_playing(self, action_id, action)
 	elseif data.state == data.STATE_PAUSE then
 		msg.post("view#pause", "input", {action_id = action_id, action = action})
-	elseif data.state == data.STATE_CLEAR then
-		input_clear(self, action_id, action)
-	elseif data.state == data.STATE_GAMEOVER then
-		input_endscreen(self, action_id, action)
-	elseif data.state == data.STATE_COMPLETE then
-		input_endscreen(self, action_id, action)
 	end
 end
 
@@ -678,7 +641,7 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == const.MSG.ENDPOINT_REACHED then
 		handle_endpoint_reached(self)
 	elseif message_id == const.MSG.QUIT then
-		quit2menu()
+		quit_to_menu()
 	elseif message_id == const.MSG.APPLY_IMPULSE then
 		-- Apply an impulse force to the player (e.g. player touched a spring)
 		self.floor_buffer = 0

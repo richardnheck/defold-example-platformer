@@ -1,14 +1,36 @@
 local data = require "main.data"
 local ui = require "main.ui"
+local const = require "game.lib.const"
+local audio = require "main.audio"
+
+-- Node Ids
+local OK_BUTTON = "ok-button"
 
 function init(self)
+	msg.post("." , "acquire_input_focus")
+	
 	self.node = gui.get_node("container")
 	ui.init(self.node)
+
+	-- Not every dialog using this script has an OK button.
+	local ok, node = pcall(gui.get_node, OK_BUTTON)
+	self.ok_button = ok and node or nil
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("show") then
+	if message_id == const.MSG.SHOW then
 		ui.show(self.node)
 		data.state = message.state
 	end
+end
+
+function on_input(self, action_id, action)
+	if action_id == const.ACTIONS.TOUCH and action.pressed and self.ok_button then
+		if gui.pick_node(self.ok_button, action.x, action.y) then
+			-- OK button pressed
+			audio.sound(const.AUDIO.BEEP)
+			return true
+		end
+	end
+	
 end

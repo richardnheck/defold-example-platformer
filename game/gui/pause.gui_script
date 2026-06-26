@@ -41,7 +41,7 @@ local function input(self, action_id, action)
 			self.handpos = 1
 		end
 		audio.sound(const.AUDIO.BEEP)
-	elseif action_id == const.ACTIONS.ACTION and action.pressed then
+	elseif action_id == const.ACTIONS.CONFIRM and action.pressed then
 		if self.handpos == 1 then
 			-- Continue
 			audio.sound(const.AUDIO.SELECT)
@@ -51,8 +51,7 @@ local function input(self, action_id, action)
 			audio.sound(const.AUDIO.SELECT)
 			msg.post(const.URLS.MAIN_HANDLER, const.MSG.SET_TIME_STEP, {factor = 1, mode = 0})
 			data.state = data.STATE_PLAYING
-			data.clear_checkpoint()
-			data.reset_collected()
+			data.restart_level()
 			msg.post(const.URLS.GAME_LOADER, const.MSG.RELOAD_LEVEL)
 		elseif self.handpos == 3 then
 			-- Quit

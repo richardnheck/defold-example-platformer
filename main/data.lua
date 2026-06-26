@@ -55,6 +55,12 @@ function M.set_level(new_level)
 	end
 end
 
+-- Restart a level by clearing checkpoints reached and items collected
+function M.restart_level()
+	M.clear_checkpoint()
+	M.reset_collected()
+end
+
 -- Set the next level
 function M.next_level()
 	local next_level = level + 1

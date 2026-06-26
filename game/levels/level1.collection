@@ -326,8 +326,8 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 64.0
-    y: 79.0
+    x: 1195.0
+    y: 198.0
   }
 }
 embedded_instances {

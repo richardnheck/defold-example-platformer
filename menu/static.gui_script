@@ -8,7 +8,7 @@ function init(self)
 end
 
 local function input(self, action_id, action)
-	if (action_id == const.ACTIONS.ACTION or action_id == const.ACTIONS.EXIT) and action.pressed then
+	if (action_id == const.ACTIONS.CONFIRM or action_id == const.ACTIONS.EXIT) and action.pressed then
 		ui.hide(self.node)
 		msg.post("#menu", "show", {})
 	end
