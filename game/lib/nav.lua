@@ -1,11 +1,4 @@
 -- Centralised game navigation / level-flow control.
---
--- Owns every "where do we go next" decision so individual scripts (player, HUD,
--- pause, clear, complete screens) don't each duplicate the level bookkeeping and
--- message routing. Callers just express intent: nav.next_level(), nav.quit_to_menu(), etc.
---
--- shared_state = 1 makes this module a singleton shared across all scripts, and
--- it posts only to absolute URLs, so these functions work from any caller.
 
 local data = require "main.data"
 local const = require "game.lib.const"
