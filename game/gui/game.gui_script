@@ -36,6 +36,8 @@ function on_input(self, action_id, action)
 		if gui.pick_node(gui.get_node(PAUSE_BUTTON), action.x, action.y) then
 			-- Pause button pressed
 			audio.sound(const.AUDIO.BEEP)
+			msg.post("#pause", const.MSG.SHOW)
+			return true
 		elseif gui.pick_node(gui.get_node(PREV_BUTTON), action.x, action.y) then
 			-- Previous button pressed
 			if data.has_previous_level() then
