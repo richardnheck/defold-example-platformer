@@ -198,7 +198,7 @@ animations {
   images {
     image: "/assets/images/pixel-adventure/Main Characters/Desappearing7.png"
   }
-  fps: 20
+  playback: PLAYBACK_ONCE_PINGPONG
 }
 animations {
   id: "pig-idle"

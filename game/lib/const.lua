@@ -34,6 +34,7 @@ const.MSG              = {
 	PROXY_LOADED           = hash("proxy_loaded"),
 	PROXY_UNLOADED         = hash("proxy_unloaded"),
 	SET_TIME_STEP          = hash("set_time_step"),
+	EXIT                   = hash("exit"),
 
 	-- Game Controls and GUI
 	SHOW_GAME            = hash("show_game"),

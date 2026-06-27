@@ -3,25 +3,43 @@ local ui = require "main.ui"
 local audio = require "main.audio"
 local const = require "game.lib.const"
 
-local MENU_LEN = 3
+-- Forward declarations of functions
+local quit_game
+
+local MENU_LEN = 4    -- New Game, Controls, Credits, Quit
+
+-- Node Ids
+local CONTAINER = "container"
+local ARROW = "arrow"
+
+-- Urls
+local CONTROLS_SCREEN = "#controls"
+local CREDITS_SCREEN = "#credits"
 
 function init(self)
+	msg.post(".", "acquire_input_focus")
+	
 	self.handpos = 1
 	self.arrowpos = {}
+	self.node = gui.get_node(CONTAINER)
 
-	msg.post(".", "acquire_input_focus")
-	self.node = gui.get_node("container")
+	-- Get the position of all menu items
 	for n = 1, MENU_LEN do
 		self.arrowpos[n] = gui.get_position(gui.get_node(tostring(n)))
 	end
+
+	-- Ensure container is centered
 	gui.set_position(self.node, vmath.vector3(data.SCR_W/2, (data.SCR_H/2), 0))
+
+	-- Display the version
 	gui.set_text(gui.get_node("v"), sys.get_config("project.version"))
+
 	data.state = data.STATE_MENU
 	audio.music_play(const.AUDIO.MUSIC_TITLE)
 end
 
 local function startgame(self)
-	msg.post("main:/handler", "show_game")
+	msg.post(const.URLS.MAIN_HANDLER, const.MSG.SHOW_GAME)
 	data.set_level(1)
 	data.reset_player_lives()
 	data.state = data.STATE_PLAYING
@@ -35,12 +53,12 @@ end
 function update(self, dt)
 	if data.state == data.STATE_MENU then
 		local pos = vmath.vector3(self.arrowpos[self.handpos].x - 32, self.arrowpos[self.handpos].y + 1, 0)
-		gui.set_position(gui.get_node("arrow"), pos)
+		gui.set_position(gui.get_node(ARROW), pos)
 	end
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("show") then
+	if message_id == const.MSG.SHOW then
 		show(self)
 	end
 end
@@ -64,27 +82,39 @@ local function input(self, action_id, action)
 		if self.handpos == 1 then
 			startgame(self)
 		elseif self.handpos == 2 then
-			msg.post("#controls", "show", {state = data.STATE_CONTROLS})
+			-- Show controls screen
+			msg.post(CONTROLS_SCREEN, const.MSG.SHOW, {state = data.STATE_CONTROLS})
 		elseif self.handpos == 3 then
-			msg.post("#credits", "show", {state = data.STATE_CREDITS})
+			-- Show credits screen
+			msg.post(CREDITS_SCREEN, const.MSG.SHOW, {state = data.STATE_CREDITS})
+		elseif self.handpos == 4 then
+			-- Quit the game
+			quit_game()
 		end
 	elseif action_id == const.ACTIONS.START and action.pressed then
+		-- Start a new game
 		startgame(self)
 	elseif action_id == const.ACTIONS.EXIT and action.pressed and not html5 then
-		msg.post("@system:", "exit", {code = 0})
+		-- Quit the game
+		quit_game()
 	end
 end
 
 function on_input(self, action_id, action)
-	--if action.value < 0.2 then return
-	--end
+	-- if action.value < 0.2 then return
+	-- end
 
 	if data.state == data.STATE_MENU then
 		input(self, action_id, action)
 	elseif data.state == data.STATE_CONTROLS then
-		msg.post("#controls", const.MSG.INPUT, {action_id = action_id, action = action})
+		-- Pass acquired input to controls screen
+		msg.post(CONTROLS_SCREEN, const.MSG.INPUT, {action_id = action_id, action = action})
 	elseif data.state == data.STATE_CREDITS then
-		msg.post("#credits", const.MSG.INPUT, {action_id = action_id, action = action})
+		-- Pass acquired input to credits screen
+		msg.post(CREDITS_SCREEN, const.MSG.INPUT, {action_id = action_id, action = action})
 	end
 end
 
+quit_game = function()
+	msg.post("@system:", const.MSG.EXIT, {code = 0})
+end

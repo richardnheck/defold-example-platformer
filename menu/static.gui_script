@@ -4,13 +4,22 @@ local const = require "game.lib.const"
 
 function init(self)
 	self.node = gui.get_node("container")
+	self.back_button = gui.get_node("back-button")
 	ui.init(self.node)
 end
 
+local function go_back(self)
+	ui.hide(self.node)
+	msg.post("#menu", const.MSG.SHOW, {})
+end
+
 local function input(self, action_id, action)
+	-- Keyboard/gamepad: confirm or exit returns to the menu
 	if (action_id == const.ACTIONS.CONFIRM or action_id == const.ACTIONS.EXIT) and action.pressed then
-		ui.hide(self.node)
-		msg.post("#menu", const.MSG.SHOW, {})
+		go_back(self)
+	-- Mouse/touch: returns to the menu when the back button is clicked
+	elseif action_id == const.ACTIONS.TOUCH and action.pressed and gui.pick_node(self.back_button, action.x, action.y) then
+		go_back(self)
 	end
 end
 

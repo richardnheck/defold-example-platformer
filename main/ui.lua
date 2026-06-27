@@ -23,7 +23,10 @@ end
 function M.init(node)
 	gui.set_position(node, vmath.vector3(data.SCR_W/2, (data.SCR_H/2) - M.GUI_DROP, 0))
 	gui.set_enabled(node, false)
-	gui.set_color(node, vmath.vector4(1,1,1,0))
+	-- Start transparent so the first show() fades in; keep the node's designed RGB
+	local color = gui.get_color(node)
+	color.w = 0
+	gui.set_color(node, color)
 end
 
 return M

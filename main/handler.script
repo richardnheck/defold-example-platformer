@@ -8,7 +8,7 @@ function init(self)
 	self.music_current = nil
 	msg.post(".", "acquire_input_focus")
 
-	if data.load_game_menu then
+	if data.show_game_menu then
 		msg.post("handler#menu", "load")
 	else
 		msg.post("handler#game", "load")

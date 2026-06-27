@@ -675,4 +675,11 @@ animations {
   }
   fps: 15
 }
+animations {
+  id: "back-button"
+  images {
+    image: "/assets/images/pixel-adventure-tweaks/Buttons/Back.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
 extrude_borders: 2

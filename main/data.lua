@@ -22,6 +22,11 @@ M.offset = vmath.vector3(0)
 M.scrollpos = vmath.vector3(0)
 M.bounds = vmath.vector3(0)
 
+-- Show the game menu at start up
+-- Set to true for normal game operation, set false to go straight to the current level, defined below
+-- This is useful when debugging and designing levels
+M.show_game_menu = true		
+
 -- Maximum number of levels
 M.MAX_LEVELS = 3
 
@@ -38,14 +43,17 @@ local collected = {
 	strawberries = 0
 }
 
+-- Get the player current number of lives
 function M.get_player_lives()
 	return player_lives
 end
 
+-- Reset the player lives back to the initial value
 function M.reset_player_lives()
 	player_lives = MAX_PLAYER_LIVES
 end
 
+-- Decrement the player lives (i.e. when player dies)
 function M.decrement_player_lives()
 	player_lives = player_lives - 1
 end	
