@@ -30,7 +30,7 @@ function on_message(self, message_id, message,sender)
 		msg.post("handler#game", const.MSG.UNLOAD)
 		msg.post("handler#menu", const.MSG.LOAD)
 	elseif message_id == const.MSG.PROXY_LOADED then
-		msg.post(sender, "enable")
+		msg.post(sender, const.MSG.ENABLE)
 	elseif message_id == const.MSG.MUSIC_PLAY then
 		music_play(self, message.id)
 	elseif message_id == const.MSG.MUSIC_STOP then
@@ -39,7 +39,7 @@ function on_message(self, message_id, message,sender)
 end
 
 function on_input(self, action_id, action)
-	if action_id == const.ACTION.FULLSCREEN and action.pressed then
+	if action_id == const.ACTIONS.FULLSCREEN and action.pressed then
 		data.fullscreen(self)
 	end
 end

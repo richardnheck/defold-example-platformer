@@ -3,7 +3,9 @@
 -- At run time the sprite is hidden so it is only visible when editting a level
 --
 
+local const = require "game.lib.const"
+
 function init(self)
 	-- hide the sprite in the game.  It is just used for enemy collisions
-	msg.post("#sprite", "disable")
+	msg.post("#sprite", const.MSG.DISABLE)
 end

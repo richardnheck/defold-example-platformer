@@ -86,8 +86,8 @@ local function setup_fsm(self)
 	fsm.on_enter(s.hit, function()
 		-- Stop being lethal/solid: disable both colliders so a dead pig can
 		-- neither kill the player nor bump patrol boundaries.
-		msg.post(COLLISION_OBJECT_HIT, "disable")
-		msg.post(COLLISION_OBJECT_WORLD, "disable")
+		msg.post(COLLISION_OBJECT_HIT, const.MSG.DISABLE)
+		msg.post(COLLISION_OBJECT_WORLD, const.MSG.DISABLE)
 		audio.sound(const.AUDIO.STOMP)
 		if self.pause_timer then
 			timer.cancel(self.pause_timer)

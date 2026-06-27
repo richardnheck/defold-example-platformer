@@ -23,8 +23,8 @@ function init(self)
 	self.exploding = false
 	
 	-- disable explosion
-	msg.post(EXPLOSION, "disable")
-	msg.post(CO_EXPLOSION, "disable")
+	msg.post(EXPLOSION, const.MSG.DISABLE)
+	msg.post(CO_EXPLOSION, const.MSG.DISABLE)
 end
 
 function on_message(self, message_id, message, sender)
@@ -42,8 +42,8 @@ function on_message(self, message_id, message, sender)
 				timer.cancel(self.tick_timer_handle)	-- cancel the tick timer
 				
 				-- explode the bomb
-				msg.post(BOMB, "disable")          -- hide the bomb
-				msg.post(EXPLOSION, "enable")      -- show the explosion
+				msg.post(BOMB, const.MSG.DISABLE)          -- hide the bomb
+				msg.post(EXPLOSION, const.MSG.ENABLE)      -- show the explosion
 				audio.sound(const.AUDIO.BOMB_EXPLOSION)
 				
 				sprite.play_flipbook(EXPLOSION, ANIM_EXPLOSION, function()
@@ -51,7 +51,7 @@ function on_message(self, message_id, message, sender)
 				end)
 				-- delay a little so the explosion can show a bit before killing the player
 				timer.delay(0.2, false, function() 
-					msg.post(CO_EXPLOSION, "enable")   -- enable the explosion collision
+					msg.post(CO_EXPLOSION, const.MSG.ENABLE)   -- enable the explosion collision
 				end)
 			end)
 		end

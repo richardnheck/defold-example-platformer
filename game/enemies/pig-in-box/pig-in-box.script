@@ -173,10 +173,10 @@ function on_message(self, message_id, message, sender)
 		-- can separate without a rising box catching it with a lethal side contact.
 		-- Refresh the window if stomped again mid-disable.
 		if self.hit_timer then timer.cancel(self.hit_timer) end
-		msg.post(COLLISION_OBJECT_HIT, "disable")
+		msg.post(COLLISION_OBJECT_HIT, const.MSG.DISABLE)
 		self.hit_timer = timer.delay(self.stomp_disable_time, false, function()
 			self.hit_timer = nil
-			msg.post(COLLISION_OBJECT_HIT, "enable")
+			msg.post(COLLISION_OBJECT_HIT, const.MSG.ENABLE)
 		end)
 
 		-- Pop the player clear with a fixed rebound, bigger than their default

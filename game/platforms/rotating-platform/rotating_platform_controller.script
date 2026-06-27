@@ -10,12 +10,14 @@ go.property("swing_speed", 90)         -- deg/s peak (at centre of arc), SWING o
 go.property("radius", 48)              -- px, orbit radius from pivot to platform centre
 go.property("chains", 1)               -- platforms equally spaced around the pivot
 
+local const = require "game.lib.const"
+
 local DEG_TO_RAD = math.pi / 180
 local TWO_PI = 2 * math.pi
 
 function init(self)
 	-- Pivot marker is editor-only — hide it at runtime so it doesn't overlay the orbit.
-	msg.post("#marker", "disable")
+	msg.post("#marker", const.MSG.DISABLE)
 
 	-- Use world position so the rotator works whether parented or at collection root.
 	-- Spawned platforms have no parent, so go.set_position on them uses world coords.

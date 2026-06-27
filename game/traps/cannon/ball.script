@@ -13,7 +13,7 @@ local ANIM_EXPLOSION = "cannon-ball-explosion"
 
 function init(self)
 	self.exploding = false
-	msg.post(EXPLOSION, "disable")		-- hide the explosion
+	msg.post(EXPLOSION, const.MSG.DISABLE)		-- hide the explosion
 end
 
 function fixed_update(self, dt)
@@ -33,10 +33,10 @@ function on_message(self, message_id, message, sender)
 			audio.sound_at(const.AUDIO.CANNON_BALL_EXPLOSION, go.get_world_position())
 
 			-- hide the ball sprite
-			msg.post(BALL, "disable")
+			msg.post(BALL, const.MSG.DISABLE)
 
 			-- show the explosion
-			msg.post(EXPLOSION, "enable")   
+			msg.post(EXPLOSION, const.MSG.ENABLE)
 			sprite.play_flipbook(EXPLOSION, ANIM_EXPLOSION, function()
 				-- explosion animation finished so delete the game object
 				go.delete()

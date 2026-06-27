@@ -28,7 +28,7 @@ function on_message(self, message_id, message,sender)
 		unloadlevel(self)
 		loadlevel(self)
 	elseif message_id == const.MSG.PROXY_LOADED then
-		msg.post(sender, "enable")
+		msg.post(sender, const.MSG.ENABLE)
 	elseif message_id == const.MSG.RELOAD_LEVEL then 
 		unloadlevel(self)
 		self.reload = true
