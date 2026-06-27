@@ -189,7 +189,7 @@ local function setup_fsm(self)
 			for k, v in pairs(s) do if v.id == id then return k end end
 			return tostring(id)
 		end
-		print(string.format("dbg king-pig FSM %s -> %s", name(from), name(to)))
+		--print(string.format("dbg king-pig FSM %s -> %s", name(from), name(to)))
 	end)
 
 	fsm.start(s.idle)
