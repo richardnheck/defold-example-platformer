@@ -17,6 +17,7 @@ function init(self)
 	gui.set_position(self.node, vmath.vector3(data.SCR_W/2, (data.SCR_H/2), 0))
 	gui.set_text(gui.get_node("v"), sys.get_config("project.version"))
 	data.state = data.STATE_MENU
+	audio.music_play(const.AUDIO.MUSIC_TITLE)
 end
 
 local function startgame(self)
@@ -80,9 +81,9 @@ function on_input(self, action_id, action)
 	if data.state == data.STATE_MENU then
 		input(self, action_id, action)
 	elseif data.state == data.STATE_CONTROLS then
-		msg.post("#controls", "input", {action_id = action_id, action = action})
+		msg.post("#controls", const.MSG.INPUT, {action_id = action_id, action = action})
 	elseif data.state == data.STATE_CREDITS then
-		msg.post("#credits", "input", {action_id = action_id, action = action})
+		msg.post("#credits", const.MSG.INPUT, {action_id = action_id, action = action})
 	end
 end
 

@@ -10,15 +10,15 @@ end
 local function input(self, action_id, action)
 	if (action_id == const.ACTIONS.CONFIRM or action_id == const.ACTIONS.EXIT) and action.pressed then
 		ui.hide(self.node)
-		msg.post("#menu", "show", {})
+		msg.post("#menu", const.MSG.SHOW, {})
 	end
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("show") then
+	if message_id == const.MSG.SHOW then
 		ui.show(self.node)
 		data.state = message.state
-	elseif message_id == hash("input") then
+	elseif message_id == const.MSG.INPUT then
 		input(self, message.action_id, message.action)
 	end
 end

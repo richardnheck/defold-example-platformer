@@ -2,13 +2,14 @@
 
 local data = require "main.data"
 local const = require "game.lib.const"
+local audio = require "main.audio"
 
 local M = {}
 
 -- Return to the main menu. Callers that paused the game are responsible for
 -- resuming it first (see pause.gui_script) — navigation doesn't touch time step.
 function M.quit_to_menu()
-	msg.post(const.URLS.MAIN_SOUND, "stop_sound")
+	audio.music_stop()
 	msg.post(const.URLS.MAIN_HANDLER, const.MSG.SHOW_MENU)
 end
 

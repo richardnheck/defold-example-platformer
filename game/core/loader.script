@@ -1,5 +1,6 @@
 local data = require "main.data"
 local const = require "game.lib.const"
+local audio = require "main.audio"
 
 local function unloadlevel(self)
 	if self.loaded > 0 then
@@ -8,8 +9,10 @@ local function unloadlevel(self)
 end
 
 local function loadlevel(self)
+	-- load the leel
 	local level = data.get_level()
 	msg.post(string.format("#level%d", level), "load")
+	audio.music_play(const.AUDIO.MUSIC_LEVEL..level)
 	self.loaded = level
 end
 

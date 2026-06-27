@@ -56,4 +56,24 @@ function M.sound_at(id, pos, complete_function)
 	play(id, { gain = gain, pan = pan }, complete_function)
 end
 
+----------------------
+-- Music
+----------------------
+-- Background music lives on the main:/sound GO, one looping component per track
+-- (#music-title, #music-level1, ...). The crossfade animates each component's
+-- `gain` property, but go.animate/go.set can only reach instances in the
+-- caller's own collection — and gameplay scripts run in a different collection
+-- from main:/sound. So we hand the work to handler.script (which shares that
+-- collection); see main/handler.script. `id` is like "#music-title".
+
+-- Crossfade to a music track. No-op (in handler) if it's already playing.
+function M.music_play(id)
+	msg.post(const.URLS.MAIN_HANDLER, const.MSG.MUSIC_PLAY, { id = id })
+end
+
+-- Fade out and stop the current music track, if any.
+function M.music_stop()
+	msg.post(const.URLS.MAIN_HANDLER, const.MSG.MUSIC_STOP)
+end
+
 return M

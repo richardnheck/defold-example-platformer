@@ -29,9 +29,10 @@ const.MSG              = {
 	TRIGGER_RESPONSE       = hash("trigger_response"),
 	CONTACT_POINT_RESPONSE = hash("contact_point_response"),
 	COLLISION_RESPONSE     = hash("collision_response"),
+	LOAD                   = hash("load"),
+	UNLOAD                 = hash("unload"),
 	PROXY_LOADED           = hash("proxy_loaded"),
 	PROXY_UNLOADED         = hash("proxy_unloaded"),
-	INPUT                  = hash("input"),
 	SET_TIME_STEP          = hash("set_time_step"),
 
 	-- Game Controls and GUI
@@ -41,6 +42,9 @@ const.MSG              = {
 	NEW_LEVEL            = hash("new_level"),
 	QUIT                 = hash("quit"),
 	SHOW                 = hash("show"),
+	MUSIC_PLAY           = hash("music_play"),
+	MUSIC_STOP           = hash("music_stop"),
+	INPUT                = hash("input"),
 	
 	-- Game
 	PLAYER_SPAWN         = hash("player_spawn"),
@@ -129,7 +133,10 @@ const.AUDIO            = {
 	COLLECT          = "#collect",
 	FIRE             = "#fire",
 	STOMP            = "#stomp",
-	
+
+	-- MUSIC
+	MUSIC_TITLE      = "#music-title",
+	MUSIC_LEVEL      = "#music-level"	-- Path for level music is created based on this and the level number
 }
 
 return const
