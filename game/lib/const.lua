@@ -54,6 +54,7 @@ const.MSG              = {
 	CHECKPOINT_REACHED   = hash("checkpoint_reached"),
 	ENDPOINT_REACHED     = hash("endpoint_reached"),
 	COLLECTED            = hash("collected"),
+	PLAYER_DIED          = hash("player_died")
 
 	
 	-- RESTART              = hash("restart"),

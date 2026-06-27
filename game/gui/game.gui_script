@@ -80,6 +80,8 @@ function on_message(self, message_id, message, sender)
 		elseif message.collectible == const.COLLECTIBLE.STRAWBERRY then
 			update_strawberries_collected()
 		end
+	elseif message_id == const.MSG.PLAYER_DIED then
+		update_lives(self)
 	end
 end
 

@@ -23,8 +23,9 @@ end
 local function startgame(self)
 	msg.post("main:/handler", "show_game")
 	data.set_level(1)
+	data.reset_player_lives()
 	data.state = data.STATE_PLAYING
-end	
+end
 
 local function show(self)
 	ui.show(self.node)

@@ -550,17 +550,26 @@ end
 
 local function player_die(self)
 	self.player_dead = true
+	data.decrement_player_lives()
 	self.fsm.handle_event(EV_DIE)
 end
 
+-- Called after player has died and animation has played to completion
 player_death_complete = function(self)
-	-- Reset collected items if player has not reached a checkpoint
-	if not data.checkpoint_reached() then
-		data.reset_collected()
-	end
+	if data.get_player_lives() > 0 then
+		-- Players has more lives left
+		-- Reset collected items if player has not reached a checkpoint
+		if not data.checkpoint_reached() then
+			data.reset_collected()
+		end
 
-	-- Reload the level
-	nav.reload_level()
+		-- Reload the level
+		nav.reload_level()
+	else
+		-- Player has run out of lives so it is game over
+		msg.post(const.URLS.GUI, const.MSG.PLAYER_DIED)		 
+		msg.post("/common/view#gameover", "show", {state = data.STATE_GAMEOVER})
+	end
 end
 
 local function show_dialog()
