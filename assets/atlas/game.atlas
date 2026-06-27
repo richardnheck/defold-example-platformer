@@ -655,4 +655,24 @@ animations {
   }
   playback: PLAYBACK_NONE
 }
+animations {
+  id: "heart"
+  images {
+    image: "/assets/images/kings-and-pigs/12-Live and Coins/Big-Heart-Idle1.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "heart-hit"
+  images {
+    image: "/assets/images/kings-and-pigs/12-Live and Coins/Big-Heart-Hit1.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/12-Live and Coins/Big-Heart-Hit2.png"
+  }
+  images {
+    image: "/assets/images/kings-and-pigs/12-Live and Coins/Big-Heart-Hit3.png"
+  }
+  fps: 15
+}
 extrude_borders: 2

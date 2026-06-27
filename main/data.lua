@@ -25,6 +25,9 @@ M.bounds = vmath.vector3(0)
 -- Maximum number of levels
 M.MAX_LEVELS = 3
 
+local MAX_PLAYER_LIVES = 3				-- Maximum player lives
+local player_lives = MAX_PLAYER_LIVES	-- current player lives
+
 local level = 1 		  -- the current level
 local checkpoint = 0	  -- the identifier (number) of the current checkpoint reached
 local checkpoints = {}    -- identifier -> world position, populated by each checkpoint on load
@@ -34,6 +37,18 @@ local collected = {
 	bananas = 0,
 	strawberries = 0
 }
+
+function M.get_player_lives()
+	return player_lives
+end
+
+function M.reset_player_lives()
+	player_lives = MAX_PLAYER_LIVES
+end
+
+function M.decrement_player_lives()
+	player_lives = player_lives - 1
+end	
 
 -- Reset current checkpoint and registered checkpoints
 local function reset_checkpoints()

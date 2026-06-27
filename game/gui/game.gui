@@ -21,7 +21,6 @@ nodes {
   ""
   font: "main"
   id: "strawberries"
-  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: true
 }
 nodes {
@@ -40,7 +39,6 @@ nodes {
   type: TYPE_BOX
   texture: "game/strawberry-icon"
   id: "strawberry-icon"
-  adjust_mode: ADJUST_MODE_FIT
   parent: "strawberries"
   inherit_alpha: true
 }
@@ -57,7 +55,6 @@ nodes {
   text: "00"
   font: "main"
   id: "bananas"
-  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: true
 }
 nodes {
@@ -71,7 +68,6 @@ nodes {
   type: TYPE_BOX
   texture: "game/banana-icon"
   id: "banana-icon"
-  adjust_mode: ADJUST_MODE_FIT
   parent: "bananas"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
@@ -96,7 +92,6 @@ nodes {
   }
   type: TYPE_BOX
   id: "button-container"
-  adjust_mode: ADJUST_MODE_FIT
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
   visible: false
@@ -112,7 +107,6 @@ nodes {
   type: TYPE_BOX
   texture: "game/next-button"
   id: "next-button"
-  adjust_mode: ADJUST_MODE_FIT
   parent: "button-container"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
@@ -125,7 +119,6 @@ nodes {
   type: TYPE_BOX
   texture: "game/previous-button"
   id: "previous-button"
-  adjust_mode: ADJUST_MODE_FIT
   parent: "button-container"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
@@ -138,7 +131,6 @@ nodes {
   type: TYPE_BOX
   texture: "game/pause-button"
   id: "pause-button"
-  adjust_mode: ADJUST_MODE_FIT
   parent: "button-container"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
@@ -151,10 +143,38 @@ nodes {
   type: TYPE_BOX
   texture: "game/volume"
   id: "volume-button"
-  adjust_mode: ADJUST_MODE_FIT
   parent: "button-container"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 36.0
+    y: 681.0
+  }
+  size {
+    x: 200.0
+    y: 75.0
+  }
+  type: TYPE_BOX
+  id: "hearts-container"
+  pivot: PIVOT_W
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "heart"
+  parent: "hearts-container"
+  inherit_alpha: true
+  template: "/game/gui/heart.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "heart/box"
+  parent: "heart"
+  template_node_child: true
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

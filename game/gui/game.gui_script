@@ -8,14 +8,21 @@ local nav = require "game.lib.nav"
 local update_strawberries_collected
 local update_bananas_collected
 local update_buttons
+local update_lives
 
 -- Node Ids
 local PAUSE_BUTTON = "pause-button"
-local NEXT_BUTTON = "next-button" 
-local PREV_BUTTON = "previous-button" 
+local NEXT_BUTTON = "next-button"
+local PREV_BUTTON = "previous-button"
 local VOLUME_BUTTON = "volume-button"
 local STRAWBERRIES = "strawberries"
 local BANANAS = "bananas"
+
+-- The heart prototype to clone for the player lives
+local HEART_PROTOTYPE = "heart/box"
+
+-- Player lives layout
+local HEART_SPACING = 60	-- horizontal gap between hearts (px)
 
 -- Textures
 local TEXTURE_NEXT_BUTTON          = "next-button"
@@ -29,10 +36,12 @@ function init(self)
 	msg.post(".", "acquire_input_focus") 
 
 	self.sound_muted = audio.is_sound_muted()
+	self.hearts = {}	-- cloned heart nodes, rebuilt by update_lives
 
 	update_bananas_collected()
 	update_strawberries_collected()
 	update_buttons(self)
+	update_lives(self)
 end
 
 function on_input(self, action_id, action)
@@ -84,8 +93,30 @@ update_bananas_collected = function()
 	gui.set_text(gui.get_node(BANANAS), data.get_collected_bananas())
 end
 
+-- Rebuild the row of hearts to reflect the current player lives
+update_lives = function(self)
+	-- Remove any previously cloned hearts
+	for _, heart in ipairs(self.hearts) do
+		gui.delete_node(heart)
+	end
+	self.hearts = {}
+
+	-- Clone the prototype heart once per remaining life
+	local prototype = gui.get_node(HEART_PROTOTYPE)
+	for i = 1, data.get_player_lives() do
+		local nodes = gui.clone_tree(prototype)
+		local heart = nodes[hash(HEART_PROTOTYPE)]
+		gui.set_position(heart, vmath.vector3((i - 1) * HEART_SPACING, 0, 0))
+		gui.set_enabled(heart, true)
+		self.hearts[i] = heart
+	end
+
+	-- Hide the prototype itself; only the clones are shown
+	gui.set_enabled(prototype, false)
+end
+
 -- Update button textures based on state
-update_buttons = function(self) 
+update_buttons = function(self)
 	gui.play_flipbook(gui.get_node(NEXT_BUTTON), data.has_next_level() and TEXTURE_NEXT_BUTTON or TEXTURE_NEXT_BUTTON_DISABLED)
 	gui.play_flipbook(gui.get_node(PREV_BUTTON), data.has_previous_level() and TEXTURE_PREV_BUTTON or TEXTURE_PREV_BUTTON_DISABLED)
 	gui.play_flipbook(gui.get_node(VOLUME_BUTTON), self.sound_muted and TEXTURE_VOLUME_BUTTON_OFF or TEXTURE_VOLUME_BUTTON_ON)
