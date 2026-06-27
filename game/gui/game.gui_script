@@ -36,7 +36,7 @@ function init(self)
 	msg.post(".", "acquire_input_focus") 
 
 	self.sound_muted = audio.is_sound_muted()
-	self.hearts = {}	-- cloned heart nodes, rebuilt by update_lives
+	self.hearts = {}	-- a table to store cloned heart nodes, rebuilt by update_lives
 
 	update_bananas_collected()
 	update_strawberries_collected()
@@ -45,6 +45,9 @@ function init(self)
 end
 
 function on_input(self, action_id, action)
+	-- Ignore input when state is paused
+	if data.state == data.STATE_PAUSE then return end
+	
 	if action_id == const.ACTIONS.TOUCH and action.pressed then
 		if gui.pick_node(gui.get_node(PAUSE_BUTTON), action.x, action.y) then
 			-- Pause button pressed

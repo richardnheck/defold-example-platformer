@@ -3,7 +3,12 @@ local const = require "game.lib.const"
 local audio = require "main.audio"
 local nav = require "game.lib.nav"
 
-local MENU_LEN = 3
+local MENU_LEN = 3   -- Continue, Restart, Quit
+
+-- Node Id's
+local CONTAINER = "container"
+local CLOSE_BUTTON = "close-button"
+local ARROW = "arrow"
 
 function init(self)
 	self.handpos = 1
@@ -11,7 +16,8 @@ function init(self)
 	for n = 1, MENU_LEN do
 		self.arrowpos[n] = gui.get_position(gui.get_node(tostring(n)))
 	end
-	self.node = gui.get_node("container")
+	self.node = gui.get_node(CONTAINER)
+	self.close_button = gui.get_node(CLOSE_BUTTON)
 	gui.set_enabled(self.node, false)
 	--gui.set_position(self.node, vmath.vector3(data.SCR_W/2, (data.SCR_H/2), 0))
 end
@@ -19,7 +25,7 @@ end
 function update(self, dt)
 	if data.state == data.STATE_PAUSE then
 		local pos = vmath.vector3(self.arrowpos[self.handpos].x - 32, self.arrowpos[self.handpos].y, 0)
-		gui.set_position(gui.get_node("arrow"), pos)
+		gui.set_position(gui.get_node(ARROW), pos)
 	end
 end
 
@@ -68,6 +74,10 @@ local function input(self, action_id, action)
 			end)
 		end
 	elseif action_id == const.ACTIONS.EXIT and action.pressed then
+		resume_game(self)
+	elseif action_id == const.ACTIONS.TOUCH and action.pressed and gui.pick_node(self.close_button, action.x, action.y) then
+		-- Close button clicked: resume the game
+		audio.sound(const.AUDIO.SELECT)
 		resume_game(self)
 	end
 end

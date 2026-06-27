@@ -682,4 +682,11 @@ animations {
   }
   playback: PLAYBACK_LOOP_FORWARD
 }
+animations {
+  id: "close-button"
+  images {
+    image: "/assets/images/pixel-adventure/Menu/Buttons/Close.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
 extrude_borders: 2
