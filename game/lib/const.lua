@@ -75,17 +75,6 @@ const.URLS             = {
 	MAIN_SOUND       = "main:/sound",
 	
 	GAME_LOADER      = "game:/loader"
-
-	
-	-- CAMERA_CONTAINER = "/camera",
-	-- CAMERA_ID        = "/camera#camera",
-	-- MAP              = "",
-	-- MAP_CONTANINER   = "",
-	-- GAME             = "/script#game",
-	-- BACKGROUND       = "/background",
-	-- BACKGROUND_MODEL = "/background#model",
-	-- GUI              = "/gui#game",
-	-- MOBILE_GUI       = ""
 }
 
 ----------------------
@@ -136,7 +125,9 @@ const.AUDIO            = {
 
 	-- MUSIC
 	MUSIC_TITLE      = "#music-title",
-	MUSIC_LEVEL      = "#music-level"	-- Path for level music is created based on this and the level number
+	MUSIC_LEVEL      = "#music-level",	-- Path for level music is created based on this and the level number
+
+	GROUP_MASTER     = hash("master")
 }
 
 return const

@@ -4,12 +4,23 @@ local data  = require "main.data"
 local M = {}
 
 -- Spatial falloff distances in world pixels, measured from the camera centre.
-M.SPATIAL_NEAR = 64    -- within this distance: full volume
-M.SPATIAL_FAR  = 420   -- beyond this distance: inaudible (sound is skipped)
+local SPATIAL_NEAR = 64    -- within this distance: full volume
+local SPATIAL_FAR  = 420   -- beyond this distance: inaudible (sound is skipped)
 
 -- Tracks the last play time per sound id (for debouncing).
 M.gate = {}
 
+-- Mute/Unmute all sound 
+function M.mute_sound(mute)
+	-- Mute/unmute by setting the gain of the master sound group (bus)
+	sound.set_group_gain(const.AUDIO.GROUP_MASTER, mute and 0 or 1)
+end
+
+-- Determine whether sound is muted
+function M.is_sound_muted() 
+	return sound.get_group_gain(const.AUDIO.GROUP_MASTER) == 0
+end
+	
 -- Per-id 50ms cooldown to avoid overlapping/machine-gun playback, then play.
 local function play(id, props, complete_function)
 	-- Seconds since this id last played (0 if never).
@@ -42,12 +53,12 @@ function M.sound_at(id, pos, complete_function)
 
 	-- Linear gain: 1 at/inside NEAR, 0 at/beyond FAR.
 	local gain
-	if dist <= M.SPATIAL_NEAR then
+	if dist <= SPATIAL_NEAR then
 		gain = 1
-	elseif dist >= M.SPATIAL_FAR then
+	elseif dist >= SPATIAL_FAR then
 		return                              -- inaudible: don't spend a voice
 	else
-		gain = 1 - (dist - M.SPATIAL_NEAR) / (M.SPATIAL_FAR - M.SPATIAL_NEAR)
+		gain = 1 - (dist - SPATIAL_NEAR) / (SPATIAL_FAR - SPATIAL_NEAR)
 	end
 
 	-- Pan by horizontal offset relative to half the canvas width, clamped to [-1, 1].
