@@ -9,12 +9,13 @@ function init(self)
 	msg.post(".", "acquire_input_focus")
 
 	if data.show_game_menu then
-		msg.post("handler#menu", "load")
+		msg.post("handler#menu", const.MSG.LOAD)
 	else
-		msg.post("handler#game", "load")
+		msg.post("handler#game", const.MSG.LOAD)
 		data.state = data.STATE_PLAYING
 	end
 
+	-- Seeds the random number generator and warm it up
 	math.randomseed(os.time())
 	for n = 1, 5 do
 		local r = math.random()
@@ -23,11 +24,11 @@ end
 
 function on_message(self, message_id, message,sender)
 	if message_id == const.MSG.SHOW_GAME then
-		msg.post("handler#menu", "unload")
-		msg.post("handler#game", "load")
+		msg.post("handler#menu", const.MSG.UNLOAD)
+		msg.post("handler#game", const.MSG.LOAD)
 	elseif message_id == const.MSG.SHOW_MENU then
-		msg.post("handler#game", "unload")
-		msg.post("handler#menu", "load")
+		msg.post("handler#game", const.MSG.UNLOAD)
+		msg.post("handler#menu", const.MSG.LOAD)
 	elseif message_id == const.MSG.PROXY_LOADED then
 		msg.post(sender, "enable")
 	elseif message_id == const.MSG.MUSIC_PLAY then
@@ -38,7 +39,7 @@ function on_message(self, message_id, message,sender)
 end
 
 function on_input(self, action_id, action)
-	if action_id == hash("fullscreen") and action.pressed then
+	if action_id == const.ACTION.FULLSCREEN and action.pressed then
 		data.fullscreen(self)
 	end
 end
@@ -49,13 +50,11 @@ end
 -- The sound components live on the sibling /sound GO in this (main) collection,
 -- so go.animate/go.set can reach them from here — gameplay scripts can't
 -- (different collection), so they route here via audio.lua. `id` is "#music-...".
-local MUSIC_GAIN = 0.4
-local FADE_TIME  = 0.6
 
 -- Fade a music track's gain to 0 over FADE_TIME, then stop it.
 local function music_fade_out(id)
 	local url = "/sound"..id
-	go.animate(url, "gain", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_LINEAR, FADE_TIME, 0,
+	go.animate(url, "gain", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_LINEAR, const.AUDIO.FADE_TIME, 0,
 		function() sound.stop(url) end)
 end
 
@@ -68,7 +67,7 @@ function music_play(self, id)
 	local url = "/sound"..id
 	go.set(url, "gain", 0)
 	sound.play(url)
-	go.animate(url, "gain", go.PLAYBACK_ONCE_FORWARD, MUSIC_GAIN, go.EASING_LINEAR, FADE_TIME)
+	go.animate(url, "gain", go.PLAYBACK_ONCE_FORWARD, const.AUDIO.MUSIC_GAIN, go.EASING_LINEAR, const.AUDIO.FADE_TIME)
 	self.music_current = id
 end
 

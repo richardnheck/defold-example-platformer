@@ -34,6 +34,8 @@ const.MSG              = {
 	PROXY_LOADED           = hash("proxy_loaded"),
 	PROXY_UNLOADED         = hash("proxy_unloaded"),
 	SET_TIME_STEP          = hash("set_time_step"),
+	ENABLE                 = hash("enable"),
+	DISABLE                = hash("disable"),
 	EXIT                   = hash("exit"),
 
 	-- Game Controls and GUI
@@ -56,15 +58,6 @@ const.MSG              = {
 	ENDPOINT_REACHED     = hash("endpoint_reached"),
 	COLLECTED            = hash("collected"),
 	PLAYER_DIED          = hash("player_died")
-
-	
-	-- RESTART              = hash("restart"),
-	-- PLAYER_DIE           = hash("player_die"),
-	-- GAME_PAUSE           = hash("game_pause"),
-	-- LANDSCAPE_PAUSE      = hash("landscape_pause"),
-	-- COLLECT              = hash("collect"),
-	-- PLAYER_HEALTH_UPDATE = hash("player_health_update"),
-	-- TOGGLE_AUDIO         = hash("toggle_audio"),
 }
 
 ----------------------
@@ -93,6 +86,7 @@ const.ACTIONS             = {
 	CONFIRM             = hash("action"),
 	START               = hash("start"),
 	EXIT                = hash("exit"),
+	FULLSCREEN          = hash("fullscreen"),
 	DEBUG               = hash("debug")
 }
 
@@ -104,14 +98,14 @@ const.AUDIO            = {
 	BEEP             = "#beep",
 	SELECT           = "#select",
 
-	-- PLAYER
+	-- PLAYER SFX
 	JUMP             = "#jump",
 	AIR_JUMP         = "#air-jump",
 	DIE              = "#die",
 	LAND             = "#land",
 	SPAWN            = "#spawn",
 
-	-- GAME
+	-- GAME SFX
 	THUD             = "#thud",
 	CANNON_SHOOT     = "#cannon-shoot",
 	CANNON_BALL_EXPLOSION = "#cannon-ball-explosion",
@@ -129,7 +123,13 @@ const.AUDIO            = {
 	MUSIC_TITLE      = "#music-title",
 	MUSIC_LEVEL      = "#music-level",	-- Path for level music is created based on this and the level number
 
-	GROUP_MASTER     = hash("master")
+	-- MUSIC SETTINGS
+	MUSIC_GAIN       = 0.3,		-- The gain for music. It is set here as it is required for fading music in and out
+	FADE_TIME        = 0.6,		-- The time in seconds to fade in and out music
+	
+	GROUP_MASTER     = hash("master"),
+
+	
 }
 
 return const
