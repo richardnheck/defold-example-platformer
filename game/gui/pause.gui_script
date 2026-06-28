@@ -112,10 +112,16 @@ local function input(self, action_id, action)
 	end
 end
 	
+function on_input(self, action_id, action)
+	-- All overlay GUIs share the "view" game object and so they share input focus.
+	-- Gate on visibility so the pause menu only reacts while it is showing.
+	if not gui.is_enabled(self.node) then return end
+	input(self, action_id, action)
+	return true   -- consume input while paused
+end
+
 function on_message(self, message_id, message, sender)
 	if message_id == const.MSG.SHOW then
 		pause_game(self)
-	elseif message_id == const.MSG.INPUT then
-		input(self, message.action_id, message.action)
 	end
 end

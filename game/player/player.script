@@ -560,8 +560,6 @@ local function input_playing(self, action_id, action)
 		elseif action.released then
 			self.jump_held = false
 		end
-	elseif action_id == const.ACTIONS.EXIT and action.pressed then
-		msg.post("view#pause", "show")
 	end
 end
 
@@ -593,8 +591,6 @@ end
 function on_input(self, action_id, action)
 	if data.state == data.STATE_PLAYING then
 		input_playing(self, action_id, action)
-	elseif data.state == data.STATE_PAUSE then
-		msg.post("view#pause", const.MSG.INPUT, {action_id = action_id, action = action})
 	end
 end
 

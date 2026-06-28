@@ -47,7 +47,14 @@ end
 function on_input(self, action_id, action)
 	-- Ignore input when state is paused
 	if data.state == data.STATE_PAUSE then return end
-	
+
+	-- Open the pause menu on the exit/escape key (gameplay only)
+	if action_id == const.ACTIONS.EXIT and action.pressed and data.state == data.STATE_PLAYING then
+		audio.sound(const.AUDIO.BEEP)
+		msg.post("#pause", const.MSG.SHOW)
+		return true
+	end
+
 	if action_id == const.ACTIONS.TOUCH and action.pressed then
 		if gui.pick_node(gui.get_node(PAUSE_BUTTON), action.x, action.y) then
 			-- Pause button pressed
