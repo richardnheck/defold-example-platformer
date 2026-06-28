@@ -3,7 +3,6 @@ local data = require("main.data")
 local debugdraw = require("debug-draw.debug-draw")
 local const = require("game.lib.const")
 local audio = require("main.audio")
-local nav = require("game.lib.nav")
 
 -- Forward declarations
 local player_death_complete
@@ -458,10 +457,10 @@ function fixed_update(self, dt)
 	go.set_position(go.get_position() + vmath.vector3(self.vel.x, -self.vel.y, 0) * dt)
 
 	-- handle sprite flipping based on direction faced
-	sprite.set_hflip("#sprite", self.facing < 0)
+	sprite.set_hflip(SPRITE, self.facing < 0)
 
 	-- pass position to for camera tracking
-	msg.post("view#script", "point", {pos = go.get_position() + CAMERA_OFFSET})
+	msg.post(const.URLS.CAMERA_SCRIPT, const.MSG.POINT, {pos = go.get_position() + CAMERA_OFFSET})
 
 	self.on_floor = false
 	self.next_to_left = false
@@ -563,8 +562,6 @@ local function input_playing(self, action_id, action)
 		end
 	elseif action_id == const.ACTIONS.EXIT and action.pressed then
 		msg.post("view#pause", "show")
-	elseif action_id == const.ACTIONS.DEBUG and action.pressed and sys.get_engine_info().is_debug then
-		msg.post("/common/view#clear", "show", {state = data.STATE_CLEAR})
 	end
 end
 
@@ -574,34 +571,10 @@ local function player_die(self)
 	self.fsm.handle_event(EV_DIE)
 end
 
--- Called after player has died and animation has played to completion
+-- Called after player has died and the death animation has played to completion.
+-- The level script owns what happens next (reload vs. game over screen).
 player_death_complete = function(self)
-	if data.get_player_lives() > 0 then
-		-- Players has more lives left
-		-- Reset collected items if player has not reached a checkpoint
-		if not data.checkpoint_reached() then
-			data.reset_collected()
-		end
-
-		-- Reload the level
-		nav.reload_level()
-	else
-		-- Player has run out of lives so it is game over
-		msg.post(const.URLS.GUI, const.MSG.PLAYER_DIED)		 
-		msg.post("/common/view#gameover", "show", {state = data.STATE_GAMEOVER})
-	end
-end
-
-local function show_dialog()
-	if data.get_level() >= data.MAX_LEVELS then
-		-- Finished the final level — show the completion screen.
-		-- input_endscreen (STATE_COMPLETE) returns to the menu on confirm/exit.
-		msg.post("/common/view#complete", "show", {state = data.STATE_COMPLETE})
-	else
-		-- Finished a non-final level — show the level-clear screen.
-		-- input_clear (STATE_CLEAR) advances to the next level on confirm.
-		msg.post("/common/view#clear", "show", {state = data.STATE_CLEAR})
-	end
+	msg.post(const.URLS.LEVEL, const.MSG.PLAYER_DEATH_COMPLETE)
 end
 
 local function handle_endpoint_reached(self)
@@ -609,12 +582,12 @@ local function handle_endpoint_reached(self)
 	self.fsm.handle_event(EV_CELEBRATE)
 
 	audio.sound(const.AUDIO.COMPLETE)
-	
-	-- wait a moment to celebrate before showing the level clear/complete dialog
+
+	-- Celebrate for a moment, then let the level script show the clear/complete screen
 	timer.delay(2, false, function()
-		show_dialog()
+		msg.post(const.URLS.LEVEL, const.MSG.LEVEL_COMPLETE)
 	end)
-end 
+end
 
 	
 function on_input(self, action_id, action)

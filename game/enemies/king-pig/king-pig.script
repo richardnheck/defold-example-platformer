@@ -27,7 +27,6 @@ local CHASE_X_DEADZONE = 4
 local SPRITE    = "#sprite"
 local COLLISION_OBJECT_HIT = "#co_hit"
 local COLLISION_OBJECT_WORLD = "#co_world"
-local PLAYER    = "common/player"  -- sibling of the level; see level.script for the same address
 
 -- Animations
 local ANIM_RUN  = hash("king-pig-run")
@@ -61,7 +60,7 @@ local function update_detection(self)
 	-- Hit/dead are terminal: a dead king pig never chases.
 	if cur == s.hit.id or cur == s.dead.id then return end
 
-	local to_player = go.get_position(PLAYER) - go.get_position()
+	local to_player = go.get_position(const.URLS.PLAYER) - go.get_position()
 	local toward    = to_player.x >= 0 and 1 or -1  -- horizontal sign toward the player
 
 	-- The king pig runs along the ground, so it can only chase a target it can

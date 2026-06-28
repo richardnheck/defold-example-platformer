@@ -1,5 +1,6 @@
 local data = require "main.data"
 local const = require "game.lib.const"
+local nav = require "game.lib.nav"
 
 -- Forward declarations
 local parse
@@ -27,8 +28,31 @@ function on_message(self, message_id, message, sender)
 		if checkpoint_pos ~= nil then
 			pos = checkpoint_pos
 		end
-		
-		msg.post("common/player", const.MSG.PLAYER_SPAWN, {pos = pos})
+
+		msg.post(const.URLS.PLAYER, const.MSG.PLAYER_SPAWN, {pos = pos})
+	elseif message_id == const.MSG.PLAYER_DEATH_COMPLETE then
+		-- Player finished its death animation: reload if lives remain, else game over.
+		if data.get_player_lives() > 0 then
+			-- Reset collected items if the player has not reached a checkpoint
+			if not data.checkpoint_reached() then
+				data.reset_collected()
+			end
+			nav.reload_level()
+		else
+			-- Out of lives — show the game over screen
+			msg.post(const.URLS.GUI, const.MSG.PLAYER_DIED)
+			msg.post(const.URLS.GAMEOVER, const.MSG.SHOW, {state = data.STATE_GAMEOVER})
+		end
+	elseif message_id == const.MSG.LEVEL_COMPLETE then
+		if data.get_level() >= data.MAX_LEVELS then
+			-- Finished the final level — show the completion screen
+			-- (STATE_COMPLETE returns to the menu on confirm/exit).
+			msg.post(const.URLS.COMPLETE, const.MSG.SHOW, {state = data.STATE_COMPLETE})
+		else
+			-- Finished a non-final level — show the level-clear screen
+			-- (STATE_CLEAR advances to the next level on confirm).
+			msg.post(const.URLS.CLEAR, const.MSG.SHOW, {state = data.STATE_CLEAR})
+		end
 	end
 end
 

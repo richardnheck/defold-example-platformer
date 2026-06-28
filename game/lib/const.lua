@@ -50,6 +50,8 @@ const.MSG              = {
 	INPUT                = hash("input"),
 	
 	-- Game
+	POINT                = hash("point"),                  -- for the view camera
+	RESET                = hash("reset"),                  -- for the view camera
 	PLAYER_SPAWN         = hash("player_spawn"),
 	APPLY_IMPULSE        = hash("apply_impulse"),
 	KILL_PLAYER          = hash("kill_player"),
@@ -57,18 +59,26 @@ const.MSG              = {
 	CHECKPOINT_REACHED   = hash("checkpoint_reached"),
 	ENDPOINT_REACHED     = hash("endpoint_reached"),
 	COLLECTED            = hash("collected"),
-	PLAYER_DIED          = hash("player_died")
+	PLAYER_DIED          = hash("player_died"),
+	PLAYER_DEATH_COMPLETE = hash("player_death_complete"), -- player → level: death animation finished
+	LEVEL_COMPLETE       = hash("level_complete")          -- player → level: endpoint reached + celebrated
 }
 
 ----------------------
 -- URLs
 ----------------------
 const.URLS             = {
+	PLAYER           = "/common/player",
 	GUI              = "/common/view#game",
+	GAMEOVER         = "/common/view#gameover",
+	CLEAR            = "/common/view#clear",
+	COMPLETE         = "/common/view#complete",
+	CAMERA_SCRIPT    = "/common/view#script",
+	LEVEL            = "/level#level",   -- the level script; the level GO id is "level" in every level collection
 
 	MAIN_HANDLER     = "main:/handler",
 	MAIN_SOUND       = "main:/sound",
-	
+
 	GAME_LOADER      = "game:/loader"
 }
 

@@ -1,4 +1,5 @@
 local data = require "main.data"
+local const = require "game.lib.const"
 
 local SPEED = 0.15
 
@@ -32,12 +33,12 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("point") then
+	if message_id == const.MSG.POINT then
 		if self.target == vmath.vector3(0) then
 			self.pos = message.pos
 		end
 		self.target = message.pos + vmath.vector3(0, 0, 0)
-	elseif message_id == hash("reset") then
+	elseif message_id == const.MSG.RESET then
 		go.set_position(vmath.vector3(0))
 	end
 end
