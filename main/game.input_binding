@@ -116,5 +116,13 @@ gamepad_trigger {
 }
 gamepad_trigger {
   input: GAMEPAD_START
-  action: "start"
+  action: "exit"
+}
+gamepad_trigger {
+  input: GAMEPAD_RPAD_DOWN
+  action: "jump"
+}
+gamepad_trigger {
+  input: GAMEPAD_RPAD_RIGHT
+  action: "jump"
 }
