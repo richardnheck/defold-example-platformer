@@ -3,7 +3,7 @@ local ui = require "main.ui"
 local const = require "game.lib.const"
 local audio = require "main.audio"
 
--- Node Ids
+-- Nodes
 local OK_BUTTON = "ok-button"
 
 function init(self)

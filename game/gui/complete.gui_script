@@ -4,7 +4,7 @@ local const = require "game.lib.const"
 local audio = require "main.audio"
 local nav = require "game.lib.nav"
 
--- Node Ids
+-- Nodes
 local OK_BUTTON = "ok-button"
 
 function init(self)

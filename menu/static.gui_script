@@ -2,9 +2,14 @@ local data = require "main.data"
 local ui = require "main.ui"
 local const = require "game.lib.const"
 
+-- Nodes
+local CONTAINER = "container"
+local BACK_BUTTON = "back-button"
+
+
 function init(self)
-	self.node = gui.get_node("container")
-	self.back_button = gui.get_node("back-button")
+	self.node = gui.get_node(CONTAINER)
+	self.back_button = gui.get_node(BACK_BUTTON)
 	ui.init(self.node)
 end
 

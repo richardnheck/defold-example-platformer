@@ -5,10 +5,11 @@ local nav = require "game.lib.nav"
 
 local MENU_LEN = 3   -- Continue, Restart, Quit
 
--- Node Id's
+-- Nodes
 local CONTAINER = "container"
 local CLOSE_BUTTON = "close-button"
 local ARROW = "arrow"
+
 
 function init(self)
 	self.handpos = 1

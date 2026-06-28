@@ -8,7 +8,7 @@ local quit_game
 
 local MENU_LEN = 4    -- New Game, Controls, Credits, Quit
 
--- Node Ids
+-- Nodes
 local CONTAINER = "container"
 local ARROW = "arrow"
 

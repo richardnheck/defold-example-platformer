@@ -10,7 +10,7 @@ local update_bananas_collected
 local update_buttons
 local update_lives
 
--- Node Ids
+-- Nodes
 local PAUSE_BUTTON = "pause-button"
 local NEXT_BUTTON = "next-button"
 local PREV_BUTTON = "previous-button"
