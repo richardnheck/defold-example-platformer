@@ -43,8 +43,44 @@ local function resume_game(self)
 	msg.post(const.URLS.MAIN_HANDLER, const.MSG.SET_TIME_STEP, {factor = 1, mode = 0})
 end
 
+-- Return the index of the menu item under the cursor, or nil
+local function hovered_item(action)
+	for n = 1, MENU_LEN do
+		if gui.pick_node(gui.get_node(tostring(n)), action.x, action.y) then
+			return n
+		end
+	end
+end
+
+-- Accept the currently selected menu item
+local function select(self)
+	if self.handpos == 1 then
+		-- Continue
+		audio.sound(const.AUDIO.SELECT)
+		resume_game(self)
+	elseif self.handpos == 2 then
+		-- Restart from the start of the level, ignoring any reached checkpoint
+		audio.sound(const.AUDIO.SELECT)
+		resume_game(self)
+		nav.restart_level()
+	elseif self.handpos == 3 then
+		-- Quit to the main menu
+		audio.sound(const.AUDIO.SELECT, function()
+			resume_game(self)
+			nav.quit_to_menu()
+		end)
+	end
+end
+
 local function input(self, action_id, action)
-	if action_id == const.ACTIONS.UP and action.pressed then
+	if action_id == nil then
+		-- Mouse hover: move the arrow to the hovered item
+		local item = hovered_item(action)
+		if item and item ~= self.handpos then
+			self.handpos = item
+			audio.sound(const.AUDIO.BEEP)
+		end
+	elseif action_id == const.ACTIONS.UP and action.pressed then
 		self.handpos = self.handpos - 1
 		if self.handpos < 1 then
 			self.handpos = MENU_LEN
@@ -57,28 +93,22 @@ local function input(self, action_id, action)
 		end
 		audio.sound(const.AUDIO.BEEP)
 	elseif action_id == const.ACTIONS.CONFIRM and action.pressed then
-		if self.handpos == 1 then
-			-- Continue
-			audio.sound(const.AUDIO.SELECT)
-			resume_game(self)
-		elseif self.handpos == 2 then
-			-- Restart from the start of the level, ignoring any reached checkpoint
-			audio.sound(const.AUDIO.SELECT)
-			resume_game(self)
-			nav.restart_level()
-		elseif self.handpos == 3 then
-			-- Quit to the main menu
-			audio.sound(const.AUDIO.SELECT, function()
-				resume_game(self)
-				nav.quit_to_menu()
-			end)
-		end
+		select(self)
 	elseif action_id == const.ACTIONS.EXIT and action.pressed then
 		resume_game(self)
-	elseif action_id == const.ACTIONS.TOUCH and action.pressed and gui.pick_node(self.close_button, action.x, action.y) then
-		-- Close button clicked: resume the game
-		audio.sound(const.AUDIO.SELECT)
-		resume_game(self)
+	elseif action_id == const.ACTIONS.TOUCH and action.pressed then
+		if gui.pick_node(self.close_button, action.x, action.y) then
+			-- Close button clicked: resume the game
+			audio.sound(const.AUDIO.SELECT)
+			resume_game(self)
+		else
+			-- Mouse click: select the clicked item
+			local item = hovered_item(action)
+			if item then
+				self.handpos = item
+				select(self)
+			end
+		end
 	end
 end
 	
