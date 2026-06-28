@@ -40,7 +40,7 @@ local EV_MOVE_STOP  = hash("ev_move_stop")
 local EV_JUMP       = hash("ev_jump")
 local EV_FALL       = hash("ev_fall")
 local EV_AIR_JUMP   = hash("ev_air_jump")
-local EV_GRAB_WALL = hash("ev_touch_wall")
+local EV_GRAB_WALL  = hash("ev_touch_wall")
 local EV_LEAVE_WALL = hash("ev_leave_wall")
 local EV_WALL_JUMP  = hash("ev_wall_jump")
 local EV_LAND_IDLE  = hash("ev_land_idle")
@@ -62,10 +62,12 @@ local ANIM_DIE       = hash("player-die")
 local SPRITE = "#sprite"
 
 -- Particle effect urls
-local FX_GROUND_HIT = "#ground_hit"
-local FX_JUMP       = "#jump"
-local FX_RUN        = "#run"
-local FX_SLIDE      = "#slide"
+local FX_GROUND_HIT  = "#ground_hit"
+local FX_JUMP        = "#jump"
+local FX_RUN         = "#run"
+-- We need two slide effects as it isn't possible in Defold to move component's position at runtime, it is a build-time offset 
+local FX_SLIDE_RIGHT = "#slide_right"  -- played when sliding the right-hand wall
+local FX_SLIDE_LEFT  = "#slide_left"   -- played when sliding the left-hand wall
 
 -- Setup the player's finite state machine (FSM)
 local function setup_fsm(self)
@@ -211,10 +213,12 @@ local function setup_fsm(self)
 		if self.wall_side ~= 0 then self.facing = self.wall_side end
 		self.jump_cut_applied = false
 		play(ANIM_SLIDE)
-		particlefx.play(FX_SLIDE)
+		-- Emit dust on the side of the wall we're clinging to
+		particlefx.play(self.wall_side > 0 and FX_SLIDE_RIGHT or FX_SLIDE_LEFT)
 	end)
 	fsm.on_leave(s.wall_slide, function()
-		particlefx.stop(FX_SLIDE)
+		particlefx.stop(FX_SLIDE_RIGHT)
+		particlefx.stop(FX_SLIDE_LEFT)
 	end)
 	fsm.on_update(s.wall_slide, function(dt)
 		if self.jump_held then

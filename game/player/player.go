@@ -28,10 +28,19 @@ components {
   }
 }
 components {
-  id: "slide"
+  id: "slide_right"
   component: "/game/player/slide.particlefx"
   position {
-    x: 6.0
+    x: 8.0
+    y: 12.0
+    z: 0.4
+  }
+}
+components {
+  id: "slide_left"
+  component: "/game/player/slide.particlefx"
+  position {
+    x: -5.0
     y: 12.0
     z: 0.4
   }
