@@ -2,6 +2,40 @@ components {
   id: "player"
   component: "/game/player/player.script"
 }
+components {
+  id: "ground_hit"
+  component: "/game/player/ground_hit.particlefx"
+  position {
+    y: 1.0
+    z: 0.4
+  }
+}
+components {
+  id: "jump"
+  component: "/game/player/jump.particlefx"
+  position {
+    y: 1.0
+    z: 0.4
+  }
+}
+components {
+  id: "run"
+  component: "/game/player/run.particlefx"
+  position {
+    x: -5.0
+    y: 1.0
+    z: 0.4
+  }
+}
+components {
+  id: "slide"
+  component: "/game/player/slide.particlefx"
+  position {
+    x: 6.0
+    y: 12.0
+    z: 0.4
+  }
+}
 embedded_components {
   id: "sprite"
   type: "sprite"

@@ -61,6 +61,12 @@ local ANIM_DIE       = hash("player-die")
 -- Urls
 local SPRITE = "#sprite"
 
+-- Particle effect urls
+local FX_GROUND_HIT = "#ground_hit"
+local FX_JUMP       = "#jump"
+local FX_RUN        = "#run"
+local FX_SLIDE      = "#slide"
+
 -- Setup the player's finite state machine (FSM)
 local function setup_fsm(self)
 	local fsm = stately.create()
@@ -149,6 +155,10 @@ local function setup_fsm(self)
 	fsm.on_enter(s.move, function()
 		play(ANIM_RUN)
 		self.air_jumped = false
+		particlefx.play(FX_RUN)
+	end)
+	fsm.on_leave(s.move, function()
+		particlefx.stop(FX_RUN)
 	end)
 	fsm.on_update(s.move, function(dt)
 		self.vel.x = self.dir * SPEED
@@ -172,10 +182,11 @@ local function setup_fsm(self)
 			self.air_jumped = not can_air_jump
 		end
 		self.jump_cut_applied = can_var_cut == false
-		if self.vel.y < 0 then 
+		if self.vel.y < 0 then
 			audio.sound(const.AUDIO.JUMP)
-			play(ANIM_JUMP_UP) 
-		else 
+			particlefx.play(FX_JUMP)
+			play(ANIM_JUMP_UP)
+		else
 			play(ANIM_JUMP_DOWN) 
 		end
 	end)
@@ -200,6 +211,10 @@ local function setup_fsm(self)
 		if self.wall_side ~= 0 then self.facing = self.wall_side end
 		self.jump_cut_applied = false
 		play(ANIM_SLIDE)
+		particlefx.play(FX_SLIDE)
+	end)
+	fsm.on_leave(s.wall_slide, function()
+		particlefx.stop(FX_SLIDE)
 	end)
 	fsm.on_update(s.wall_slide, function(dt)
 		if self.jump_held then
@@ -421,6 +436,7 @@ function fixed_update(self, dt)
 			self.fsm.handle_event(EV_LAND_IDLE)
 		end
 		audio.sound(const.AUDIO.LAND)
+		particlefx.play(FX_GROUND_HIT)
 		cur = self.fsm.current_state()
 	end
 
