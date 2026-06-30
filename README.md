@@ -4,6 +4,10 @@ A sample 2D pixel platformer for [Defold](https://defold.com/) that goes beyond 
 demonstrates how to build a clean, maintainable player controller using the
 [Stately](https://github.com/britzl/stately) finite state machine library.  The game also demonstrates how to implement basic UI screens and handle input from keyboard, controller and mouse.
 
+## Demo
+- [Itch.io](https://parabolink.itch.io/defold-example-platformer)
+- [Youtube](https://youtu.be/cDwDfoD7unM?si=BiYaSGlr3tuqDc6_)
+
 ## The Game
 The game consistis of three small levels. It can be played with keyboard or game controller and the UI also handles mouse control.
 
