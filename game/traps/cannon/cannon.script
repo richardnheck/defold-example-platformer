@@ -1,3 +1,9 @@
+-- =============================================================================
+-- Cannon trap.
+--
+-- Fires a cannon ball in a fixed direction on a repeating timer.
+-- =============================================================================
+
 local const = require "game.lib.const"
 local audio = require "main.audio"
 

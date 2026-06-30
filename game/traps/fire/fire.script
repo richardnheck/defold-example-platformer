@@ -1,3 +1,10 @@
+-- =============================================================================
+-- Fire trap.
+--
+-- When the player steps on the trap, it triggers and then fire blasts a few
+-- momenets later.  After a short period, it turns off again.
+-- =============================================================================
+
 local const = require("game.lib.const")
 local stately = require("stately.stately")
 local audio = require("main.audio")

@@ -1,3 +1,11 @@
+-- =============================================================================
+-- Spiked ball trap.
+--
+-- Rotates a spiked ball about its anchor, either swinging back and forth like
+-- a pendulum (SWING) or spinning in a full continuous circle (SPIN), set by
+-- the "mode" and "direction" properties.
+-- =============================================================================
+
 go.property("mode", 0)			-- default mode: SWING
 go.property("direction", -1)		-- default direction: clockwise (for swing this is the initial swing direction)
 go.property("time", 3.0)        -- time for a complete revolution.  NB: a swing will take roughly half this time

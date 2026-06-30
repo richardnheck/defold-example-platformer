@@ -1,3 +1,10 @@
+-- =============================================================================
+-- Proximity bomb trap. 
+-- 
+-- When the player enters its trigger, the bomb arms, ticks for a few moments, 
+-- then explodes.
+-- =============================================================================
+
 local const = require("game.lib.const")
 local audio = require("main.audio")
 

@@ -1,4 +1,4 @@
---
+-- =============================================================================
 -- Saw trap that travels a path defined by point game objects.
 --
 -- A path is a set of points named "path<path_id>-point1", "path<path_id>-point2", ...
@@ -6,6 +6,7 @@
 -- group game object, so the saw moves in their shared local frame. The saw gathers the
 -- points in order and either ping-pongs back and forth along them or, with `loop`, runs
 -- a closed circuit. With `show_chain` it lays a static chain of link sprites along the path.
+-- =============================================================================
 --
 -- Configure per-instance in the collection via the properties below.
 --
