@@ -597,7 +597,14 @@ end
 function on_message(self, message_id, message, sender)
 	if self.player_dead then return end
 	
-	if message_id == const.MSG.PLAYER_SPAWN then
+	if message_id == const.MSG.INPUT then
+		-- Virtual input from the on-screen mobile buttons (game.gui_script).
+		-- The message carries {action_id, pressed/released} and doubles as the
+		-- `action` table, so it flows through the same path as engine input.
+		if data.state == data.STATE_PLAYING then
+			input_playing(self, message.action_id, message)
+		end
+	elseif message_id == const.MSG.PLAYER_SPAWN then
 		audio.sound(const.AUDIO.SPAWN)
 		go.set_position(message.pos)
 	elseif message_id == const.MSG.CONTACT_POINT_RESPONSE then

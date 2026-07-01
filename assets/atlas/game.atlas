@@ -689,4 +689,25 @@ animations {
   }
   playback: PLAYBACK_LOOP_FORWARD
 }
+animations {
+  id: "left-mobile-button"
+  images {
+    image: "/assets/images/gui/left-mobile-button.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "right-mobile-button"
+  images {
+    image: "/assets/images/gui/right-mobile-button.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
+animations {
+  id: "jump-mobile-button"
+  images {
+    image: "/assets/images/gui/jump-mobile-button.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+}
 extrude_borders: 2

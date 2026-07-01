@@ -89,6 +89,7 @@ const.URLS             = {
 const.ACTIONS             = {
 	JUMP                = hash("jump"),
 	TOUCH               = hash("touch"),
+	TOUCH_MULTI         = hash("touch_multi"),
 	UP                  = hash("up"),
 	DOWN                = hash("down"),
 	LEFT                = hash("left"),

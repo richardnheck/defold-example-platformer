@@ -176,5 +176,69 @@ nodes {
   parent: "heart"
   template_node_child: true
 }
+nodes {
+  position {
+    x: 1.0
+    y: 50.0
+  }
+  size {
+    x: 1280.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "mobile-button-container"
+  pivot: PIVOT_W
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: 102.0
+    y: 16.0
+  }
+  scale {
+    x: 4.0
+    y: 4.0
+  }
+  type: TYPE_BOX
+  texture: "game/left-mobile-button"
+  id: "left-button"
+  parent: "mobile-button-container"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 310.0
+    y: 16.0
+  }
+  scale {
+    x: 4.0
+    y: 4.0
+  }
+  type: TYPE_BOX
+  texture: "game/right-mobile-button"
+  id: "right-button"
+  parent: "mobile-button-container"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 1173.0
+    y: 16.0
+  }
+  scale {
+    x: 4.0
+    y: 4.0
+  }
+  type: TYPE_BOX
+  texture: "game/jump-mobile-button"
+  id: "jump-button"
+  parent: "mobile-button-container"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

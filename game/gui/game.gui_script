@@ -18,6 +18,25 @@ local VOLUME_BUTTON = "volume-button"
 local STRAWBERRIES = "strawberries"
 local BANANAS = "bananas"
 
+-- Forward declarations
+local is_touch_device
+local button_action_at
+local handle_mobile_touch
+local post_player_input
+
+-- Set true to force the on-screen controls on for testing on desktop.
+local FORCE_SHOW_MOBILE_CONTROLS = false    -- Ensure false for release
+
+-- On-screen mobile control buttons (shown on touch devices only)
+local MOBILE_CONTAINER = "mobile-button-container"
+
+-- Maps each mobile button node to the player input action it emits
+local BUTTON_ACTIONS = {
+	["left-button"]  = const.ACTIONS.LEFT,
+	["right-button"] = const.ACTIONS.RIGHT,
+	["jump-button"]  = const.ACTIONS.JUMP,
+}
+
 -- The heart prototype to clone for the player lives
 local HEART_PROTOTYPE = "heart/box"
 
@@ -32,11 +51,21 @@ local TEXTURE_PREV_BUTTON_DISABLED = "previous-button-disabled"
 local TEXTURE_VOLUME_BUTTON_ON     = "volume"
 local TEXTURE_VOLUME_BUTTON_OFF    = "volume-off"
 
+
 function init(self)
-	msg.post(".", "acquire_input_focus") 
+	msg.post(".", "acquire_input_focus")
 
 	self.sound_muted = audio.is_sound_muted()
 	self.hearts = {}	-- a table to store cloned heart nodes, rebuilt by update_lives
+
+	-- Show the on-screen controls on touch devices (or when force-enabled for
+	-- desktop testing). self.touch_buttons maps an active touch point to the button
+	-- action it holds, so we can emit a matching release when that point lifts. It is
+	-- keyed by touch id for multitouch, and by "mouse" for the desktop mouse fallback.
+	self.touch_device = is_touch_device()
+	self.mobile_shown = self.touch_device or FORCE_SHOW_MOBILE_CONTROLS
+	self.touch_buttons = {}
+	gui.set_enabled(gui.get_node(MOBILE_CONTAINER), self.mobile_shown)
 
 	update_bananas_collected()
 	update_strawberries_collected()
@@ -55,6 +84,27 @@ function on_input(self, action_id, action)
 		return true
 	end
 
+	-- Drive the player from the on-screen mobile buttons. Multitouch lets one finger
+	-- hold left/right while another taps jump. TOUCH_MULTI is distinct from the mouse
+	-- TOUCH action below, so it always consumes the event.
+	if self.mobile_shown and action_id == const.ACTIONS.TOUCH_MULTI and action.touch then
+		for _, touch in ipairs(action.touch) do
+			handle_mobile_touch(self, touch.id, touch.pressed, touch.released, touch.x, touch.y)
+		end
+		return
+	end
+
+	-- Mouse fallback so the controls can be verified on desktop when force-enabled.
+	-- Gated to non-touch devices so it never double-fires on real hardware. The mouse
+	-- is treated as a single touch point; only consume the event when it actually hits
+	-- a control button, otherwise let it fall through to the HUD buttons below.
+	if self.mobile_shown and not self.touch_device and action_id == const.ACTIONS.TOUCH then
+		if handle_mobile_touch(self, "mouse", action.pressed, action.released, action.x, action.y) then
+			return
+		end
+	end
+
+	-- Handle buttons at the top right of the screen
 	if action_id == const.ACTIONS.TOUCH and action.pressed then
 		if gui.pick_node(gui.get_node(PAUSE_BUTTON), action.x, action.y) then
 			-- Pause button pressed
@@ -132,4 +182,58 @@ update_buttons = function(self)
 	gui.play_flipbook(gui.get_node(NEXT_BUTTON), data.has_next_level() and TEXTURE_NEXT_BUTTON or TEXTURE_NEXT_BUTTON_DISABLED)
 	gui.play_flipbook(gui.get_node(PREV_BUTTON), data.has_previous_level() and TEXTURE_PREV_BUTTON or TEXTURE_PREV_BUTTON_DISABLED)
 	gui.play_flipbook(gui.get_node(VOLUME_BUTTON), self.sound_muted and TEXTURE_VOLUME_BUTTON_OFF or TEXTURE_VOLUME_BUTTON_ON)
+end
+
+-- Forwards a virtual input action to the player, mirroring an engine input event
+-- (see player.script on_message). Exactly one of pressed/released is true.
+post_player_input = function(player_action, pressed)
+	msg.post(const.URLS.PLAYER, const.MSG.INPUT, { action_id = player_action, pressed = pressed, released = not pressed })
+end
+
+-- Returns the player action for the mobile control button under (x, y), or nil.
+button_action_at = function(x, y)
+	for node_name, player_action in pairs(BUTTON_ACTIONS) do
+		if gui.pick_node(gui.get_node(node_name), x, y) then
+			return player_action
+		end
+	end
+	return nil
+end
+
+-- Processes a single touch point (keyed by id) against the mobile control buttons,
+-- emitting press/release transitions to the player. self.touch_buttons remembers
+-- which button the point currently holds so the matching release can be sent when it
+-- lifts. Returns true when the event engaged a button and should be consumed.
+handle_mobile_touch = function(self, id, pressed, released, x, y)
+	if pressed then
+		local player_action = button_action_at(x, y)
+		if player_action then
+			self.touch_buttons[id] = player_action
+			post_player_input(player_action, true)
+			return true
+		end
+	elseif released then
+		local player_action = self.touch_buttons[id]
+		if player_action then
+			post_player_input(player_action, false)
+			self.touch_buttons[id] = nil
+			return true
+		end
+	end
+	return false
+end
+
+-- True on native mobile (Android/iOS) and mobile web. All web builds report
+-- system_name as "HTML5", so mobile web is distinguished by parsing the user agent.
+is_touch_device = function()
+	local info = sys.get_sys_info()
+	local name = info.system_name
+	if name == "Android" or name == "iPhone OS" then
+		return true
+	elseif name == "HTML5" then
+		local ua = (info.user_agent or ""):lower()
+		return ua:find("mobile") ~= nil or ua:find("android") ~= nil
+		or ua:find("iphone") ~= nil or ua:find("ipad") ~= nil or ua:find("ipod") ~= nil
+	end
+	return false
 end

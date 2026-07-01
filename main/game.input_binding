@@ -66,6 +66,10 @@ mouse_trigger {
   input: MOUSE_BUTTON_LEFT
   action: "touch"
 }
+touch_trigger {
+  input: TOUCH_MULTI
+  action: "touch_multi"
+}
 gamepad_trigger {
   input: GAMEPAD_LSTICK_LEFT
   action: "left"
